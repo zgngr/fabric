@@ -26,6 +26,8 @@ type PRCommit struct {
 	SHA     string
 	Message string
 	Author  string
+	Date    time.Time // Add timestamp field
+	Parents []string  // Add parent commits for merge detection
 }
 
 // GraphQL query structures for hasura client
@@ -50,9 +52,10 @@ type PullRequestsQuery struct {
 				Commits struct {
 					Nodes []struct {
 						Commit struct {
-							OID     string `graphql:"oid"`
-							Message string
-							Author  struct {
+							OID          string `graphql:"oid"`
+							Message      string
+							AuthoredDate time.Time `graphql:"authoredDate"`
+							Author       struct {
 								Name string
 							}
 						}

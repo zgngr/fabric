@@ -65,7 +65,7 @@ func (g *Generator) Generate() (string, error) {
 		return "", fmt.Errorf("failed to collect data: %w", err)
 	}
 
-	if err := g.fetchPRs(); err != nil {
+	if err := g.fetchPRs(g.cfg.ForcePRSync); err != nil {
 		return "", fmt.Errorf("failed to fetch PRs: %w", err)
 	}
 
@@ -193,7 +193,7 @@ func (g *Generator) collectData() error {
 	return nil
 }
 
-func (g *Generator) fetchPRs() error {
+func (g *Generator) fetchPRs(forcePRSync bool) error {
 	// First, load all cached PRs
 	if g.cache != nil {
 		cachedPRs, err := g.cache.GetAllPRs()
@@ -229,7 +229,7 @@ func (g *Generator) fetchPRs() error {
 	}
 	// If we have never synced or it's been more than 24 hours, do a full sync
 	// Also sync if we have versions with PR numbers that aren't cached
-	needsSync := lastSync.IsZero() || time.Since(lastSync) > 24*time.Hour || g.cfg.ForcePRSync || missingPRs
+	needsSync := lastSync.IsZero() || time.Since(lastSync) > 24*time.Hour || forcePRSync || missingPRs
 
 	if !needsSync {
 		fmt.Fprintf(os.Stderr, "Using cached PR data (last sync: %s)\n", lastSync.Format("2006-01-02 15:04:05"))
@@ -706,10 +706,9 @@ func (g *Generator) SyncDatabase() error {
 
 	fmt.Fprintf(os.Stderr, "🔄 Starting database synchronization...\n")
 
-	// Step 1: Force PR sync (reuse existing logic)
+	// Step 1: Force PR sync (pass true explicitly)
 	fmt.Fprintf(os.Stderr, "📥 Forcing PR sync from GitHub...\n")
-	g.cfg.ForcePRSync = true
-	if err := g.fetchPRs(); err != nil {
+	if err := g.fetchPRs(true); err != nil {
 		return fmt.Errorf("failed to sync PRs: %w", err)
 	}
 

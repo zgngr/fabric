@@ -207,6 +207,18 @@ func (c *Client) convertGitHubPR(ghPR *github.PullRequest, commits []*github.Rep
 			}
 			if commit.Commit.Author != nil {
 				prCommit.Author = getString(commit.Commit.Author.Name)
+				// Capture actual commit timestamp from GitHub API
+				if commit.Commit.Author.Date != nil {
+					prCommit.Date = commit.Commit.Author.Date.Time
+				}
+			}
+			// Capture parent commit SHAs for merge detection
+			if commit.Parents != nil {
+				for _, parent := range commit.Parents {
+					if parent.SHA != nil {
+						prCommit.Parents = append(prCommit.Parents, *parent.SHA)
+					}
+				}
 			}
 			result.Commits = append(result.Commits, prCommit)
 		}
@@ -395,6 +407,7 @@ func (c *Client) FetchAllMergedPRsGraphQL(since time.Time) ([]*PR, error) {
 					SHA:     commitNode.Commit.OID,
 					Message: strings.TrimSpace(commitNode.Commit.Message),
 					Author:  commitNode.Commit.Author.Name,
+					Date:    commitNode.Commit.AuthoredDate, // Use actual commit timestamp
 				}
 				pr.Commits = append(pr.Commits, commit)
 			}

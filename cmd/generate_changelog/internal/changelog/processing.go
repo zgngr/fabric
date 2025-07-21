@@ -14,6 +14,32 @@ import (
 	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal/github"
 )
 
+// isMergeCommit determines if a commit is a merge commit based on multiple criteria
+func isMergeCommit(commit github.PRCommit) bool {
+	// Primary method: Check parent count (merge commits have multiple parents)
+	if len(commit.Parents) > 1 {
+		return true
+	}
+
+	// Fallback method: Check commit message patterns
+	// Common merge commit message patterns
+	mergePatterns := []string{
+		`^Merge pull request #\d+`,      // "Merge pull request #123 from..."
+		`^Merge branch '.*' into .*`,    // "Merge branch 'feature' into main"
+		`^Merge remote-tracking branch`, // "Merge remote-tracking branch..."
+		`^Merge '.*' into .*`,           // "Merge 'feature' into main"
+		`^Merge .*`,                     // General "Merge ..." patterns
+	}
+
+	for _, pattern := range mergePatterns {
+		if matched, _ := regexp.MatchString(pattern, commit.Message); matched {
+			return true
+		}
+	}
+
+	return false
+}
+
 // ProcessIncomingPR processes a single PR for changelog entry creation
 func (g *Generator) ProcessIncomingPR(prNumber int) error {
 	if err := g.validatePRState(prNumber); err != nil {
@@ -129,8 +155,24 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 		return nil
 	}
 
+	// Calculate the version date for the changelog entry as the most recent commit date from processed PRs
+	changelogDate := time.Now() // fallback to current time
+	if len(fetchedPRs) > 0 {
+		var mostRecentCommitDate time.Time
+		for _, pr := range fetchedPRs {
+			for _, commit := range pr.Commits {
+				if commit.Date.After(mostRecentCommitDate) {
+					mostRecentCommitDate = commit.Date
+				}
+			}
+		}
+		if !mostRecentCommitDate.IsZero() {
+			changelogDate = mostRecentCommitDate
+		}
+	}
+
 	entry := fmt.Sprintf("## %s (%s)\n\n%s",
-		version, time.Now().Format("2006-01-02"), strings.TrimLeft(content.String(), "\n"))
+		version, changelogDate.Format("2006-01-02"), strings.TrimLeft(content.String(), "\n"))
 
 	if err := g.insertVersionAtTop(entry); err != nil {
 		return fmt.Errorf("failed to update CHANGELOG.md: %w", err)
@@ -152,14 +194,21 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 			// Save individual commits to cache for each PR
 			for _, pr := range fetchedPRs {
 				for _, commit := range pr.Commits {
+					// Use actual commit timestamp, with fallback to current time if invalid
+					commitDate := commit.Date
+					if commitDate.IsZero() {
+						commitDate = time.Now()
+						fmt.Fprintf(os.Stderr, "Warning: Commit %s has invalid timestamp, using current time\n", commit.SHA)
+					}
+
 					// Convert github.PRCommit to git.Commit
 					gitCommit := &git.Commit{
 						SHA:      commit.SHA,
 						Message:  commit.Message,
 						Author:   commit.Author,
-						Email:    "",         // Not available from GitHub API
-						Date:     time.Now(), // Use current time as fallback
-						IsMerge:  false,      // We don't have this info from GitHub API
+						Email:    "",                    // Not available from GitHub API
+						Date:     commitDate,            // Use actual commit timestamp from GitHub API
+						IsMerge:  isMergeCommit(commit), // Detect merge commits using parents and message patterns
 						PRNumber: pr.Number,
 					}
 					if err := g.cache.SaveCommit(gitCommit, version); err != nil {
@@ -169,12 +218,28 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 			}
 		}
 
+		// Calculate the version date as the most recent commit date from processed PRs
+		versionDate := time.Now() // fallback to current time
+		if len(fetchedPRs) > 0 {
+			var mostRecentCommitDate time.Time
+			for _, pr := range fetchedPRs {
+				for _, commit := range pr.Commits {
+					if commit.Date.After(mostRecentCommitDate) {
+						mostRecentCommitDate = commit.Date
+					}
+				}
+			}
+			if !mostRecentCommitDate.IsZero() {
+				versionDate = mostRecentCommitDate
+			}
+		}
+
 		// Create a proper new version entry for the database
 		newVersionEntry := &git.Version{
 			Name:      version,
-			Date:      time.Now(),
-			CommitSHA: "",        // Will be set when the release commit is made
-			PRNumbers: prNumbers, // Now we have the actual PR numbers
+			Date:      versionDate, // Use most recent commit date instead of current time
+			CommitSHA: "",          // Will be set when the release commit is made
+			PRNumbers: prNumbers,   // Now we have the actual PR numbers
 			AISummary: content.String(),
 		}
 
