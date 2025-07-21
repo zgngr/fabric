@@ -15,5 +15,5 @@ type Config struct {
 	IncomingPR      int
 	ProcessPRs      bool
 	IncomingDir     string
-	NoPush          bool
+	Push            bool
 }

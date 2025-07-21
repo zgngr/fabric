@@ -2,6 +2,7 @@ package git
 
 import (
 	"fmt"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -11,6 +12,7 @@ import (
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/go-git/go-git/v5/plumbing/storer"
+	"github.com/go-git/go-git/v5/plumbing/transport/http"
 )
 
 var (
@@ -505,8 +507,43 @@ func (w *Walker) CommitChanges(message string) (plumbing.Hash, error) {
 }
 
 // PushToRemote pushes the current branch to the remote repository
+// It automatically detects GitHub repositories and uses token authentication when available
 func (w *Walker) PushToRemote() error {
-	err := w.repo.Push(&git.PushOptions{})
+	pushOptions := &git.PushOptions{}
+
+	// Check if we have a GitHub token for authentication
+	if githubToken := os.Getenv("GITHUB_TOKEN"); githubToken != "" {
+		// Get remote URL to check if it's a GitHub repository
+		remotes, err := w.repo.Remotes()
+		if err == nil && len(remotes) > 0 {
+			// Get the origin remote (or first remote if origin doesn't exist)
+			var remote *git.Remote
+			for _, r := range remotes {
+				if r.Config().Name == "origin" {
+					remote = r
+					break
+				}
+			}
+			if remote == nil {
+				remote = remotes[0]
+			}
+
+			// Check if this is a GitHub repository
+			urls := remote.Config().URLs
+			if len(urls) > 0 {
+				url := urls[0]
+				if strings.Contains(url, "github.com") {
+					// Use token authentication for GitHub repositories
+					pushOptions.Auth = &http.BasicAuth{
+						Username: "token", // GitHub expects "token" as username
+						Password: githubToken,
+					}
+				}
+			}
+		}
+	}
+
+	err := w.repo.Push(pushOptions)
 	if err != nil {
 		return fmt.Errorf("failed to push: %w", err)
 	}

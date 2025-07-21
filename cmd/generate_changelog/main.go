@@ -40,7 +40,7 @@ func init() {
 	rootCmd.Flags().IntVar(&cfg.IncomingPR, "incoming-pr", 0, "Pre-process PR for changelog (provide PR number)")
 	rootCmd.Flags().BoolVar(&cfg.ProcessPRs, "process-prs", false, "Process all incoming PR files for release")
 	rootCmd.Flags().StringVar(&cfg.IncomingDir, "incoming-dir", "./cmd/generate_changelog/incoming", "Directory for incoming PR files")
-	rootCmd.Flags().BoolVar(&cfg.NoPush, "no-push", false, "Disable automatic git push after creating an incoming entry")
+	rootCmd.Flags().BoolVar(&cfg.Push, "push", false, "Enable automatic git push after creating an incoming entry")
 }
 
 func run(cmd *cobra.Command, args []string) error {

@@ -266,8 +266,8 @@ func (g *Generator) commitAndPushIncoming(prNumber int, filename string) error {
 		return fmt.Errorf("failed to commit changes: %w", err)
 	}
 
-	// Push to remote if not disabled
-	if !g.cfg.NoPush {
+	// Push to remote if enabled
+	if g.cfg.Push {
 		if err := g.gitWalker.PushToRemote(); err != nil {
 			return fmt.Errorf("failed to push to remote: %w", err)
 		}

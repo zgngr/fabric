@@ -44,7 +44,7 @@ The tool will:
 
 1. Create `./cmd/generate_changelog/incoming/1672.txt`
 2. Generate an AI-enhanced summary (if `--ai-summarize` is enabled)
-3. Auto-commit and push the file to your branch (unless `--no-push` is used)
+3. Auto-commit the file to your branch (use `--push` to also push to remote)
 
 Review the generated file and edit if needed:
 
@@ -104,11 +104,13 @@ Enable AI-enhanced summaries using Fabric integration.
 
 **Usage**: `./generate_changelog --incoming-pr 1672 --ai-summarize`
 
-### `--no-push`
+### `--push`
 
-Disable automatic git push after creating an incoming entry. The commit will be created locally but not pushed to the remote repository.
+Enable automatic git push after creating an incoming entry. By default, the commit is created locally but not pushed to the remote repository.
 
-**Usage**: `./generate_changelog --incoming-pr 1672 --no-push`
+**Usage**: `./generate_changelog --incoming-pr 1672 --push`
+
+**Note**: When using `--push`, ensure you have proper authentication configured (SSH keys or GITHUB_TOKEN environment variable).
 
 ## Troubleshooting
 
@@ -171,13 +173,15 @@ When a release is created:
 ./generate_changelog --incoming-pr 1672 --no-cache
 ```
 
-### Disable Auto-Push
+### Enable Auto-Push
 
 ```bash
-./generate_changelog --incoming-pr 1672 --no-push
+./generate_changelog --incoming-pr 1672 --push
 ```
 
-This creates the commit locally but doesn't push to the remote repository, allowing you to review changes before pushing manually.
+This creates the commit locally and pushes it to the remote repository. By default, commits are only created locally, allowing you to review changes before pushing manually.
+
+**Authentication**: The tool automatically detects GitHub repositories and uses the GITHUB_TOKEN environment variable for authentication when pushing. For SSH repositories, ensure your SSH keys are properly configured.
 
 ## Integration with Existing Workflow
 

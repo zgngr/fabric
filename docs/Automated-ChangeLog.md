@@ -89,7 +89,7 @@ graph TD
 
 4. **Auto-commit**:
    - Commit file with message: `chore: incoming 1672 changelog entry`
-   - Push to current branch
+   - Optionally push to current branch (use `--push` flag)
 
 (The PR is now completely ready to be merged with integrated CHANGELOG entry updating)
 
@@ -274,8 +274,11 @@ Update `.github/workflows/update-version-and-create-tag.yml`.
 1. **During Development**:
 
    ```bash
-   # After PR is ready for review
-   generate_changelog --incoming-pr 1672
+   # After PR is ready for review (commit locally only)
+   generate_changelog --incoming-pr 1672 --ai-summarize
+
+   # Or to automatically push to remote
+   generate_changelog --incoming-pr 1672 --ai-summarize --push
    ```
 
 2. **Validation**:
