@@ -44,6 +44,10 @@ func (g *Generator) ProcessIncomingPR(prNumber int) error {
 	}
 
 	filename := filepath.Join(g.cfg.IncomingDir, fmt.Sprintf("%d.txt", prNumber))
+
+	// Ensure content ends with a single newline
+	content = strings.TrimSpace(content) + "\n"
+
 	if err := os.WriteFile(filename, []byte(content), 0644); err != nil {
 		return fmt.Errorf("failed to write incoming file: %w", err)
 	}
