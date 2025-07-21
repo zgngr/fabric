@@ -350,3 +350,6 @@ web/static/*.png
 # Local tmp directory
 .tmp/
 tmp/
+
+# Ignore .claude/
+.claude/

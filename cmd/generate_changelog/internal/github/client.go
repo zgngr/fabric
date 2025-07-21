@@ -100,35 +100,89 @@ func (c *Client) FetchPRs(prNumbers []int) ([]*PR, error) {
 	return prs, nil
 }
 
-func (c *Client) fetchSinglePR(ctx context.Context, prNumber int) (*PR, error) {
-	pr, _, err := c.client.PullRequests.Get(ctx, c.owner, c.repo, prNumber)
+// GetPRValidationDetails fetches only the data needed for validation (lightweight).
+func (c *Client) GetPRValidationDetails(prNumber int) (*PRDetails, error) {
+	ctx := context.Background()
+	ghPR, _, err := c.client.PullRequests.Get(ctx, c.owner, c.repo, prNumber)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to get PR %d: %w", prNumber, err)
 	}
 
-	commits, _, err := c.client.PullRequests.ListCommits(ctx, c.owner, c.repo, prNumber, nil)
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch commits: %w", err)
+	// Only return validation data, no commits fetched
+	details := &PRDetails{
+		PR:        nil, // Will be populated later if needed
+		State:     getString(ghPR.State),
+		Mergeable: ghPR.Mergeable != nil && *ghPR.Mergeable,
 	}
+
+	return details, nil
+}
+
+// GetPRWithCommits fetches the full PR and its commits.
+func (c *Client) GetPRWithCommits(prNumber int) (*PR, error) {
+	ctx := context.Background()
+	ghPR, _, err := c.client.PullRequests.Get(ctx, c.owner, c.repo, prNumber)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get PR %d: %w", prNumber, err)
+	}
+
+	return c.buildPRWithCommits(ctx, ghPR)
+}
+
+// GetPRDetails fetches a comprehensive set of details for a single PR.
+// Deprecated: Use GetPRValidationDetails + GetPRWithCommits for better performance
+func (c *Client) GetPRDetails(prNumber int) (*PRDetails, error) {
+	ctx := context.Background()
+	ghPR, _, err := c.client.PullRequests.Get(ctx, c.owner, c.repo, prNumber)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get PR %d: %w", prNumber, err)
+	}
+
+	// Reuse the existing logic to build the base PR object
+	pr, err := c.buildPRWithCommits(ctx, ghPR)
+	if err != nil {
+		return nil, fmt.Errorf("failed to build PR details for %d: %w", prNumber, err)
+	}
+
+	details := &PRDetails{
+		PR:        pr,
+		State:     getString(ghPR.State),
+		Mergeable: ghPR.Mergeable != nil && *ghPR.Mergeable,
+	}
+
+	return details, nil
+}
+
+// buildPRWithCommits fetches commits and constructs a PR object from a GitHub API response
+func (c *Client) buildPRWithCommits(ctx context.Context, ghPR *github.PullRequest) (*PR, error) {
+	commits, _, err := c.client.PullRequests.ListCommits(ctx, c.owner, c.repo, *ghPR.Number, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch commits for PR %d: %w", *ghPR.Number, err)
+	}
+
+	return c.convertGitHubPR(ghPR, commits), nil
+}
+
+// convertGitHubPR transforms GitHub API data into our internal PR struct (pure function)
+func (c *Client) convertGitHubPR(ghPR *github.PullRequest, commits []*github.RepositoryCommit) *PR {
 
 	result := &PR{
-		Number:  prNumber,
-		Title:   getString(pr.Title),
-		Body:    getString(pr.Body),
-		URL:     getString(pr.HTMLURL),
+		Number:  *ghPR.Number,
+		Title:   getString(ghPR.Title),
+		Body:    getString(ghPR.Body),
+		URL:     getString(ghPR.HTMLURL),
 		Commits: make([]PRCommit, 0, len(commits)),
 	}
 
-	if pr.MergedAt != nil {
-		result.MergedAt = pr.MergedAt.Time
+	if ghPR.MergedAt != nil {
+		result.MergedAt = ghPR.MergedAt.Time
 	}
 
-	if pr.User != nil {
-		result.Author = getString(pr.User.Login)
-		result.AuthorURL = getString(pr.User.HTMLURL)
-		userType := getString(pr.User.Type) // GitHub API returns "User", "Organization", or "Bot"
+	if ghPR.User != nil {
+		result.Author = getString(ghPR.User.Login)
+		result.AuthorURL = getString(ghPR.User.HTMLURL)
+		userType := getString(ghPR.User.Type)
 
-		// Convert GitHub API type to lowercase
 		switch userType {
 		case "User":
 			result.AuthorType = "user"
@@ -137,12 +191,12 @@ func (c *Client) fetchSinglePR(ctx context.Context, prNumber int) (*PR, error) {
 		case "Bot":
 			result.AuthorType = "bot"
 		default:
-			result.AuthorType = "user" // Default fallback
+			result.AuthorType = "user"
 		}
 	}
 
-	if pr.MergeCommitSHA != nil {
-		result.MergeCommit = *pr.MergeCommitSHA
+	if ghPR.MergeCommitSHA != nil {
+		result.MergeCommit = *ghPR.MergeCommitSHA
 	}
 
 	for _, commit := range commits {
@@ -158,7 +212,16 @@ func (c *Client) fetchSinglePR(ctx context.Context, prNumber int) (*PR, error) {
 		}
 	}
 
-	return result, nil
+	return result
+}
+
+func (c *Client) fetchSinglePR(ctx context.Context, prNumber int) (*PR, error) {
+	ghPR, _, err := c.client.PullRequests.Get(ctx, c.owner, c.repo, prNumber)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.buildPRWithCommits(ctx, ghPR)
 }
 
 func getString(s *string) string {
