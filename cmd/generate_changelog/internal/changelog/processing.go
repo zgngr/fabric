@@ -359,7 +359,7 @@ func (g *Generator) insertVersionAtTop(entry string) error {
 			insertionPoint++
 		}
 		// Insert with proper spacing: single newline after header, then entry, then newline before existing content
-		newContent = contentStr[:loc[1]] + "\n\n" + entry + "\n\n" + contentStr[insertionPoint:]
+		newContent = contentStr[:loc[1]] + "\n" + entry + "\n" + contentStr[insertionPoint:]
 	} else {
 		// Header not found, prepend everything.
 		newContent = fmt.Sprintf("%s\n\n%s\n\n%s", header, entry, contentStr)
