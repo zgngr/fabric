@@ -112,13 +112,8 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 	if err != nil {
 		return fmt.Errorf("failed to get direct commits since last release: %w", err)
 	}
+	content.WriteString(directCommitsContent)
 
-	if directCommitsContent != "" {
-		if content.Len() > 0 {
-			content.WriteString("\n")
-		}
-		content.WriteString(directCommitsContent)
-	}
 	// Check if we have any content at all
 	if content.Len() == 0 {
 		if len(files) == 0 {
