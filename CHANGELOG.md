@@ -2,6 +2,14 @@
 
 ## v1.4.263 (2025-07-21)
 
+### PR [#1641](https://github.com/danielmiessler/Fabric/pull/1641) by [ksylvan](https://github.com/ksylvan): Fix Fabric Web timeout error
+
+- Chore: extend proxy timeout in `vite.config.ts` to 15 minutes
+- Increase `/api` proxy timeout to 900,000 ms
+- Increase `/names` proxy timeout to 900,000 ms
+
+## v1.4.262 (2025-07-21)
+
 ### PR [#1640](https://github.com/danielmiessler/Fabric/pull/1640) by [ksylvan](https://github.com/ksylvan): Implement Automated Changelog System for CI/CD Integration
 
 - Add automated changelog processing for CI/CD integration with comprehensive test coverage and GitHub client validation methods
@@ -9,13 +17,6 @@
 - Change push behavior from opt-out to opt-in with GitHub token authentication and automatic repository detection
 - Enhance changelog generation to avoid duplicate commit entries by extracting PR numbers and filtering commits already included via PR files
 - Add version parameter requirement for PR processing with commit SHA tracking to prevent duplicate entries and improve formatting consistency
-
-### PR [#1641](https://github.com/danielmiessler/Fabric/pull/1641) by [ksylvan](https://github.com/ksylvan): Fix Fabric Web timeout error
-
-- Chore: extend proxy timeout in `vite.config.ts` to 15 minutes
-- Increase `/api` proxy timeout to 900,000 ms
-- Increase `/names` proxy timeout to 900,000 ms
-
 
 ## v1.4.262 (2025-07-21)
 
