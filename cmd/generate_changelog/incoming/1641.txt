@@ -1,0 +1,5 @@
+### PR [#1641](https://github.com/danielmiessler/Fabric/pull/1641) by [ksylvan](https://github.com/ksylvan): Fix Fabric Web timeout error
+
+- Chore: extend proxy timeout in `vite.config.ts` to 15 minutes
+- Increase `/api` proxy timeout to 900,000 ms
+- Increase `/names` proxy timeout to 900,000 ms
