@@ -22,7 +22,7 @@ var rootCmd = &cobra.Command{
 collects version information and pull requests, and generates a
 comprehensive changelog in markdown format.`,
 	RunE:         run,
-	SilenceUsage: true, // Don't show usage on errors
+	SilenceUsage: true, // Don't show usage on runtime errors, only on flag errors
 }
 
 func init() {
@@ -94,8 +94,5 @@ func main() {
 		}
 	}
 
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		os.Exit(1)
-	}
+	rootCmd.Execute()
 }
