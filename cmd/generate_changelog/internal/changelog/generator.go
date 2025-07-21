@@ -742,7 +742,7 @@ func (g *Generator) syncGitHistory() error {
 		// Only save version if it doesn't exist
 		exists, err := g.cache.VersionExists(version.Name)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Warning: Failed to check version %s existence: %v\n", version.Name, err)
+			fmt.Fprintf(os.Stderr, "Warning: Failed to check version %s existence: %v. This may affect the completeness of the sync operation. Please check the logs and retry if necessary.\n", version.Name, err)
 			continue
 		}
 		if !exists {
