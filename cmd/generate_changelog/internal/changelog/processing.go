@@ -62,7 +62,7 @@ func (g *Generator) ProcessIncomingPR(prNumber int) error {
 }
 
 // ProcessIncomingPRs aggregates all incoming PR files for release and includes direct commits
-func (g *Generator) ProcessIncomingPRs() error {
+func (g *Generator) ProcessIncomingPRs(version string) error {
 	files, err := filepath.Glob(filepath.Join(g.cfg.IncomingDir, "*.txt"))
 	if err != nil {
 		return fmt.Errorf("failed to scan incoming directory: %w", err)
@@ -86,31 +86,39 @@ func (g *Generator) ProcessIncomingPRs() error {
 		return fmt.Errorf("encountered errors while processing incoming files: %s", strings.Join(processingErrors, "; "))
 	}
 
-	// Extract PR numbers from processed files to avoid including their commits as "direct"
+	// Extract PR numbers and their commit SHAs from processed files to avoid including their commits as "direct"
 	processedPRs := make(map[int]bool)
+	processedCommitSHAs := make(map[string]bool)
+
 	for _, file := range files {
 		// Extract PR number from filename (e.g., "1640.txt" -> 1640)
 		filename := filepath.Base(file)
 		if prNumStr := strings.TrimSuffix(filename, ".txt"); prNumStr != filename {
 			if prNum, err := strconv.Atoi(prNumStr); err == nil {
 				processedPRs[prNum] = true
+
+				// Fetch the PR to get its commit SHAs
+				if pr, err := g.ghClient.GetPRWithCommits(prNum); err == nil {
+					for _, commit := range pr.Commits {
+						processedCommitSHAs[commit.SHA] = true
+					}
+				}
 			}
 		}
 	}
 
 	// Now add direct commits since the last release, excluding commits from processed PRs
-	directCommitsContent, err := g.getDirectCommitsSinceLastRelease(processedPRs)
+	directCommitsContent, err := g.getDirectCommitsSinceLastRelease(processedPRs, processedCommitSHAs)
 	if err != nil {
 		return fmt.Errorf("failed to get direct commits since last release: %w", err)
 	}
 
 	if directCommitsContent != "" {
 		if content.Len() > 0 {
-			content.WriteString("\n")
+			content.WriteString("\n\n")
 		}
 		content.WriteString(directCommitsContent)
 	}
-
 	// Check if we have any content at all
 	if content.Len() == 0 {
 		if len(files) == 0 {
@@ -119,11 +127,6 @@ func (g *Generator) ProcessIncomingPRs() error {
 			fmt.Fprintf(os.Stderr, "No content found in incoming files and no direct commits since last release\n")
 		}
 		return nil
-	}
-
-	version, err := g.detectVersion()
-	if err != nil {
-		return fmt.Errorf("failed to detect version: %w", err)
 	}
 
 	entry := fmt.Sprintf("## %s (%s)\n\n%s",
@@ -163,7 +166,7 @@ func (g *Generator) ProcessIncomingPRs() error {
 }
 
 // getDirectCommitsSinceLastRelease gets all direct commits (not part of PRs) since the last release
-func (g *Generator) getDirectCommitsSinceLastRelease(processedPRs map[int]bool) (string, error) {
+func (g *Generator) getDirectCommitsSinceLastRelease(processedPRs map[int]bool, processedCommitSHAs map[string]bool) (string, error) {
 	// Get the latest tag to determine what commits are unreleased
 	latestTag, err := g.gitWalker.GetLatestTag()
 	if err != nil {
@@ -189,8 +192,14 @@ func (g *Generator) getDirectCommitsSinceLastRelease(processedPRs map[int]bool) 
 			continue
 		}
 
-		// Skip commits that belong to PRs we've already processed from incoming files
+		// Skip commits that belong to PRs we've already processed from incoming files (by PR number)
 		if commit.PRNumber > 0 && processedPRs[commit.PRNumber] {
+			continue
+		}
+
+		// Skip commits whose SHA is already included in processed PRs (this catches commits
+		// that might not have been detected as part of a PR but are actually in the PR)
+		if processedCommitSHAs[commit.SHA] {
 			continue
 		}
 
@@ -199,6 +208,7 @@ func (g *Generator) getDirectCommitsSinceLastRelease(processedPRs map[int]bool) 
 			directCommits = append(directCommits, commit)
 		}
 	}
+
 	if len(directCommits) == 0 {
 		return "", nil // No direct commits
 	}
@@ -353,7 +363,8 @@ func (g *Generator) insertVersionAtTop(entry string) error {
 		for insertionPoint < len(contentStr) && (contentStr[insertionPoint] == '\n' || contentStr[insertionPoint] == '\r') {
 			insertionPoint++
 		}
-		newContent = contentStr[:loc[1]] + "\n" + entry + "\n" + contentStr[insertionPoint:]
+		// Insert with proper spacing: single newline after header, then entry, then newline before existing content
+		newContent = contentStr[:loc[1]] + "\n\n" + entry + "\n\n" + contentStr[insertionPoint:]
 	} else {
 		// Header not found, prepend everything.
 		newContent = fmt.Sprintf("%s\n\n%s\n\n%s", header, entry, contentStr)

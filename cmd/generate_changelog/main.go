@@ -38,13 +38,13 @@ func init() {
 	rootCmd.Flags().BoolVar(&cfg.ForcePRSync, "force-pr-sync", false, "Force a full PR sync from GitHub (ignores cache age)")
 	rootCmd.Flags().BoolVar(&cfg.EnableAISummary, "ai-summarize", false, "Generate AI-enhanced summaries using Fabric")
 	rootCmd.Flags().IntVar(&cfg.IncomingPR, "incoming-pr", 0, "Pre-process PR for changelog (provide PR number)")
-	rootCmd.Flags().BoolVar(&cfg.ProcessPRs, "process-prs", false, "Process all incoming PR files for release")
+	rootCmd.Flags().StringVar(&cfg.ProcessPRsVersion, "process-prs", "", "Process all incoming PR files for release (provide version like v1.4.262)")
 	rootCmd.Flags().StringVar(&cfg.IncomingDir, "incoming-dir", "./cmd/generate_changelog/incoming", "Directory for incoming PR files")
 	rootCmd.Flags().BoolVar(&cfg.Push, "push", false, "Enable automatic git push after creating an incoming entry")
 }
 
 func run(cmd *cobra.Command, args []string) error {
-	if cfg.IncomingPR > 0 && cfg.ProcessPRs {
+	if cfg.IncomingPR > 0 && cfg.ProcessPRsVersion != "" {
 		return fmt.Errorf("--incoming-pr and --process-prs are mutually exclusive flags")
 	}
 
@@ -61,8 +61,8 @@ func run(cmd *cobra.Command, args []string) error {
 		return generator.ProcessIncomingPR(cfg.IncomingPR)
 	}
 
-	if cfg.ProcessPRs {
-		return generator.ProcessIncomingPRs()
+	if cfg.ProcessPRsVersion != "" {
+		return generator.ProcessIncomingPRs(cfg.ProcessPRsVersion)
 	}
 
 	output, err := generator.Generate()

@@ -94,7 +94,7 @@ Specify custom directory for incoming PR files (default: `./cmd/generate_changel
 
 Process all incoming PR files for release aggregation. Used by CI/CD during release creation.
 
-**Usage**: `./generate_changelog --process-prs`
+**Usage**: `./generate_changelog --process-prs {new_version_string}`
 
 **Mutual Exclusivity**: Cannot be used with `--incoming-pr` flag
 

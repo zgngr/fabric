@@ -156,9 +156,9 @@ Add to `internal/config/config.go`:
 ```go
 type Config struct {
     // ... existing fields
-    IncomingPR   int    // PR number for --incoming-pr
-    ProcessPRs   bool   // Flag for --process-prs
-    IncomingDir  string // Directory for incoming files (default: ./cmd/generate_changelog/incoming/)
+    IncomingPR   int         // PR number for --incoming-pr
+    ProcessPRsVersion string // Flag for --process-prs (new version string)
+    IncomingDir  string      // Directory for incoming files (default: ./cmd/generate_changelog/incoming/)
 }
 ```
 
@@ -166,7 +166,7 @@ type Config struct {
 
 ```go
 rootCmd.Flags().IntVar(&cfg.IncomingPR, "incoming-pr", 0, "Pre-process PR for changelog (provide PR number)")
-rootCmd.Flags().BoolVar(&cfg.ProcessPRs, "process-prs", false, "Process all incoming PR files for release")
+rootCmd.Flags().StringVar(&cfg.ProcessPRsVersion, "process-prs", "", "Process all incoming PR files for release (provide version like v1.4.262)")
 rootCmd.Flags().StringVar(&cfg.IncomingDir, "incoming-dir", "./cmd/generate_changelog/incoming", "Directory for incoming PR files")
 ```
 
@@ -314,22 +314,22 @@ Update `.github/workflows/update-version-and-create-tag.yml`.
 
 ### Phase 1: Implement Developer Tooling
 
-- [ ] Add new command line flags and configuration
-- [ ] Implement `--incoming-pr` functionality
-- [ ] Add validation for PR states and git status
-- [ ] Create auto-commit logic
+- [x] Add new command line flags and configuration
+- [x] Implement `--incoming-pr` functionality
+- [x] Add validation for PR states and git status
+- [x] Create auto-commit logic
 
 ### Phase 2: Integration (CI/CD) Readiness
 
-- [ ] Implement `--process-prs` functionality
-- [ ] Add CHANGELOG.md insertion logic
-- [ ] Update database storage for version entries
+- [x] Implement `--process-prs` functionality
+- [x] Add CHANGELOG.md insertion logic
+- [x] Update database storage for version entries
 
 ### Phase 3: Deployment
 
-- [ ] Update GitHub Actions workflow
-- [ ] Create developer documentation in ./docs/ directory
-- [ ] Test full end-to-end workflow (the PR that includes these modifications can be its first production test)
+- [x] Update GitHub Actions workflow
+- [x] Create developer documentation in ./docs/ directory
+- [x] Test full end-to-end workflow (the PR that includes these modifications can be its first production test)
 
 ### Phase 4: Adoption
 
