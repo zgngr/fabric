@@ -21,7 +21,8 @@ var rootCmd = &cobra.Command{
 	Long: `A high-performance changelog generator that walks git history,
 collects version information and pull requests, and generates a
 comprehensive changelog in markdown format.`,
-	RunE: run,
+	RunE:         run,
+	SilenceUsage: true, // Don't show usage on errors
 }
 
 func init() {

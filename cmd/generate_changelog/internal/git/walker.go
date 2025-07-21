@@ -426,6 +426,30 @@ func (w *Walker) IsWorkingDirectoryClean() (bool, error) {
 	return status.IsClean(), nil
 }
 
+// GetStatusDetails returns a detailed status of the working directory
+func (w *Walker) GetStatusDetails() (string, error) {
+	worktree, err := w.repo.Worktree()
+	if err != nil {
+		return "", fmt.Errorf("failed to get worktree: %w", err)
+	}
+
+	status, err := worktree.Status()
+	if err != nil {
+		return "", fmt.Errorf("failed to get git status: %w", err)
+	}
+
+	if status.IsClean() {
+		return "", nil
+	}
+
+	var details strings.Builder
+	for file, fileStatus := range status {
+		details.WriteString(fmt.Sprintf("  %c%c %s\n", fileStatus.Staging, fileStatus.Worktree, file))
+	}
+
+	return details.String(), nil
+}
+
 // AddFile adds a file to the git index
 func (w *Walker) AddFile(filename string) error {
 	worktree, err := w.repo.Worktree()

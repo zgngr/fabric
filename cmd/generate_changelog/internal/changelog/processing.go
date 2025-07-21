@@ -228,6 +228,11 @@ func (g *Generator) validateGitStatus() error {
 	}
 
 	if !isClean {
+		// Get detailed status for better error message
+		statusDetails, statusErr := g.gitWalker.GetStatusDetails()
+		if statusErr == nil && statusDetails != "" {
+			return fmt.Errorf("working directory is not clean - please commit or stash changes before proceeding:\n%s", statusDetails)
+		}
 		return fmt.Errorf("working directory is not clean - please commit or stash changes before proceeding")
 	}
 
