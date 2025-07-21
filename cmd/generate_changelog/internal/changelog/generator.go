@@ -697,3 +697,110 @@ func hashContent(content string) string {
 	hash := sha256.Sum256([]byte(content))
 	return fmt.Sprintf("%x", hash)
 }
+
+// SyncDatabase performs a comprehensive database synchronization and validation
+func (g *Generator) SyncDatabase() error {
+	if g.cache == nil {
+		return fmt.Errorf("cache is disabled, cannot sync database")
+	}
+
+	fmt.Fprintf(os.Stderr, "🔄 Starting database synchronization...\n")
+
+	// Step 1: Force PR sync (reuse existing logic)
+	fmt.Fprintf(os.Stderr, "📥 Forcing PR sync from GitHub...\n")
+	g.cfg.ForcePRSync = true
+	if err := g.fetchPRs(); err != nil {
+		return fmt.Errorf("failed to sync PRs: %w", err)
+	}
+
+	// Step 2: Rebuild git history and verify versions/commits completeness
+	fmt.Fprintf(os.Stderr, "🔍 Verifying git history and version completeness...\n")
+	if err := g.syncGitHistory(); err != nil {
+		return fmt.Errorf("failed to sync git history: %w", err)
+	}
+
+	// Step 3: Verify commit-PR mappings
+	fmt.Fprintf(os.Stderr, "🔗 Verifying commit-PR mappings...\n")
+	if err := g.verifyCommitPRMappings(); err != nil {
+		return fmt.Errorf("failed to verify commit-PR mappings: %w", err)
+	}
+
+	fmt.Fprintf(os.Stderr, "✅ Database synchronization completed successfully!\n")
+	return nil
+}
+
+// syncGitHistory walks the complete git history and ensures all versions and commits are cached
+func (g *Generator) syncGitHistory() error {
+	// Walk complete git history (reuse existing logic)
+	versions, err := g.gitWalker.WalkHistory()
+	if err != nil {
+		return fmt.Errorf("failed to walk git history: %w", err)
+	}
+
+	// Save only new versions and commits (preserve existing data)
+	var newVersions, newCommits int
+	for _, version := range versions {
+		// Only save version if it doesn't exist
+		exists, err := g.cache.VersionExists(version.Name)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Warning: Failed to check version %s existence: %v\n", version.Name, err)
+			continue
+		}
+		if !exists {
+			if err := g.cache.SaveVersion(version); err != nil {
+				fmt.Fprintf(os.Stderr, "Warning: Failed to save version %s: %v\n", version.Name, err)
+			} else {
+				newVersions++
+			}
+		}
+
+		// Only save commits that don't exist
+		for _, commit := range version.Commits {
+			exists, err := g.cache.CommitExists(commit.SHA)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Warning: Failed to check commit %s existence: %v\n", commit.SHA, err)
+				continue
+			}
+			if !exists {
+				if err := g.cache.SaveCommit(commit, version.Name); err != nil {
+					fmt.Fprintf(os.Stderr, "Warning: Failed to save commit %s: %v\n", commit.SHA, err)
+				} else {
+					newCommits++
+				}
+			}
+		}
+	}
+
+	// Update last processed tag
+	if latestTag, err := g.gitWalker.GetLatestTag(); err == nil && latestTag != "" {
+		if err := g.cache.SetLastProcessedTag(latestTag); err != nil {
+			fmt.Fprintf(os.Stderr, "Warning: Failed to update last processed tag: %v\n", err)
+		}
+	}
+
+	fmt.Fprintf(os.Stderr, "   Added %d new versions and %d new commits (preserved existing data)\n", newVersions, newCommits)
+	return nil
+}
+
+// verifyCommitPRMappings ensures all PR commits have proper mappings
+func (g *Generator) verifyCommitPRMappings() error {
+	// Get all cached PRs
+	allPRs, err := g.cache.GetAllPRs()
+	if err != nil {
+		return fmt.Errorf("failed to get cached PRs: %w", err)
+	}
+
+	// Convert to slice for batch operations (reuse existing logic)
+	var prSlice []*github.PR
+	for _, pr := range allPRs {
+		prSlice = append(prSlice, pr)
+	}
+
+	// Save commit-PR mappings (reuse existing logic)
+	if err := g.cache.SaveCommitPRMappings(prSlice); err != nil {
+		return fmt.Errorf("failed to save commit-PR mappings: %w", err)
+	}
+
+	fmt.Fprintf(os.Stderr, "   Verified mappings for %d PRs\n", len(prSlice))
+	return nil
+}

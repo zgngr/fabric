@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal/git"
+	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal/github"
 )
 
 // ProcessIncomingPR processes a single PR for changelog entry creation
@@ -89,6 +90,8 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 	// Extract PR numbers and their commit SHAs from processed files to avoid including their commits as "direct"
 	processedPRs := make(map[int]bool)
 	processedCommitSHAs := make(map[string]bool)
+	var fetchedPRs []*github.PR
+	var prNumbers []int
 
 	for _, file := range files {
 		// Extract PR number from filename (e.g., "1640.txt" -> 1640)
@@ -96,9 +99,11 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 		if prNumStr := strings.TrimSuffix(filename, ".txt"); prNumStr != filename {
 			if prNum, err := strconv.Atoi(prNumStr); err == nil {
 				processedPRs[prNum] = true
+				prNumbers = append(prNumbers, prNum)
 
 				// Fetch the PR to get its commit SHAs
 				if pr, err := g.ghClient.GetPRWithCommits(prNum); err == nil {
+					fetchedPRs = append(fetchedPRs, pr)
 					for _, commit := range pr.Commits {
 						processedCommitSHAs[commit.SHA] = true
 					}
@@ -132,12 +137,44 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 	}
 
 	if g.cache != nil {
+		// Cache the fetched PRs using the same logic as normal changelog generation
+		if len(fetchedPRs) > 0 {
+			// Save PRs to cache
+			if err := g.cache.SavePRBatch(fetchedPRs); err != nil {
+				fmt.Fprintf(os.Stderr, "Warning: Failed to cache PRs: %v\n", err)
+			}
+
+			// Save SHA→PR mappings for lightning-fast git operations
+			if err := g.cache.SaveCommitPRMappings(fetchedPRs); err != nil {
+				fmt.Fprintf(os.Stderr, "Warning: Failed to cache commit mappings: %v\n", err)
+			}
+
+			// Save individual commits to cache for each PR
+			for _, pr := range fetchedPRs {
+				for _, commit := range pr.Commits {
+					// Convert github.PRCommit to git.Commit
+					gitCommit := &git.Commit{
+						SHA:      commit.SHA,
+						Message:  commit.Message,
+						Author:   commit.Author,
+						Email:    "",         // Not available from GitHub API
+						Date:     time.Now(), // Use current time as fallback
+						IsMerge:  false,      // We don't have this info from GitHub API
+						PRNumber: pr.Number,
+					}
+					if err := g.cache.SaveCommit(gitCommit, version); err != nil {
+						fmt.Fprintf(os.Stderr, "Warning: Failed to save commit %s to cache: %v\n", commit.SHA, err)
+					}
+				}
+			}
+		}
+
 		// Create a proper new version entry for the database
 		newVersionEntry := &git.Version{
 			Name:      version,
 			Date:      time.Now(),
-			CommitSHA: "",      // Will be set when the release commit is made
-			PRNumbers: []int{}, // Could be extracted from incoming files if needed
+			CommitSHA: "",        // Will be set when the release commit is made
+			PRNumbers: prNumbers, // Now we have the actual PR numbers
 			AISummary: content.String(),
 		}
 
@@ -147,8 +184,19 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 	}
 
 	for _, file := range files {
-		if err := os.Remove(file); err != nil {
-			fmt.Fprintf(os.Stderr, "Warning: Failed to remove %s: %v\n", file, err)
+		// Convert to relative path for git operations
+		relativeFile, err := filepath.Rel(g.cfg.RepoPath, file)
+		if err != nil {
+			relativeFile = file
+		}
+
+		// Use git remove to handle both filesystem and git index
+		if err := g.gitWalker.RemoveFile(relativeFile); err != nil {
+			fmt.Fprintf(os.Stderr, "Warning: Failed to remove %s from git: %v\n", relativeFile, err)
+			// Fallback to filesystem-only removal
+			if err := os.Remove(file); err != nil {
+				fmt.Fprintf(os.Stderr, "Warning: Failed to remove %s from filesystem: %v\n", file, err)
+			}
 		}
 	}
 
@@ -391,17 +439,8 @@ func (g *Generator) stageChangesForRelease() error {
 		return fmt.Errorf("failed to add %s: %w", relativeCacheFile, err)
 	}
 
-	// Remove incoming directory if it exists
-	if g.cfg.IncomingDir != "" {
-		relativeIncomingDir, err := filepath.Rel(g.cfg.RepoPath, g.cfg.IncomingDir)
-		if err != nil {
-			relativeIncomingDir = g.cfg.IncomingDir
-		}
-
-		if err := g.gitWalker.RemoveFile(relativeIncomingDir); err != nil {
-			return fmt.Errorf("failed to remove incoming directory %s: %w", relativeIncomingDir, err)
-		}
-	}
+	// Note: Individual incoming files are now removed during the main processing loop
+	// No need to remove the entire directory here
 
 	return nil
 }
