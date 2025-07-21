@@ -62,7 +62,7 @@ func run(cmd *cobra.Command, args []string) error {
 	}
 
 	if cfg.ProcessPRsVersion != "" {
-		return generator.ProcessIncomingPRs(cfg.ProcessPRsVersion)
+		return generator.CreateNewChangelogEntry(cfg.ProcessPRsVersion)
 	}
 
 	output, err := generator.Generate()

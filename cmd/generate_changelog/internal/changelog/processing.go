@@ -61,8 +61,8 @@ func (g *Generator) ProcessIncomingPR(prNumber int) error {
 	return nil
 }
 
-// ProcessIncomingPRs aggregates all incoming PR files for release and includes direct commits
-func (g *Generator) ProcessIncomingPRs(version string) error {
+// CreateNewChangelogEntry aggregates all incoming PR files for release and includes direct commits
+func (g *Generator) CreateNewChangelogEntry(version string) error {
 	files, err := filepath.Glob(filepath.Join(g.cfg.IncomingDir, "*.txt"))
 	if err != nil {
 		return fmt.Errorf("failed to scan incoming directory: %w", err)
@@ -115,7 +115,7 @@ func (g *Generator) ProcessIncomingPRs(version string) error {
 
 	if directCommitsContent != "" {
 		if content.Len() > 0 {
-			content.WriteString("\n\n")
+			content.WriteString("\n")
 		}
 		content.WriteString(directCommitsContent)
 	}
