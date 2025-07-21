@@ -40,6 +40,26 @@ func isMergeCommit(commit github.PRCommit) bool {
 	return false
 }
 
+// calculateVersionDate calculates the version date as the most recent commit date from the provided PRs
+// Returns current time as fallback if no valid commit dates are found
+func calculateVersionDate(fetchedPRs []*github.PR) time.Time {
+	versionDate := time.Now() // fallback to current time
+	if len(fetchedPRs) > 0 {
+		var mostRecentCommitDate time.Time
+		for _, pr := range fetchedPRs {
+			for _, commit := range pr.Commits {
+				if commit.Date.After(mostRecentCommitDate) {
+					mostRecentCommitDate = commit.Date
+				}
+			}
+		}
+		if !mostRecentCommitDate.IsZero() {
+			versionDate = mostRecentCommitDate
+		}
+	}
+	return versionDate
+}
+
 // ProcessIncomingPR processes a single PR for changelog entry creation
 func (g *Generator) ProcessIncomingPR(prNumber int) error {
 	if err := g.validatePRState(prNumber); err != nil {
@@ -156,20 +176,7 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 	}
 
 	// Calculate the version date for the changelog entry as the most recent commit date from processed PRs
-	changelogDate := time.Now() // fallback to current time
-	if len(fetchedPRs) > 0 {
-		var mostRecentCommitDate time.Time
-		for _, pr := range fetchedPRs {
-			for _, commit := range pr.Commits {
-				if commit.Date.After(mostRecentCommitDate) {
-					mostRecentCommitDate = commit.Date
-				}
-			}
-		}
-		if !mostRecentCommitDate.IsZero() {
-			changelogDate = mostRecentCommitDate
-		}
-	}
+	changelogDate := calculateVersionDate(fetchedPRs)
 
 	entry := fmt.Sprintf("## %s (%s)\n\n%s",
 		version, changelogDate.Format("2006-01-02"), strings.TrimLeft(content.String(), "\n"))
@@ -206,7 +213,7 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 						SHA:      commit.SHA,
 						Message:  commit.Message,
 						Author:   commit.Author,
-						Email:    "",                    // Not available from GitHub API
+						Email:    commit.Email,          // Use email from GitHub API
 						Date:     commitDate,            // Use actual commit timestamp from GitHub API
 						IsMerge:  isMergeCommit(commit), // Detect merge commits using parents and message patterns
 						PRNumber: pr.Number,
@@ -219,20 +226,7 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 		}
 
 		// Calculate the version date as the most recent commit date from processed PRs
-		versionDate := time.Now() // fallback to current time
-		if len(fetchedPRs) > 0 {
-			var mostRecentCommitDate time.Time
-			for _, pr := range fetchedPRs {
-				for _, commit := range pr.Commits {
-					if commit.Date.After(mostRecentCommitDate) {
-						mostRecentCommitDate = commit.Date
-					}
-				}
-			}
-			if !mostRecentCommitDate.IsZero() {
-				versionDate = mostRecentCommitDate
-			}
-		}
+		versionDate := calculateVersionDate(fetchedPRs)
 
 		// Create a proper new version entry for the database
 		newVersionEntry := &git.Version{

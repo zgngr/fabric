@@ -207,6 +207,7 @@ func (c *Client) convertGitHubPR(ghPR *github.PullRequest, commits []*github.Rep
 			}
 			if commit.Commit.Author != nil {
 				prCommit.Author = getString(commit.Commit.Author.Name)
+				prCommit.Email = getString(commit.Commit.Author.Email) // Properly access email from GitHub API
 				// Capture actual commit timestamp from GitHub API
 				if commit.Commit.Author.Date != nil {
 					prCommit.Date = commit.Commit.Author.Date.Time

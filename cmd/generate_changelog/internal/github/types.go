@@ -26,6 +26,7 @@ type PRCommit struct {
 	SHA     string
 	Message string
 	Author  string
+	Email   string    // Email of the author, if available
 	Date    time.Time // Add timestamp field
 	Parents []string  // Add parent commits for merge detection
 }

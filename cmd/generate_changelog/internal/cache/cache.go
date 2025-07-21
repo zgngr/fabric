@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal/git"
@@ -204,10 +205,10 @@ func (c *Cache) GetVersions() (map[string]*git.Version, error) {
 			// Try RFC3339Nano first (for nanosecond precision), then fall back to RFC3339
 			v.Date, err = time.Parse(time.RFC3339Nano, dateStr.String)
 			if err != nil {
-				fmt.Printf("Error parsing date with RFC3339Nano: %v\n", err)
+				fmt.Fprintf(os.Stderr, "Error parsing date with RFC3339Nano: %v\n", err)
 				v.Date, err = time.Parse(time.RFC3339, dateStr.String)
 				if err != nil {
-					fmt.Printf("Error parsing date with RFC3339: %v\n", err)
+					fmt.Fprintf(os.Stderr, "Error parsing date with RFC3339: %v\n", err)
 				}
 			}
 		}
