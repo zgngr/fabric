@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -85,8 +86,20 @@ func (g *Generator) ProcessIncomingPRs() error {
 		return fmt.Errorf("encountered errors while processing incoming files: %s", strings.Join(processingErrors, "; "))
 	}
 
-	// Now add direct commits since the last release
-	directCommitsContent, err := g.getDirectCommitsSinceLastRelease()
+	// Extract PR numbers from processed files to avoid including their commits as "direct"
+	processedPRs := make(map[int]bool)
+	for _, file := range files {
+		// Extract PR number from filename (e.g., "1640.txt" -> 1640)
+		filename := filepath.Base(file)
+		if prNumStr := strings.TrimSuffix(filename, ".txt"); prNumStr != filename {
+			if prNum, err := strconv.Atoi(prNumStr); err == nil {
+				processedPRs[prNum] = true
+			}
+		}
+	}
+
+	// Now add direct commits since the last release, excluding commits from processed PRs
+	directCommitsContent, err := g.getDirectCommitsSinceLastRelease(processedPRs)
 	if err != nil {
 		return fmt.Errorf("failed to get direct commits since last release: %w", err)
 	}
@@ -150,7 +163,7 @@ func (g *Generator) ProcessIncomingPRs() error {
 }
 
 // getDirectCommitsSinceLastRelease gets all direct commits (not part of PRs) since the last release
-func (g *Generator) getDirectCommitsSinceLastRelease() (string, error) {
+func (g *Generator) getDirectCommitsSinceLastRelease(processedPRs map[int]bool) (string, error) {
 	// Get the latest tag to determine what commits are unreleased
 	latestTag, err := g.gitWalker.GetLatestTag()
 	if err != nil {
@@ -176,12 +189,16 @@ func (g *Generator) getDirectCommitsSinceLastRelease() (string, error) {
 			continue
 		}
 
-		// Only include commits that are NOT part of a PR (direct commits)
+		// Skip commits that belong to PRs we've already processed from incoming files
+		if commit.PRNumber > 0 && processedPRs[commit.PRNumber] {
+			continue
+		}
+
+		// Only include commits that are NOT part of any PR (direct commits)
 		if commit.PRNumber == 0 {
 			directCommits = append(directCommits, commit)
 		}
 	}
-
 	if len(directCommits) == 0 {
 		return "", nil // No direct commits
 	}
@@ -336,7 +353,7 @@ func (g *Generator) insertVersionAtTop(entry string) error {
 		for insertionPoint < len(contentStr) && (contentStr[insertionPoint] == '\n' || contentStr[insertionPoint] == '\r') {
 			insertionPoint++
 		}
-		newContent = contentStr[:loc[1]] + "\n\n" + entry + "\n" + contentStr[insertionPoint:]
+		newContent = contentStr[:loc[1]] + "\n" + entry + "\n" + contentStr[insertionPoint:]
 	} else {
 		// Header not found, prepend everything.
 		newContent = fmt.Sprintf("%s\n\n%s\n\n%s", header, entry, contentStr)
