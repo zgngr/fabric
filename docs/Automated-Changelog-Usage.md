@@ -120,15 +120,11 @@ Your PR has been closed or merged. Only open PRs can be processed.
 
 ### "PR is not mergeable"
 
-Your PR has merge conflicts. Resolve conflicts and try again.
+Your PR has merge conflicts or other issues preventing it from being merged. Resolve conflicts and ensure the PR is in a mergeable state.
 
 ### "Working directory is not clean"
 
 You have uncommitted changes. Commit or stash them before running the tool.
-
-### "PR is not mergeable"
-
-Your PR has merge conflicts or other issues preventing it from being merged. Resolve conflicts and ensure the PR is in a mergeable state.
 
 ### "Failed to fetch PR"
 
