@@ -201,7 +201,7 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 		if len(fetchedPRs) > 0 {
 			// Save PRs to cache
 			if err := g.cache.SavePRBatch(fetchedPRs); err != nil {
-				fmt.Fprintf(os.Stderr, "Warning: Failed to cache PRs: %v\n", err)
+				fmt.Fprintf(os.Stderr, "Warning: Failed to save PR batch to cache: %v\n", err)
 			}
 
 			// Save SHA→PR mappings for lightning-fast git operations
@@ -216,7 +216,7 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 					commitDate := commit.Date
 					if commitDate.IsZero() {
 						commitDate = time.Now()
-						fmt.Fprintf(os.Stderr, "Warning: Commit %s has invalid timestamp, using current time\n", commit.SHA)
+						fmt.Fprintf(os.Stderr, "Warning: Commit %s has invalid timestamp (likely due to git history rewrite), using current time as fallback\n", commit.SHA)
 					}
 
 					// Convert github.PRCommit to git.Commit
@@ -262,7 +262,7 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 
 		// Use git remove to handle both filesystem and git index
 		if err := g.gitWalker.RemoveFile(relativeFile); err != nil {
-			fmt.Fprintf(os.Stderr, "Warning: Failed to remove %s from git: %v\n", relativeFile, err)
+			fmt.Fprintf(os.Stderr, "Warning: Failed to remove %s from git index: %v\n", relativeFile, err)
 			// Fallback to filesystem-only removal
 			if err := os.Remove(file); err != nil {
 				fmt.Fprintf(os.Stderr, "Warning: Failed to remove %s from filesystem: %v\n", file, err)
