@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	versionPattern = regexp.MustCompile(`Update version to (v\d+\.\d+\.\d+)`)
+	versionPattern = regexp.MustCompile(`(?:chore\(release\): )?Update version to (v\d+\.\d+\.\d+)`)
 	prPattern      = regexp.MustCompile(`Merge pull request #(\d+)`)
 )
 

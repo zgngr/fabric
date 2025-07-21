@@ -18,16 +18,6 @@
 - Enhance changelog generation to avoid duplicate commit entries by extracting PR numbers and filtering commits already included via PR files
 - Add version parameter requirement for PR processing with commit SHA tracking to prevent duplicate entries and improve formatting consistency
 
-## v1.4.262 (2025-07-21)
-
-### PR [#1640](https://github.com/danielmiessler/Fabric/pull/1640) by [ksylvan](https://github.com/ksylvan): Implement Automated Changelog System for CI/CD Integration
-
-- Add automated changelog processing for CI/CD integration with comprehensive test coverage and GitHub client validation methods
-- Implement release aggregation for incoming files with git operations for staging changes and support for version detection from nix files
-- Change push behavior from opt-out to opt-in with GitHub token authentication and automatic repository detection
-- Enhance changelog generation to avoid duplicate commit entries by extracting PR numbers and filtering commits already included via PR files
-- Add version parameter requirement for PR processing with commit SHA tracking to prevent duplicate entries and improve formatting consistency
-
 ### Direct commits
 
 - Docs: Update CHANGELOG after v1.4.261
