@@ -125,7 +125,7 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 	}
 
 	entry := fmt.Sprintf("## %s (%s)\n\n%s",
-		version, time.Now().Format("2006-01-02"), content.String())
+		version, time.Now().Format("2006-01-02"), strings.TrimLeft(content.String(), "\n"))
 
 	if err := g.insertVersionAtTop(entry); err != nil {
 		return fmt.Errorf("failed to update CHANGELOG.md: %w", err)
