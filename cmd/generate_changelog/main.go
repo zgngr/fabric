@@ -36,9 +36,17 @@ func init() {
 	rootCmd.Flags().StringVar(&cfg.GitHubToken, "token", "", "GitHub API token (or set GITHUB_TOKEN env var)")
 	rootCmd.Flags().BoolVar(&cfg.ForcePRSync, "force-pr-sync", false, "Force a full PR sync from GitHub (ignores cache age)")
 	rootCmd.Flags().BoolVar(&cfg.EnableAISummary, "ai-summarize", false, "Generate AI-enhanced summaries using Fabric")
+	rootCmd.Flags().IntVar(&cfg.IncomingPR, "incoming-pr", 0, "Pre-process PR for changelog (provide PR number)")
+	rootCmd.Flags().BoolVar(&cfg.ProcessPRs, "process-prs", false, "Process all incoming PR files for release")
+	rootCmd.Flags().StringVar(&cfg.IncomingDir, "incoming-dir", "./cmd/generate_changelog/incoming", "Directory for incoming PR files")
+	rootCmd.Flags().BoolVar(&cfg.NoPush, "no-push", false, "Disable automatic git push after creating an incoming entry")
 }
 
 func run(cmd *cobra.Command, args []string) error {
+	if cfg.IncomingPR > 0 && cfg.ProcessPRs {
+		return fmt.Errorf("--incoming-pr and --process-prs are mutually exclusive flags")
+	}
+
 	if cfg.GitHubToken == "" {
 		cfg.GitHubToken = os.Getenv("GITHUB_TOKEN")
 	}
@@ -46,6 +54,14 @@ func run(cmd *cobra.Command, args []string) error {
 	generator, err := changelog.New(cfg)
 	if err != nil {
 		return fmt.Errorf("failed to create changelog generator: %w", err)
+	}
+
+	if cfg.IncomingPR > 0 {
+		return generator.ProcessIncomingPR(cfg.IncomingPR)
+	}
+
+	if cfg.ProcessPRs {
+		return generator.ProcessIncomingPRs()
 	}
 
 	output, err := generator.Generate()

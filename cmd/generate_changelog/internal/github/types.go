@@ -15,6 +15,13 @@ type PR struct {
 	MergeCommit string
 }
 
+// PRDetails encapsulates all relevant information about a Pull Request.
+type PRDetails struct {
+	*PR
+	State     string
+	Mergeable bool
+}
+
 type PRCommit struct {
 	SHA     string
 	Message string

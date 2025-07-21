@@ -400,3 +400,106 @@ func dedupInts(ints []int) []int {
 
 	return result
 }
+
+// Worktree returns the git worktree for performing git operations
+func (w *Walker) Worktree() (*git.Worktree, error) {
+	return w.repo.Worktree()
+}
+
+// Repository returns the underlying git repository
+func (w *Walker) Repository() *git.Repository {
+	return w.repo
+}
+
+// IsWorkingDirectoryClean checks if the working directory has any uncommitted changes
+func (w *Walker) IsWorkingDirectoryClean() (bool, error) {
+	worktree, err := w.repo.Worktree()
+	if err != nil {
+		return false, fmt.Errorf("failed to get worktree: %w", err)
+	}
+
+	status, err := worktree.Status()
+	if err != nil {
+		return false, fmt.Errorf("failed to get git status: %w", err)
+	}
+
+	return status.IsClean(), nil
+}
+
+// AddFile adds a file to the git index
+func (w *Walker) AddFile(filename string) error {
+	worktree, err := w.repo.Worktree()
+	if err != nil {
+		return fmt.Errorf("failed to get worktree: %w", err)
+	}
+
+	_, err = worktree.Add(filename)
+	if err != nil {
+		return fmt.Errorf("failed to add file %s: %w", filename, err)
+	}
+
+	return nil
+}
+
+// CommitChanges creates a commit with the given message
+func (w *Walker) CommitChanges(message string) (plumbing.Hash, error) {
+	worktree, err := w.repo.Worktree()
+	if err != nil {
+		return plumbing.ZeroHash, fmt.Errorf("failed to get worktree: %w", err)
+	}
+
+	// Get git config for author information
+	cfg, err := w.repo.Config()
+	if err != nil {
+		return plumbing.ZeroHash, fmt.Errorf("failed to get git config: %w", err)
+	}
+
+	var authorName, authorEmail string
+	if cfg.User.Name != "" {
+		authorName = cfg.User.Name
+	} else {
+		authorName = "Changelog Bot"
+	}
+	if cfg.User.Email != "" {
+		authorEmail = cfg.User.Email
+	} else {
+		authorEmail = "bot@changelog.local"
+	}
+
+	commit, err := worktree.Commit(message, &git.CommitOptions{
+		Author: &object.Signature{
+			Name:  authorName,
+			Email: authorEmail,
+			When:  time.Now(),
+		},
+	})
+	if err != nil {
+		return plumbing.ZeroHash, fmt.Errorf("failed to commit: %w", err)
+	}
+
+	return commit, nil
+}
+
+// PushToRemote pushes the current branch to the remote repository
+func (w *Walker) PushToRemote() error {
+	err := w.repo.Push(&git.PushOptions{})
+	if err != nil {
+		return fmt.Errorf("failed to push: %w", err)
+	}
+	return nil
+}
+
+// RemoveFile removes a file from both the working directory and git index
+func (w *Walker) RemoveFile(filename string) error {
+	worktree, err := w.repo.Worktree()
+	if err != nil {
+		return fmt.Errorf("failed to get worktree: %w", err)
+	}
+
+	_, err = worktree.Remove(filename)
+	if err != nil {
+		return fmt.Errorf("failed to remove file %s: %w", filename, err)
+	}
+
+	return nil
+}

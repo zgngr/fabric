@@ -12,4 +12,8 @@ type Config struct {
 	GitHubToken     string
 	ForcePRSync     bool
 	EnableAISummary bool
+	IncomingPR      int
+	ProcessPRs      bool
+	IncomingDir     string
+	NoPush          bool
 }

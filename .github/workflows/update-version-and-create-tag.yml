@@ -83,14 +83,23 @@ jobs:
         run: |
           nix run .#gomod2nix -- --outdir nix/pkgs/fabric
 
+      - name: Generate Changelog Entry
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          go run ./cmd/generate_changelog --process-prs
       - name: Commit changes
         run: |
+          # These files are modified by the version bump process
           git add cmd/fabric/version.go
           git add nix/pkgs/fabric/version.nix
           git add nix/pkgs/fabric/gomod2nix.toml
-          git add .
+
+          # The changelog tool is responsible for staging CHANGELOG.md, changelog.db,
+          # and removing the incoming/ directory.
+
           if ! git diff --staged --quiet; then
-            git commit -m "Update version to ${{ env.new_tag }} and commit $commit_hash"
+            git commit -m "chore(release): Update version to ${{ env.new_tag }}"
           else
             echo "No changes to commit."
           fi
