@@ -83,13 +83,13 @@ func TestInsertVersionAtTop_ImprovedRobustness(t *testing.T) {
 			name:            "header with trailing spaces",
 			existingContent: "# Changelog   \n\n## v1.0.0\n- Old content",
 			entry:           "## v2.0.0\n- New content",
-			expectedContent: "# Changelog   \n\n\n\n## v2.0.0\n- New content\n## v1.0.0\n- Old content",
+			expectedContent: "# Changelog   \n\n\n\n## v2.0.0\n- New content\n\n## v1.0.0\n- Old content",
 		},
 		{
 			name:            "header with different line endings",
 			existingContent: "# Changelog\r\n\r\n## v1.0.0\r\n- Old content",
 			entry:           "## v2.0.0\n- New content",
-			expectedContent: "# Changelog\r\n\r\n\n\n## v2.0.0\n- New content\n## v1.0.0\r\n- Old content",
+			expectedContent: "# Changelog\r\n\r\n\n\n## v2.0.0\n- New content\n\n## v1.0.0\r\n- Old content",
 		},
 		{
 			name:            "no existing header",

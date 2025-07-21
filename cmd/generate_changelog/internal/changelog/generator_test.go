@@ -107,7 +107,7 @@ func TestInsertVersionAtTop(t *testing.T) {
 			t.Fatalf("Failed to read changelog: %v", err)
 		}
 
-		expected := "# Changelog\n\n\n\n## v1.0.0 (2025-01-01)\n\n- New release\n## v0.9.0 (2024-12-01)\n\n- Previous release"
+		expected := "# Changelog\n\n\n\n## v1.0.0 (2025-01-01)\n\n- New release\n\n## v0.9.0 (2024-12-01)\n\n- Previous release"
 		if string(content) != expected {
 			t.Errorf("Expected:\n%s\nGot:\n%s", expected, string(content))
 		}
