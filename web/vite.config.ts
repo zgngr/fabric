@@ -44,7 +44,7 @@ export default defineConfig({
       '/api': {
         target: FABRIC_BASE_URL,
         changeOrigin: true,
-        timeout: 30000,
+        timeout: 900000,
         rewrite: (path) => path.replace(/^\/api/, ''),
         configure: (proxy, _options) => {
           proxy.on('error', (err, req, res) => {
@@ -59,7 +59,7 @@ export default defineConfig({
       '^/(patterns|models|sessions)/names': {
         target: FABRIC_BASE_URL,
         changeOrigin: true,
-        timeout: 30000,
+        timeout: 900000,
         configure: (proxy, _options) => {
           proxy.on('error', (err, req, res) => {
             console.log('proxy error', err);
