@@ -1,7 +1,7 @@
 ### PR [#1642](https://github.com/danielmiessler/Fabric/pull/1642) by [ksylvan](https://github.com/ksylvan): Add --sync-db to `generate_changelog`, plus many fixes
 
-- Add database synchronization command with comprehensive validation
-- Implement version and commit existence checking methods
-- Enhance time parsing with RFC3339Nano fallback support
-- Cache fetched PRs during changelog entry creation
-- Add sync-db flag for database integrity validation
+- Add database synchronization command with comprehensive validation and sync-db flag for database integrity validation
+- Implement version and commit existence checking methods with comprehensive merge commit detection using parents
+- Enhance time parsing with RFC3339Nano fallback support and capture actual commit timestamps from GitHub API
+- Add Email field to PRCommit struct for author information and populate commit email from GitHub API responses correctly
+- Improve commit-PR mapping verification process and cache fetched PRs during changelog entry creation
