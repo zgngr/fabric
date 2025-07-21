@@ -14,7 +14,15 @@ import (
 	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal/github"
 )
 
-// isMergeCommit determines if a commit is a merge commit based on multiple criteria
+// isMergeCommit determines if a commit is a merge commit.
+//
+// This function uses two methods to detect merge commits:
+//  1. Primary method: It checks the number of parent commits. A merge commit typically has more than one parent.
+//  2. Fallback method: If the parent count is not sufficient to determine the commit type, it matches the commit message
+//     against common merge commit patterns (e.g., "Merge pull request #123", "Merge branch 'feature' into main").
+//
+// The fallback method is necessary because some merge commits might not have multiple parents due to repository history
+// rewrites or other anomalies. By combining these two methods, the function ensures robust detection of merge commits.
 func isMergeCommit(commit github.PRCommit) bool {
 	// Primary method: Check parent count (merge commits have multiple parents)
 	if len(commit.Parents) > 1 {
@@ -40,8 +48,11 @@ func isMergeCommit(commit github.PRCommit) bool {
 	return false
 }
 
-// calculateVersionDate calculates the version date as the most recent commit date from the provided PRs
-// Returns current time as fallback if no valid commit dates are found
+// calculateVersionDate determines the version date based on the most recent commit date from the provided PRs.
+//
+// If no valid commit dates are found, the function falls back to the current time.
+// The function iterates through the provided PRs and their associated commits, comparing commit dates
+// to identify the most recent one. If a valid date is found, it is returned; otherwise, the fallback is used.
 func calculateVersionDate(fetchedPRs []*github.PR) time.Time {
 	versionDate := time.Now() // fallback to current time
 	if len(fetchedPRs) > 0 {
