@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"runtime"
 	"sort"
 	"strconv"
 	"strings"
@@ -281,7 +282,11 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 				fmt.Fprintf(os.Stderr, "Error: Failed to remove %s from the filesystem after failing to remove it from the git index.\n", relativeFile)
 				fmt.Fprintf(os.Stderr, "Filesystem error: %v\n", err)
 				fmt.Fprintf(os.Stderr, "Manual intervention required:\n")
-				fmt.Fprintf(os.Stderr, "  1. Remove the file manually: rm %s\n", file)
+				if runtime.GOOS == "windows" {
+					fmt.Fprintf(os.Stderr, "  1. Remove the file manually: del %s (Command Prompt) or Remove-Item %s (PowerShell)\n", file, file)
+				} else {
+					fmt.Fprintf(os.Stderr, "  1. Remove the file manually: rm %s\n", file)
+				}
 				fmt.Fprintf(os.Stderr, "  2. Remove from git index: git rm --cached %s\n", relativeFile)
 				fmt.Fprintf(os.Stderr, "  3. Or reset git index: git reset HEAD %s\n", relativeFile)
 			}
