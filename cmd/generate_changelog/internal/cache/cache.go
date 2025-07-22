@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal/git"
@@ -201,7 +202,14 @@ func (c *Cache) GetVersions() (map[string]*git.Version, error) {
 		}
 
 		if dateStr.Valid {
-			v.Date, _ = time.Parse(time.RFC3339, dateStr.String)
+			// Try RFC3339Nano first (for nanosecond precision), then fall back to RFC3339
+			v.Date, err = time.Parse(time.RFC3339Nano, dateStr.String)
+			if err != nil {
+				v.Date, err = time.Parse(time.RFC3339, dateStr.String)
+				if err != nil {
+					fmt.Fprintf(os.Stderr, "Error parsing date '%s' for version '%s': %v. Expected format: RFC3339 or RFC3339Nano.\n", dateStr.String, v.Name, err)
+				}
+			}
 		}
 
 		if prNumbersJSON != "" {
@@ -258,6 +266,26 @@ func (c *Cache) Clear() error {
 		}
 	}
 	return nil
+}
+
+// VersionExists checks if a version already exists in the cache
+func (c *Cache) VersionExists(version string) (bool, error) {
+	var count int
+	err := c.db.QueryRow("SELECT COUNT(*) FROM versions WHERE name = ?", version).Scan(&count)
+	if err != nil {
+		return false, err
+	}
+	return count > 0, nil
+}
+
+// CommitExists checks if a commit already exists in the cache
+func (c *Cache) CommitExists(hash string) (bool, error) {
+	var count int
+	err := c.db.QueryRow("SELECT COUNT(*) FROM commits WHERE sha = ?", hash).Scan(&count)
+	if err != nil {
+		return false, err
+	}
+	return count > 0, nil
 }
 
 // GetLastPRSync returns the timestamp of the last PR sync

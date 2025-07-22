@@ -41,6 +41,7 @@ func init() {
 	rootCmd.Flags().StringVar(&cfg.ProcessPRsVersion, "process-prs", "", "Process all incoming PR files for release (provide version like v1.4.262)")
 	rootCmd.Flags().StringVar(&cfg.IncomingDir, "incoming-dir", "./cmd/generate_changelog/incoming", "Directory for incoming PR files")
 	rootCmd.Flags().BoolVar(&cfg.Push, "push", false, "Enable automatic git push after creating an incoming entry")
+	rootCmd.Flags().BoolVar(&cfg.SyncDB, "sync-db", false, "Synchronize and validate database integrity with git history and GitHub PRs")
 }
 
 func run(cmd *cobra.Command, args []string) error {
@@ -63,6 +64,10 @@ func run(cmd *cobra.Command, args []string) error {
 
 	if cfg.ProcessPRsVersion != "" {
 		return generator.CreateNewChangelogEntry(cfg.ProcessPRsVersion)
+	}
+
+	if cfg.SyncDB {
+		return generator.SyncDatabase()
 	}
 
 	output, err := generator.Generate()

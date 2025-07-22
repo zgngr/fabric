@@ -8,10 +8,71 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal/git"
+	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal/github"
 )
+
+var (
+	mergePatterns     []*regexp.Regexp
+	mergePatternsOnce sync.Once
+)
+
+// getMergePatterns returns the compiled merge patterns, initializing them lazily
+func getMergePatterns() []*regexp.Regexp {
+	mergePatternsOnce.Do(func() {
+		mergePatterns = []*regexp.Regexp{
+			regexp.MustCompile(`^Merge pull request #\d+`),      // "Merge pull request #123 from..."
+			regexp.MustCompile(`^Merge branch '.*' into .*`),    // "Merge branch 'feature' into main"
+			regexp.MustCompile(`^Merge remote-tracking branch`), // "Merge remote-tracking branch..."
+			regexp.MustCompile(`^Merge '.*' into .*`),           // "Merge 'feature' into main"
+		}
+	})
+	return mergePatterns
+}
+
+// isMergeCommit determines if a commit is a merge commit based on its parents and message patterns.
+func isMergeCommit(commit github.PRCommit) bool {
+	// Primary method: Check parent count (merge commits have multiple parents)
+	if len(commit.Parents) > 1 {
+		return true
+	}
+
+	// Fallback method: Check commit message patterns
+	mergePatterns := getMergePatterns()
+	for _, pattern := range mergePatterns {
+		if pattern.MatchString(commit.Message) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// calculateVersionDate determines the version date based on the most recent commit date from the provided PRs.
+//
+// If no valid commit dates are found, the function falls back to the current time.
+// The function iterates through the provided PRs and their associated commits, comparing commit dates
+// to identify the most recent one. If a valid date is found, it is returned; otherwise, the fallback is used.
+func calculateVersionDate(fetchedPRs []*github.PR) time.Time {
+	versionDate := time.Now() // fallback to current time
+	if len(fetchedPRs) > 0 {
+		var mostRecentCommitDate time.Time
+		for _, pr := range fetchedPRs {
+			for _, commit := range pr.Commits {
+				if commit.Date.After(mostRecentCommitDate) {
+					mostRecentCommitDate = commit.Date
+				}
+			}
+		}
+		if !mostRecentCommitDate.IsZero() {
+			versionDate = mostRecentCommitDate
+		}
+	}
+	return versionDate
+}
 
 // ProcessIncomingPR processes a single PR for changelog entry creation
 func (g *Generator) ProcessIncomingPR(prNumber int) error {
@@ -89,6 +150,8 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 	// Extract PR numbers and their commit SHAs from processed files to avoid including their commits as "direct"
 	processedPRs := make(map[int]bool)
 	processedCommitSHAs := make(map[string]bool)
+	var fetchedPRs []*github.PR
+	var prNumbers []int
 
 	for _, file := range files {
 		// Extract PR number from filename (e.g., "1640.txt" -> 1640)
@@ -96,9 +159,11 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 		if prNumStr := strings.TrimSuffix(filename, ".txt"); prNumStr != filename {
 			if prNum, err := strconv.Atoi(prNumStr); err == nil {
 				processedPRs[prNum] = true
+				prNumbers = append(prNumbers, prNum)
 
 				// Fetch the PR to get its commit SHAs
 				if pr, err := g.ghClient.GetPRWithCommits(prNum); err == nil {
+					fetchedPRs = append(fetchedPRs, pr)
 					for _, commit := range pr.Commits {
 						processedCommitSHAs[commit.SHA] = true
 					}
@@ -124,20 +189,62 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 		return nil
 	}
 
+	// Calculate the version date for the changelog entry as the most recent commit date from processed PRs
+	versionDate := calculateVersionDate(fetchedPRs)
+
 	entry := fmt.Sprintf("## %s (%s)\n\n%s",
-		version, time.Now().Format("2006-01-02"), strings.TrimLeft(content.String(), "\n"))
+		version, versionDate.Format("2006-01-02"), strings.TrimLeft(content.String(), "\n"))
 
 	if err := g.insertVersionAtTop(entry); err != nil {
 		return fmt.Errorf("failed to update CHANGELOG.md: %w", err)
 	}
 
 	if g.cache != nil {
+		// Cache the fetched PRs using the same logic as normal changelog generation
+		if len(fetchedPRs) > 0 {
+			// Save PRs to cache
+			if err := g.cache.SavePRBatch(fetchedPRs); err != nil {
+				fmt.Fprintf(os.Stderr, "Warning: Failed to save PR batch to cache: %v\n", err)
+			}
+
+			// Save SHA→PR mappings for lightning-fast git operations
+			if err := g.cache.SaveCommitPRMappings(fetchedPRs); err != nil {
+				fmt.Fprintf(os.Stderr, "Warning: Failed to cache commit mappings: %v\n", err)
+			}
+
+			// Save individual commits to cache for each PR
+			for _, pr := range fetchedPRs {
+				for _, commit := range pr.Commits {
+					// Use actual commit timestamp, with fallback to current time if invalid
+					commitDate := commit.Date
+					if commitDate.IsZero() {
+						commitDate = time.Now()
+						fmt.Fprintf(os.Stderr, "Warning: Commit %s has invalid timestamp, using current time as fallback\n", commit.SHA)
+					}
+
+					// Convert github.PRCommit to git.Commit
+					gitCommit := &git.Commit{
+						SHA:      commit.SHA,
+						Message:  commit.Message,
+						Author:   commit.Author,
+						Email:    commit.Email,          // Use email from GitHub API
+						Date:     commitDate,            // Use actual commit timestamp from GitHub API
+						IsMerge:  isMergeCommit(commit), // Detect merge commits using parents and message patterns
+						PRNumber: pr.Number,
+					}
+					if err := g.cache.SaveCommit(gitCommit, version); err != nil {
+						fmt.Fprintf(os.Stderr, "Warning: Failed to save commit %s to cache: %v\n", commit.SHA, err)
+					}
+				}
+			}
+		}
+
 		// Create a proper new version entry for the database
 		newVersionEntry := &git.Version{
 			Name:      version,
-			Date:      time.Now(),
-			CommitSHA: "",      // Will be set when the release commit is made
-			PRNumbers: []int{}, // Could be extracted from incoming files if needed
+			Date:      versionDate, // Use most recent commit date instead of current time
+			CommitSHA: "",          // Will be set when the release commit is made
+			PRNumbers: prNumbers,   // Now we have the actual PR numbers
 			AISummary: content.String(),
 		}
 
@@ -147,8 +254,24 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 	}
 
 	for _, file := range files {
-		if err := os.Remove(file); err != nil {
-			fmt.Fprintf(os.Stderr, "Warning: Failed to remove %s: %v\n", file, err)
+		// Convert to relative path for git operations
+		relativeFile, err := filepath.Rel(g.cfg.RepoPath, file)
+		if err != nil {
+			relativeFile = file
+		}
+
+		// Use git remove to handle both filesystem and git index
+		if err := g.gitWalker.RemoveFile(relativeFile); err != nil {
+			fmt.Fprintf(os.Stderr, "Warning: Failed to remove %s from git index: %v\n", relativeFile, err)
+			// Fallback to filesystem-only removal
+			if err := os.Remove(file); err != nil {
+				fmt.Fprintf(os.Stderr, "Error: Failed to remove %s from the filesystem after failing to remove it from the git index.\n", relativeFile)
+				fmt.Fprintf(os.Stderr, "Filesystem error: %v\n", err)
+				fmt.Fprintf(os.Stderr, "Manual intervention required:\n")
+				fmt.Fprintf(os.Stderr, "  1. Remove the file %s manually (using the OS-specific command)\n", file)
+				fmt.Fprintf(os.Stderr, "  2. Remove from git index: git rm --cached %s\n", relativeFile)
+				fmt.Fprintf(os.Stderr, "  3. Or reset git index: git reset HEAD %s\n", relativeFile)
+			}
 		}
 	}
 
@@ -391,17 +514,8 @@ func (g *Generator) stageChangesForRelease() error {
 		return fmt.Errorf("failed to add %s: %w", relativeCacheFile, err)
 	}
 
-	// Remove incoming directory if it exists
-	if g.cfg.IncomingDir != "" {
-		relativeIncomingDir, err := filepath.Rel(g.cfg.RepoPath, g.cfg.IncomingDir)
-		if err != nil {
-			relativeIncomingDir = g.cfg.IncomingDir
-		}
-
-		if err := g.gitWalker.RemoveFile(relativeIncomingDir); err != nil {
-			return fmt.Errorf("failed to remove incoming directory %s: %w", relativeIncomingDir, err)
-		}
-	}
+	// Note: Individual incoming files are now removed during the main processing loop
+	// No need to remove the entire directory here
 
 	return nil
 }

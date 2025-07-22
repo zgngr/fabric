@@ -16,4 +16,5 @@ type Config struct {
 	ProcessPRsVersion string
 	IncomingDir       string
 	Push              bool
+	SyncDB            bool
 }
