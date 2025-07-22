@@ -187,10 +187,10 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 	}
 
 	// Calculate the version date for the changelog entry as the most recent commit date from processed PRs
-	changelogDate := calculateVersionDate(fetchedPRs)
+	versionDate := calculateVersionDate(fetchedPRs)
 
 	entry := fmt.Sprintf("## %s (%s)\n\n%s",
-		version, changelogDate.Format("2006-01-02"), strings.TrimLeft(content.String(), "\n"))
+		version, versionDate.Format("2006-01-02"), strings.TrimLeft(content.String(), "\n"))
 
 	if err := g.insertVersionAtTop(entry); err != nil {
 		return fmt.Errorf("failed to update CHANGELOG.md: %w", err)
@@ -236,9 +236,6 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 			}
 		}
 
-		// Calculate the version date as the most recent commit date from processed PRs
-		versionDate := calculateVersionDate(fetchedPRs)
-
 		// Create a proper new version entry for the database
 		newVersionEntry := &git.Version{
 			Name:      version,
@@ -265,7 +262,7 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 			fmt.Fprintf(os.Stderr, "Warning: Failed to remove %s from git index: %v\n", relativeFile, err)
 			// Fallback to filesystem-only removal
 			if err := os.Remove(file); err != nil {
-				fmt.Fprintf(os.Stderr, "Warning: Failed to remove %s from filesystem: %v\n", file, err)
+				fmt.Fprintf(os.Stderr, "Warning: Failed to remove %s from git index. Git error: %v. This may require manual intervention.\n", relativeFile, err)
 			}
 		}
 	}

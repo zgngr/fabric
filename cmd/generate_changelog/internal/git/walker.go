@@ -16,6 +16,8 @@ import (
 )
 
 var (
+	// the versionPattern matches version commit messages like "chore(release): Update version to v1.2.3"
+	// and "Update version to v1.2.3" (both of which are used in Fabric)
 	versionPattern = regexp.MustCompile(`(?:chore\(release\): )?Update version to (v\d+\.\d+\.\d+)`)
 	prPattern      = regexp.MustCompile(`Merge pull request #(\d+)`)
 )
