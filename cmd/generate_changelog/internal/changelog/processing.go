@@ -56,7 +56,8 @@ func isMergeCommit(commit github.PRCommit) bool {
 	}
 
 	// Fallback method: Check commit message patterns
-	for _, pattern := range getMergePatterns() {
+	mergePatterns := getMergePatterns()
+	for _, pattern := range mergePatterns {
 		if pattern.MatchString(commit.Message) {
 			return true
 		}
