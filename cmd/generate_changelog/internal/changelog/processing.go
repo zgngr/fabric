@@ -15,32 +15,25 @@ import (
 	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal/github"
 )
 
-type mergePatternManager struct {
-	patterns []*regexp.Regexp
-	once     sync.Once
-}
-
-var mergePatternsManager = &mergePatternManager{}
+var (
+	mergePatterns     []*regexp.Regexp
+	mergePatternsOnce sync.Once
+)
 
 // getMergePatterns returns the compiled merge patterns, initializing them lazily
 func getMergePatterns() []*regexp.Regexp {
-	mergePatternsManager.once.Do(func() {
-		mergePatternsManager.patterns = []*regexp.Regexp{
+	mergePatternsOnce.Do(func() {
+		mergePatterns = []*regexp.Regexp{
 			regexp.MustCompile(`^Merge pull request #\d+`),      // "Merge pull request #123 from..."
 			regexp.MustCompile(`^Merge branch '.*' into .*`),    // "Merge branch 'feature' into main"
 			regexp.MustCompile(`^Merge remote-tracking branch`), // "Merge remote-tracking branch..."
 			regexp.MustCompile(`^Merge '.*' into .*`),           // "Merge 'feature' into main"
 		}
 	})
-	return mergePatternsManager.patterns
+	return mergePatterns
 }
 
-//  1. Primary method: It checks the number of parent commits. A merge commit typically has more than one parent.
-//  2. Fallback method: If the parent count is not sufficient to determine the commit type, it matches the commit message
-//     against common merge commit patterns (e.g., "Merge pull request #123", "Merge branch 'feature' into main").
-//
-// The fallback method is necessary because some merge commits might not have multiple parents due to repository history
-// rewrites or other anomalies. By combining these two methods, the function ensures robust detection of merge commits.
+// isMergeCommit determines if a commit is a merge commit based on its parents and message patterns.
 func isMergeCommit(commit github.PRCommit) bool {
 	// Primary method: Check parent count (merge commits have multiple parents)
 	if len(commit.Parents) > 1 {
