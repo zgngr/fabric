@@ -262,7 +262,12 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 			fmt.Fprintf(os.Stderr, "Warning: Failed to remove %s from git index: %v\n", relativeFile, err)
 			// Fallback to filesystem-only removal
 			if err := os.Remove(file); err != nil {
-				fmt.Fprintf(os.Stderr, "Warning: Failed to remove %s from git index. Git error: %v. This may require manual intervention.\n", relativeFile, err)
+				fmt.Fprintf(os.Stderr, "Error: Failed to remove %s from both git index and filesystem.\n", relativeFile)
+				fmt.Fprintf(os.Stderr, "Git error: %v\n", err)
+				fmt.Fprintf(os.Stderr, "Manual intervention required:\n")
+				fmt.Fprintf(os.Stderr, "  1. Remove the file manually: rm %s\n", file)
+				fmt.Fprintf(os.Stderr, "  2. Remove from git index: git rm --cached %s\n", relativeFile)
+				fmt.Fprintf(os.Stderr, "  3. Or reset git index: git reset HEAD %s\n", relativeFile)
 			}
 		}
 	}
