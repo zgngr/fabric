@@ -1,7 +1,7 @@
 ### PR [#1642](https://github.com/danielmiessler/Fabric/pull/1642) by [ksylvan](https://github.com/ksylvan): Add --sync-db to `generate_changelog`, plus many fixes
 
-- Add database synchronization command with comprehensive validation and version existence checking
-- Implement improved timestamp handling and merge commit detection using GitHub API data
-- Add email field support to PRCommit struct with proper population from GitHub responses
-- Optimize merge pattern matching performance with lazy initialization and thread-safe compilation
-- Add cross-platform file removal instructions for Windows, Command Prompt, and PowerShell users
+- Add database synchronization command with comprehensive validation and version checking methods
+- Implement comprehensive merge commit detection using parent commit SHAs and real commit timestamps from GitHub API
+- Add email field support to PRCommit struct with proper population from GitHub API responses
+- Optimize merge pattern matching performance with lazy initialization and thread-safe pattern compilation
+- Add cross-platform file removal instructions with Windows-specific commands for improved user experience
