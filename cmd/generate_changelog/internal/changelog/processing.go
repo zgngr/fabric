@@ -8,18 +8,29 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal/git"
 	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal/github"
 )
 
-var mergePatterns = []*regexp.Regexp{
-	regexp.MustCompile(`^Merge pull request #\d+`),      // "Merge pull request #123 from..."
-	regexp.MustCompile(`^Merge branch '.*' into .*`),    // "Merge branch 'feature' into main"
-	regexp.MustCompile(`^Merge remote-tracking branch`), // "Merge remote-tracking branch..."
-	regexp.MustCompile(`^Merge '.*' into .*`),           // "Merge 'feature' into main"
-	regexp.MustCompile(`^Merge .*`),                     // General "Merge ..." patterns
+var (
+	mergePatterns     []*regexp.Regexp
+	mergePatternsOnce sync.Once
+)
+
+func getMergePatterns() []*regexp.Regexp {
+	mergePatternsOnce.Do(func() {
+		mergePatterns = []*regexp.Regexp{
+			regexp.MustCompile(`^Merge pull request #\d+`),      // "Merge pull request #123 from..."
+			regexp.MustCompile(`^Merge branch '.*' into .*`),    // "Merge branch 'feature' into main"
+			regexp.MustCompile(`^Merge remote-tracking branch`), // "Merge remote-tracking branch..."
+			regexp.MustCompile(`^Merge '.*' into .*`),           // "Merge 'feature' into main"
+			regexp.MustCompile(`^Merge .*`),                     // General "Merge ..." patterns
+		}
+	})
+	return mergePatterns
 }
 
 // isMergeCommit determines if a commit is a merge commit.
@@ -38,7 +49,7 @@ func isMergeCommit(commit github.PRCommit) bool {
 	}
 
 	// Fallback method: Check commit message patterns
-	for _, pattern := range mergePatterns {
+	for _, pattern := range getMergePatterns() {
 		if pattern.MatchString(commit.Message) {
 			return true
 		}
