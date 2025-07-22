@@ -205,10 +205,9 @@ func (c *Cache) GetVersions() (map[string]*git.Version, error) {
 			// Try RFC3339Nano first (for nanosecond precision), then fall back to RFC3339
 			v.Date, err = time.Parse(time.RFC3339Nano, dateStr.String)
 			if err != nil {
-				firstErr := err // Capture the error from RFC3339Nano
 				v.Date, err = time.Parse(time.RFC3339, dateStr.String)
 				if err != nil {
-					fmt.Fprintf(os.Stderr, "Error parsing date '%s' for version '%s': RFC3339Nano error: %v; RFC3339 error: %v\n", dateStr.String, v.Name, firstErr, err)
+					fmt.Fprintf(os.Stderr, "Error parsing date '%s' for version '%s': Invalid date format. Expected format: RFC3339 or RFC3339Nano.\n", dateStr.String, v.Name)
 				}
 			}
 		}

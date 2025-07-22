@@ -5,7 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"runtime"
 	"sort"
 	"strconv"
 	"strings"
@@ -16,33 +15,26 @@ import (
 	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal/github"
 )
 
-var (
-	mergePatterns            []*regexp.Regexp
-	mergePatternsInitialized bool
-	mergePatternsMutex       sync.Mutex
-)
+type mergePatternManager struct {
+	patterns []*regexp.Regexp
+	once     sync.Once
+}
+
+var mergePatternsManager = &mergePatternManager{}
 
 // getMergePatterns returns the compiled merge patterns, initializing them lazily
 func getMergePatterns() []*regexp.Regexp {
-	mergePatternsMutex.Lock()
-	defer mergePatternsMutex.Unlock()
-
-	if !mergePatternsInitialized {
-		mergePatterns = []*regexp.Regexp{
+	mergePatternsManager.once.Do(func() {
+		mergePatternsManager.patterns = []*regexp.Regexp{
 			regexp.MustCompile(`^Merge pull request #\d+`),      // "Merge pull request #123 from..."
 			regexp.MustCompile(`^Merge branch '.*' into .*`),    // "Merge branch 'feature' into main"
 			regexp.MustCompile(`^Merge remote-tracking branch`), // "Merge remote-tracking branch..."
 			regexp.MustCompile(`^Merge '.*' into .*`),           // "Merge 'feature' into main"
 		}
-		mergePatternsInitialized = true
-	}
-
-	return mergePatterns
+	})
+	return mergePatternsManager.patterns
 }
 
-// isMergeCommit determines if a commit is a merge commit.
-//
-// This function uses two methods to detect merge commits:
 //  1. Primary method: It checks the number of parent commits. A merge commit typically has more than one parent.
 //  2. Fallback method: If the parent count is not sufficient to determine the commit type, it matches the commit message
 //     against common merge commit patterns (e.g., "Merge pull request #123", "Merge branch 'feature' into main").
@@ -283,11 +275,7 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 				fmt.Fprintf(os.Stderr, "Error: Failed to remove %s from the filesystem after failing to remove it from the git index.\n", relativeFile)
 				fmt.Fprintf(os.Stderr, "Filesystem error: %v\n", err)
 				fmt.Fprintf(os.Stderr, "Manual intervention required:\n")
-				if runtime.GOOS == "windows" {
-					fmt.Fprintf(os.Stderr, "  1. Remove the file manually: del %s (Command Prompt) or Remove-Item %s (PowerShell)\n", file, file)
-				} else {
-					fmt.Fprintf(os.Stderr, "  1. Remove the file manually: rm %s\n", file)
-				}
+				fmt.Fprintf(os.Stderr, "  1. Remove the file %s manually (using the OS-specific command)\n", file)
 				fmt.Fprintf(os.Stderr, "  2. Remove from git index: git rm --cached %s\n", relativeFile)
 				fmt.Fprintf(os.Stderr, "  3. Or reset git index: git reset HEAD %s\n", relativeFile)
 			}
