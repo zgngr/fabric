@@ -207,7 +207,7 @@ func (c *Cache) GetVersions() (map[string]*git.Version, error) {
 			if err != nil {
 				v.Date, err = time.Parse(time.RFC3339, dateStr.String)
 				if err != nil {
-					fmt.Fprintf(os.Stderr, "Error parsing date '%s' for version '%s': Invalid date format. Expected format: RFC3339 or RFC3339Nano.\n", dateStr.String, v.Name)
+					fmt.Fprintf(os.Stderr, "Error parsing date '%s' for version '%s': %v. Expected format: RFC3339 or RFC3339Nano.\n", dateStr.String, v.Name, err)
 				}
 			}
 		}
