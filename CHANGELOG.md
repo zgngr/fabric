@@ -1,5 +1,26 @@
 # Changelog
 
+## v1.4.264 (2025-07-22)
+
+### PR [#1642](https://github.com/danielmiessler/Fabric/pull/1642) by [ksylvan](https://github.com/ksylvan): Add --sync-db to `generate_changelog`, plus many fixes
+
+- Add database synchronization command with comprehensive validation and sync-db flag for database integrity validation
+- Implement version and commit existence checking methods with enhanced time parsing using RFC3339Nano fallback support
+- Improve timestamp handling and merge commit detection in changelog generator with comprehensive merge commit detection using parents
+- Add email field support to PRCommit struct for author information and improve error logging throughout changelog generation
+- Optimize merge pattern matching with lazy initialization and thread-safe pattern compilation for better performance
+
+### Direct commits
+
+- Chore: incoming 1642 changelog entry
+- Fix: improve error message formatting in version date parsing
+
+- Add actual error details to date parsing failure message
+
+- Include error variable in stderr output formatting
+- Enhance debugging information for invalid date formats
+- Docs: Update CHANGELOG after v1.4.263
+
 ## v1.4.263 (2025-07-21)
 
 ### PR [#1641](https://github.com/danielmiessler/Fabric/pull/1641) by [ksylvan](https://github.com/ksylvan): Fix Fabric Web timeout error
