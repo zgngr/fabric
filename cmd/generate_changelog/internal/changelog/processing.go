@@ -14,6 +14,14 @@ import (
 	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal/github"
 )
 
+var mergePatterns = []*regexp.Regexp{
+	regexp.MustCompile(`^Merge pull request #\d+`),      // "Merge pull request #123 from..."
+	regexp.MustCompile(`^Merge branch '.*' into .*`),    // "Merge branch 'feature' into main"
+	regexp.MustCompile(`^Merge remote-tracking branch`), // "Merge remote-tracking branch..."
+	regexp.MustCompile(`^Merge '.*' into .*`),           // "Merge 'feature' into main"
+	regexp.MustCompile(`^Merge .*`),                     // General "Merge ..." patterns
+}
+
 // isMergeCommit determines if a commit is a merge commit.
 //
 // This function uses two methods to detect merge commits:
@@ -30,16 +38,6 @@ func isMergeCommit(commit github.PRCommit) bool {
 	}
 
 	// Fallback method: Check commit message patterns
-	// Common merge commit message patterns
-	// Pre-compiled regular expressions for common merge commit message patterns
-	mergePatterns := []*regexp.Regexp{
-		regexp.MustCompile(`^Merge pull request #\d+`),      // "Merge pull request #123 from..."
-		regexp.MustCompile(`^Merge branch '.*' into .*`),    // "Merge branch 'feature' into main"
-		regexp.MustCompile(`^Merge remote-tracking branch`), // "Merge remote-tracking branch..."
-		regexp.MustCompile(`^Merge '.*' into .*`),           // "Merge 'feature' into main"
-		regexp.MustCompile(`^Merge .*`),                     // General "Merge ..." patterns
-	}
-
 	for _, pattern := range mergePatterns {
 		if pattern.MatchString(commit.Message) {
 			return true
