@@ -217,7 +217,7 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 					commitDate := commit.Date
 					if commitDate.IsZero() {
 						commitDate = time.Now()
-						fmt.Fprintf(os.Stderr, "Warning: Commit %s has invalid timestamp (likely due to git history rewrite), using current time as fallback\n", commit.SHA)
+						fmt.Fprintf(os.Stderr, "Warning: Commit %s has invalid timestamp, using current time as fallback\n", commit.SHA)
 					}
 
 					// Convert github.PRCommit to git.Commit
