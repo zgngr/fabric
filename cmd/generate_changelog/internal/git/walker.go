@@ -16,8 +16,14 @@ import (
 )
 
 var (
-	// the versionPattern matches version commit messages like "chore(release): Update version to v1.2.3"
-	// and "Update version to v1.2.3" (both of which are used in Fabric)
+	// The versionPattern matches version commit messages with or without the optional "chore(release): " prefix.
+	// Examples of matching commit messages:
+	//   - "chore(release): Update version to v1.2.3"
+	//   - "Update version to v1.2.3"
+	// Examples of non-matching commit messages:
+	//   - "fix: Update version to v1.2.3" (missing "chore(release): " or "Update version to")
+	//   - "chore(release): Update version to 1.2.3" (missing "v" prefix in version)
+	//   - "Update version to v1.2" (incomplete version number)
 	versionPattern = regexp.MustCompile(`(?:chore\(release\): )?Update version to (v\d+\.\d+\.\d+)`)
 	prPattern      = regexp.MustCompile(`Merge pull request #(\d+)`)
 )
