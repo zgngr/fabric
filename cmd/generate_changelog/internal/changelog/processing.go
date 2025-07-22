@@ -16,20 +16,26 @@ import (
 )
 
 var (
-	mergePatterns     []*regexp.Regexp
-	mergePatternsOnce sync.Once
+	mergePatterns            []*regexp.Regexp
+	mergePatternsInitialized bool
+	mergePatternsMutex       sync.Mutex
 )
 
+// getMergePatterns returns the compiled merge patterns, initializing them lazily
 func getMergePatterns() []*regexp.Regexp {
-	mergePatternsOnce.Do(func() {
+	mergePatternsMutex.Lock()
+	defer mergePatternsMutex.Unlock()
+
+	if !mergePatternsInitialized {
 		mergePatterns = []*regexp.Regexp{
 			regexp.MustCompile(`^Merge pull request #\d+`),      // "Merge pull request #123 from..."
 			regexp.MustCompile(`^Merge branch '.*' into .*`),    // "Merge branch 'feature' into main"
 			regexp.MustCompile(`^Merge remote-tracking branch`), // "Merge remote-tracking branch..."
 			regexp.MustCompile(`^Merge '.*' into .*`),           // "Merge 'feature' into main"
-			regexp.MustCompile(`^Merge .*`),                     // General "Merge ..." patterns
 		}
-	})
+		mergePatternsInitialized = true
+	}
+
 	return mergePatterns
 }
 
@@ -272,8 +278,8 @@ func (g *Generator) CreateNewChangelogEntry(version string) error {
 			fmt.Fprintf(os.Stderr, "Warning: Failed to remove %s from git index: %v\n", relativeFile, err)
 			// Fallback to filesystem-only removal
 			if err := os.Remove(file); err != nil {
-				fmt.Fprintf(os.Stderr, "Error: Failed to remove %s from both git index and filesystem.\n", relativeFile)
-				fmt.Fprintf(os.Stderr, "Git error: %v\n", err)
+				fmt.Fprintf(os.Stderr, "Error: Failed to remove %s from the filesystem after failing to remove it from the git index.\n", relativeFile)
+				fmt.Fprintf(os.Stderr, "Filesystem error: %v\n", err)
 				fmt.Fprintf(os.Stderr, "Manual intervention required:\n")
 				fmt.Fprintf(os.Stderr, "  1. Remove the file manually: rm %s\n", file)
 				fmt.Fprintf(os.Stderr, "  2. Remove from git index: git rm --cached %s\n", relativeFile)
