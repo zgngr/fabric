@@ -704,27 +704,27 @@ func (g *Generator) SyncDatabase() error {
 		return fmt.Errorf("cache is disabled, cannot sync database")
 	}
 
-	fmt.Fprintf(os.Stderr, "🔄 Starting database synchronization...\n")
+	fmt.Fprintf(os.Stderr, "[SYNC] Starting database synchronization...\n")
 
 	// Step 1: Force PR sync (pass true explicitly)
-	fmt.Fprintf(os.Stderr, "📥 Forcing PR sync from GitHub...\n")
+	fmt.Fprintf(os.Stderr, "[PR_SYNC] Forcing PR sync from GitHub...\n")
 	if err := g.fetchPRs(true); err != nil {
 		return fmt.Errorf("failed to sync PRs: %w", err)
 	}
 
 	// Step 2: Rebuild git history and verify versions/commits completeness
-	fmt.Fprintf(os.Stderr, "🔍 Verifying git history and version completeness...\n")
+	fmt.Fprintf(os.Stderr, "[VERIFY] Verifying git history and version completeness...\n")
 	if err := g.syncGitHistory(); err != nil {
 		return fmt.Errorf("failed to sync git history: %w", err)
 	}
 
 	// Step 3: Verify commit-PR mappings
-	fmt.Fprintf(os.Stderr, "🔗 Verifying commit-PR mappings...\n")
+	fmt.Fprintf(os.Stderr, "[MAPPING] Verifying commit-PR mappings...\n")
 	if err := g.verifyCommitPRMappings(); err != nil {
 		return fmt.Errorf("failed to verify commit-PR mappings: %w", err)
 	}
 
-	fmt.Fprintf(os.Stderr, "✅ Database synchronization completed successfully!\n")
+	fmt.Fprintf(os.Stderr, "[SUCCESS] Database synchronization completed successfully!\n")
 	return nil
 }
 
@@ -742,7 +742,7 @@ func (g *Generator) syncGitHistory() error {
 		// Only save version if it doesn't exist
 		exists, err := g.cache.VersionExists(version.Name)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Warning: Failed to check version %s existence: %v. This may affect the completeness of the sync operation. Please check the logs and retry if necessary.\n", version.Name, err)
+			fmt.Fprintf(os.Stderr, "Warning: Failed to check existence of version %s: %v. This may affect the completeness of the sync operation.\n", version.Name, err)
 			continue
 		}
 		if !exists {
