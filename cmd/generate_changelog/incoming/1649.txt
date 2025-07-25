@@ -1,0 +1,7 @@
+### PR [#1649](https://github.com/danielmiessler/Fabric/pull/1649) by [ksylvan](https://github.com/ksylvan): Fix Conditional API Initialization to Prevent Unnecessary Error Messages
+
+- Prevent unconfigured API initialization and add Docker test suite
+- Add BEDROCK_AWS_REGION requirement for Bedrock initialization
+- Implement IsConfigured check for Ollama API URL
+- Create comprehensive Docker testing environment with 6 scenarios
+- Add interactive test runner with shell access
