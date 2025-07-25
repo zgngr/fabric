@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.4.265 (2025-07-25)
+
+### PR [#1647](https://github.com/danielmiessler/Fabric/pull/1647) by [ksylvan](https://github.com/ksylvan): Simplify Workflow with Single Version Retrieval Step
+
+- Replace git tag lookup with version.nix file reading for release workflow
+- Remove OS-specific git tag retrieval steps and add unified version extraction from nix file
+- Include version format validation with regex check
+- Add error handling for missing version file
+- Consolidate cross-platform version logic into single step with bash shell for consistent version parsing
+
+
 ## v1.4.264 (2025-07-22)
 
 ### PR [#1642](https://github.com/danielmiessler/Fabric/pull/1642) by [ksylvan](https://github.com/ksylvan): Add --sync-db to `generate_changelog`, plus many fixes
