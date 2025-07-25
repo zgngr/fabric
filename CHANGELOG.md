@@ -10,7 +10,6 @@
 - Add error handling for missing version file
 - Consolidate cross-platform version logic into single step with bash shell for consistent version parsing
 
-
 ## v1.4.264 (2025-07-22)
 
 ### PR [#1642](https://github.com/danielmiessler/Fabric/pull/1642) by [ksylvan](https://github.com/ksylvan): Add --sync-db to `generate_changelog`, plus many fixes
