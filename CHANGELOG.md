@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.268 (2025-07-26)
+
+### PR [#1652](https://github.com/danielmiessler/Fabric/pull/1652) by [ksylvan](https://github.com/ksylvan): Implement Voice Selection for Gemini Text-to-Speech
+
+- Feat: add Gemini TTS voice selection and listing functionality
+- Add `--voice` flag for TTS voice selection
+- Add `--list-gemini-voices` command for voice discovery
+- Implement voice validation for Gemini TTS models
+- Update shell completions for voice options
+
 ## v1.4.267 (2025-07-26)
 
 ### PR [#1650](https://github.com/danielmiessler/Fabric/pull/1650) by [ksylvan](https://github.com/ksylvan): Update Gemini Plugin to New SDK with TTS Support
