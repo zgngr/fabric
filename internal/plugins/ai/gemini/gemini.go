@@ -22,7 +22,7 @@ const (
 	WAVHeaderSize        = 44
 	RIFFHeaderSize       = 36
 	MaxAudioDataSize     = 100 * 1024 * 1024 // 100MB limit for security
-	MinAudioDataSize     = 44                 // Minimum viable audio data
+	MinAudioDataSize     = 44                // Minimum viable audio data
 	AudioDataPrefix      = "FABRIC_AUDIO_DATA:"
 )
 
