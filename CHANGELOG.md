@@ -10,7 +10,6 @@
 - Create comprehensive Docker testing environment with 6 scenarios
 - Add interactive test runner with shell access
 
-
 ## v1.4.265 (2025-07-25)
 
 ### PR [#1647](https://github.com/danielmiessler/Fabric/pull/1647) by [ksylvan](https://github.com/ksylvan): Simplify Workflow with Single Version Retrieval Step
