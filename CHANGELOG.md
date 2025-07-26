@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.269 (2025-07-26)
+
+### PR [#1653](https://github.com/danielmiessler/Fabric/pull/1653) by [ksylvan](https://github.com/ksylvan): docs: update Gemini TTS model references to gemini-2.5-flash-preview-tts
+
+- Updated Gemini TTS model references from gemini-2.0-flash-tts to gemini-2.5-flash-preview-tts throughout documentation
+- Modified documentation examples to use the new gemini-2.5-flash-preview-tts model
+- Updated voice selection example commands in Gemini-TTS.md
+- Revised CLI help text example commands to reflect model changes
+- Updated changelog database binary file
+
 ## v1.4.268 (2025-07-26)
 
 ### PR [#1652](https://github.com/danielmiessler/Fabric/pull/1652) by [ksylvan](https://github.com/ksylvan): Implement Voice Selection for Gemini Text-to-Speech
