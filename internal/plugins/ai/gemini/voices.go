@@ -60,7 +60,7 @@ func GetGeminiVoices() []GeminiVoice {
 
 		// Relaxed voices
 		{Name: "Callirrhoe", Description: "Easy-going and relaxed", Characteristics: []string{"relaxed", "easy-going"}},
-		{Name: "Despina", Description: "Smooth and flowing", Characteristics: []string{"smooth", "flowing"}},
+		{Name: "Despina", Description: "Calm and serene", Characteristics: []string{"calm", "serene"}},
 
 		// Mature voices
 		{Name: "Gacrux", Description: "Mature and experienced", Characteristics: []string{"mature", "experienced"}},
@@ -80,9 +80,9 @@ func GetGeminiVoices() []GeminiVoice {
 		{Name: "Zubenelgenubi", Description: "Casual and conversational", Characteristics: []string{"casual", "conversational"}},
 
 		// Additional voices from latest API
-		{Name: "Sadaltager", Description: "Additional voice option", Characteristics: []string{"additional"}},
-		{Name: "Schedar", Description: "Additional voice option", Characteristics: []string{"additional"}},
-		{Name: "Umbriel", Description: "Additional voice option", Characteristics: []string{"additional"}},
+		{Name: "Sadaltager", Description: "Experimental voice with a calm and neutral tone", Characteristics: []string{"experimental", "calm", "neutral"}},
+		{Name: "Schedar", Description: "Experimental voice with a warm and engaging tone", Characteristics: []string{"experimental", "warm", "engaging"}},
+		{Name: "Umbriel", Description: "Experimental voice with a deep and resonant tone", Characteristics: []string{"experimental", "deep", "resonant"}},
 	}
 }
 
