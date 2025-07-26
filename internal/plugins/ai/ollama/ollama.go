@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 	"time"
 
@@ -59,6 +60,11 @@ func (t *transport_sec) RoundTrip(req *http.Request) (*http.Response, error) {
 		req.Header.Add("Authorization", "Bearer "+t.ApiKey.Value)
 	}
 	return t.underlyingTransport.RoundTrip(req)
+}
+
+// IsConfigured returns true only if OLLAMA_API_URL environment variable is explicitly set
+func (o *Client) IsConfigured() bool {
+	return os.Getenv("OLLAMA_API_URL") != ""
 }
 
 func (o *Client) configure() (err error) {
