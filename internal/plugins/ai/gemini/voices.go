@@ -199,7 +199,7 @@ func ListGeminiVoices(shellCompleteMode bool) string {
 	}
 
 	result += "Use --voice <voice_name> to select a specific voice.\n"
-	result += "Example: fabric --voice Charon -m gemini-2.0-flash-tts -o output.wav \"Hello world\"\n"
+	result += "Example: fabric --voice Charon -m gemini-2.5-flash-preview-tts -o output.wav \"Hello world\"\n"
 
 	return result
 }
