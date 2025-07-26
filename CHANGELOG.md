@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.267 (2025-07-26)
+
+### PR [#1650](https://github.com/danielmiessler/Fabric/pull/1650) by [ksylvan](https://github.com/ksylvan): Update Gemini Plugin to New SDK with TTS Support
+
+- Update Gemini SDK to new genai library and add TTS audio output support
+- Replace deprecated generative-ai-go with google.golang.org/genai library
+- Add TTS model detection and audio output validation
+- Implement WAV file generation for TTS audio responses
+- Add audio format checking utilities in CLI output
+
 ## v1.4.266 (2025-07-25)
 
 ### PR [#1649](https://github.com/danielmiessler/Fabric/pull/1649) by [ksylvan](https://github.com/ksylvan): Fix Conditional API Initialization to Prevent Unnecessary Error Messages
