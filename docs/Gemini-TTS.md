@@ -19,13 +19,13 @@ To generate audio from text using TTS:
 
 ```bash
 # Basic TTS with default voice (Kore)
-echo "Hello, this is a test of Gemini TTS" | fabric -m gemini-2.0-flash-tts -o output.wav
+echo "Hello, this is a test of Gemini TTS" | fabric -m gemini-2.5-flash-preview-tts -o output.wav
 
 # Using a specific voice
-echo "Hello, this is a test with the Charon voice" | fabric -m gemini-2.0-flash-tts --voice Charon -o output.wav
+echo "Hello, this is a test with the Charon voice" | fabric -m gemini-2.5-flash-preview-tts --voice Charon -o output.wav
 
 # Using TTS with a pattern
-fabric -p summarize --voice Puck -m gemini-2.0-flash-tts -o summary.wav < document.txt
+fabric -p summarize --voice Puck -m gemini-2.5-flash-preview-tts -o summary.wav < document.txt
 ```
 
 ### Voice Selection
@@ -33,7 +33,7 @@ fabric -p summarize --voice Puck -m gemini-2.0-flash-tts -o summary.wav < docume
 Use the `--voice` flag to specify which voice to use for TTS generation:
 
 ```bash
-fabric -m gemini-2.0-flash-tts --voice Zephyr -o output.wav "Your text here"
+fabric -m gemini-2.5-flash-preview-tts --voice Zephyr -o output.wav "Your text here"
 ```
 
 If no voice is specified, the default voice "Kore" will be used.
@@ -103,7 +103,7 @@ For current rate limits and pricing, visit: <https://ai.google.dev/gemini-api/do
 
 - `--voice <voice_name>` - Specify the TTS voice to use
 - `-o <filename.wav>` - Output audio file (required for TTS models)
-- `-m <tts_model>` - Specify a TTS-capable model (e.g., `gemini-2.0-flash-tts`)
+- `-m <tts_model>` - Specify a TTS-capable model (e.g., `gemini-2.5-flash-preview-tts`)
 
 ### YAML Configuration
 
