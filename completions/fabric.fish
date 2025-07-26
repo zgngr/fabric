@@ -31,6 +31,10 @@ function __fabric_get_extensions
 	fabric --listextensions --shell-complete-list 2>/dev/null
 end
 
+function __fabric_get_gemini_voices
+	fabric --list-gemini-voices --shell-complete-list 2>/dev/null
+end
+
 # Main completion function
 complete -c fabric -f
 
@@ -71,6 +75,7 @@ complete -c fabric -l rmextension -d "Remove a registered extension by name" -a 
 complete -c fabric -l strategy -d "Choose a strategy from the available strategies" -a "(__fabric_get_strategies)"
 complete -c fabric -l think-start-tag -d "Start tag for thinking sections (default: <think>)"
 complete -c fabric -l think-end-tag -d "End tag for thinking sections (default: </think>)"
+complete -c fabric -l voice -d "TTS voice name for supported models (e.g., Kore, Charon, Puck)" -a "(__fabric_get_gemini_voices)"
 
 # Boolean flags (no arguments)
 complete -c fabric -s S -l setup -d "Run setup for all reconfigurable parts of fabric"
@@ -99,6 +104,7 @@ complete -c fabric -l version -d "Print current version"
 complete -c fabric -l listextensions -d "List all registered extensions"
 complete -c fabric -l liststrategies -d "List all strategies"
 complete -c fabric -l listvendors -d "List all vendors"
+complete -c fabric -l list-gemini-voices -d "List all available Gemini TTS voices"
 complete -c fabric -l shell-complete-list -d "Output raw list without headers/formatting (for shell completion)"
 complete -c fabric -l suppress-think -d "Suppress text enclosed in thinking tags"
 complete -c fabric -l disable-responses-api -d "Disable OpenAI Responses API (default: false)"

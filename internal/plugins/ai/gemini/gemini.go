@@ -194,6 +194,12 @@ func (o *Client) generateTTSAudio(ctx context.Context, msgs []*chat.ChatCompleti
 		return "", err
 	}
 
+	// Validate voice name before making API call
+	if opts.Voice != "" && !IsValidGeminiVoice(opts.Voice) {
+		validVoices := GetGeminiVoiceNames()
+		return "", fmt.Errorf("invalid voice '%s'. Valid voices are: %v", opts.Voice, validVoices)
+	}
+
 	client, err := o.createGenaiClient(ctx)
 	if err != nil {
 		return "", err
@@ -211,12 +217,17 @@ func (o *Client) performTTSGeneration(ctx context.Context, client *genai.Client,
 	}}
 
 	// Configure for TTS generation
+	voiceName := opts.Voice
+	if voiceName == "" {
+		voiceName = "Kore" // Default voice if none specified
+	}
+
 	config := &genai.GenerateContentConfig{
 		ResponseModalities: []string{"AUDIO"},
 		SpeechConfig: &genai.SpeechConfig{
 			VoiceConfig: &genai.VoiceConfig{
 				PrebuiltVoiceConfig: &genai.PrebuiltVoiceConfig{
-					VoiceName: "Kore", // Default voice
+					VoiceName: voiceName,
 				},
 			},
 		},

@@ -14,16 +14,19 @@ _fabric_models() {
   models=(${(f)"$(fabric --listmodels --shell-complete-list 2>/dev/null)"})
   compadd -X "Models:" ${models}
 }
+
 _fabric_contexts() {
   local -a contexts
   contexts=(${(f)"$(fabric --listcontexts --shell-complete-list 2>/dev/null)"})
   compadd -X "Contexts:" ${contexts}
 }
+
 _fabric_sessions() {
   local -a sessions
   sessions=(${(f)"$(fabric --listsessions --shell-complete-list 2>/dev/null)"})
   compadd -X "Sessions:" ${sessions}
 }
+
 _fabric_strategies() {
   local -a strategies
   strategies=(${(f)"$(fabric --liststrategies --shell-complete-list 2>/dev/null)"})
@@ -34,14 +37,12 @@ _fabric_extensions() {
   local -a extensions
   extensions=(${(f)"$(fabric --listextensions --shell-complete-list 2>/dev/null)"})
   compadd -X "Extensions:" ${extensions}
-    '(-L --listmodels)'{-L,--listmodels}'[List all available models]:list models:_fabric_models' \
-    '(-x --listcontexts)'{-x,--listcontexts}'[List all contexts]:list contexts:_fabric_contexts' \
-    '(-X --listsessions)'{-X,--listsessions}'[List all sessions]:list sessions:_fabric_sessions' \
-    '(--listextensions)--listextensions[List all registered extensions]' \
-    '(--liststrategies)--liststrategies[List all strategies]:list strategies:_fabric_strategies' \
-    '(--listvendors)--listvendors[List all vendors]' \
-  vendors=(${(f)"$(fabric --listvendors 2>/dev/null)"})
-  compadd -X "Vendors:" ${vendors}
+}
+
+_fabric_gemini_voices() {
+  local -a voices
+  voices=(${(f)"$(fabric --list-gemini-voices --shell-complete-list 2>/dev/null)"})
+  compadd -X "Gemini TTS Voices:" ${voices}
 }
 
 _fabric() {
@@ -109,6 +110,8 @@ _fabric() {
     '(--strategy)--strategy[Choose a strategy from the available strategies]:strategy:_fabric_strategies' \
     '(--liststrategies)--liststrategies[List all strategies]' \
     '(--listvendors)--listvendors[List all vendors]' \
+    '(--voice)--voice[TTS voice name for supported models]:voice:_fabric_gemini_voices' \
+    '(--list-gemini-voices)--list-gemini-voices[List all available Gemini TTS voices]' \
     '(--shell-complete-list)--shell-complete-list[Output raw list without headers/formatting (for shell completion)]' \
     '(--suppress-think)--suppress-think[Suppress text enclosed in thinking tags]' \
     '(--think-start-tag)--think-start-tag[Start tag for thinking sections (default: <think>)]:start tag:' \
@@ -119,4 +122,3 @@ _fabric() {
 }
 
 _fabric "$@"
-

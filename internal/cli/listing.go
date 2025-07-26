@@ -1,11 +1,13 @@
 package cli
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 
 	"github.com/danielmiessler/fabric/internal/core"
 	"github.com/danielmiessler/fabric/internal/plugins/ai"
+	"github.com/danielmiessler/fabric/internal/plugins/ai/gemini"
 	"github.com/danielmiessler/fabric/internal/plugins/db/fsdb"
 )
 
@@ -56,6 +58,12 @@ func handleListingCommands(currentFlags *Flags, fabricDb *fsdb.Db, registry *cor
 	if currentFlags.ListVendors {
 		err = registry.ListVendors(os.Stdout)
 		return true, err
+	}
+
+	if currentFlags.ListGeminiVoices {
+		voicesList := gemini.ListGeminiVoices(currentFlags.ShellCompleteOutput)
+		fmt.Print(voicesList)
+		return true, nil
 	}
 
 	return false, nil

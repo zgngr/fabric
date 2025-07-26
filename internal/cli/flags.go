@@ -87,6 +87,8 @@ type Flags struct {
 	ThinkStartTag                   string            `long:"think-start-tag" yaml:"thinkStartTag" description:"Start tag for thinking sections" default:"<think>"`
 	ThinkEndTag                     string            `long:"think-end-tag" yaml:"thinkEndTag" description:"End tag for thinking sections" default:"</think>"`
 	DisableResponsesAPI             bool              `long:"disable-responses-api" yaml:"disableResponsesAPI" description:"Disable OpenAI Responses API (default: false)"`
+	Voice                           string            `long:"voice" yaml:"voice" description:"TTS voice name for supported models (e.g., Kore, Charon, Puck)" default:"Kore"`
+	ListGeminiVoices                bool              `long:"list-gemini-voices" description:"List all available Gemini TTS voices"`
 }
 
 var debug = false
@@ -441,6 +443,7 @@ func (o *Flags) BuildChatOptions() (ret *domain.ChatOptions, err error) {
 		SuppressThink:      o.SuppressThink,
 		ThinkStartTag:      startTag,
 		ThinkEndTag:        endTag,
+		Voice:              o.Voice,
 	}
 	return
 }
