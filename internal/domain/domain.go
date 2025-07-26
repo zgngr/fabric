@@ -38,6 +38,7 @@ type ChatOptions struct {
 	ThinkEndTag        string
 	AudioOutput        bool
 	AudioFormat        string
+	Voice              string
 }
 
 // NormalizeMessages remove empty messages and ensure messages order user-assist-user

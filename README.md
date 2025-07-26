@@ -548,6 +548,9 @@ Application Options:
       --think-start-tag=            Start tag for thinking sections (default: <think>)
       --think-end-tag=              End tag for thinking sections (default: </think>)
       --disable-responses-api       Disable OpenAI Responses API (default: false)
+      --voice=                      TTS voice name for supported models (e.g., Kore, Charon, Puck)
+                                    (default: Kore)
+      --list-gemini-voices          List all available Gemini TTS voices
 
 Help Options:
   -h, --help                        Show this help message
