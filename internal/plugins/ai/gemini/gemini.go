@@ -323,7 +323,7 @@ func (o *Client) convertMessages(msgs []*chat.ChatCompletionMessage) []*genai.Co
 	var contents []*genai.Content
 
 	for _, msg := range msgs {
-		content := &genai.Content{}
+		content := &genai.Content{Parts: []*genai.Part{}}
 
 		if msg.Content != "" {
 			content.Parts = append(content.Parts, &genai.Part{Text: msg.Content})
