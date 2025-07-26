@@ -104,8 +104,8 @@ func handleChatProcessing(currentFlags *Flags, registry *core.PluginRegistry, me
 				// Check if result contains actual audio data
 				if strings.HasPrefix(result, "FABRIC_AUDIO_DATA:") {
 					// Extract the binary audio data
-					audioData := []byte(result[len("FABRIC_AUDIO_DATA:"):])
-					err = CreateAudioOutputFile(audioData, currentFlags.Output)
+					audioData := result[len("FABRIC_AUDIO_DATA:"):]
+					err = CreateAudioOutputFile([]byte(audioData), currentFlags.Output)
 				} else {
 					// Fallback for any error messages or unexpected responses
 					err = CreateOutputFile(result, currentFlags.Output)
