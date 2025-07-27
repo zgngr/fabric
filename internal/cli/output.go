@@ -17,6 +17,10 @@ func CopyToClipboard(message string) (err error) {
 }
 
 func CreateOutputFile(message string, fileName string) (err error) {
+	if _, err = os.Stat(fileName); err == nil {
+		err = fmt.Errorf("file %s already exists, not overwriting. Rename the existing file or choose a different name", fileName)
+		return
+	}
 	var file *os.File
 	if file, err = os.Create(fileName); err != nil {
 		err = fmt.Errorf("error creating file: %v", err)
@@ -26,7 +30,7 @@ func CreateOutputFile(message string, fileName string) (err error) {
 	if _, err = file.WriteString(message); err != nil {
 		err = fmt.Errorf("error writing to file: %v", err)
 	} else {
-		fmt.Printf("\n\n... written to %s\n", fileName)
+		fmt.Fprintf(os.Stderr, "\n\n[Output also written to %s]\n", fileName)
 	}
 	return
 }
