@@ -1,7 +1,0 @@
-### PR [#1654](https://github.com/danielmiessler/Fabric/pull/1654) by [ksylvan](https://github.com/ksylvan): Refine Output File Handling for Safety
-
-- Fix: prevent file overwrite and improve output messaging in CreateOutputFile
-- Add file existence check before creating output file
-- Return error if target file already exists
-- Change success message to write to stderr
-- Update message format with brackets for clarity

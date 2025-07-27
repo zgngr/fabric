@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.270 (2025-07-27)
+
+### PR [#1654](https://github.com/danielmiessler/Fabric/pull/1654) by [ksylvan](https://github.com/ksylvan): Refine Output File Handling for Safety
+
+- Fix: prevent file overwrite and improve output messaging in CreateOutputFile
+- Add file existence check before creating output file
+- Return error if target file already exists
+- Change success message to write to stderr
+- Update message format with brackets for clarity
+
 ## v1.4.269 (2025-07-26)
 
 ### PR [#1653](https://github.com/danielmiessler/Fabric/pull/1653) by [ksylvan](https://github.com/ksylvan): docs: update Gemini TTS model references to gemini-2.5-flash-preview-tts
