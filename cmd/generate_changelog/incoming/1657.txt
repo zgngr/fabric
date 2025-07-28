@@ -1,7 +1,0 @@
-### PR [#1657](https://github.com/danielmiessler/Fabric/pull/1657) by [ksylvan](https://github.com/ksylvan): Add GitHub Release Description Update Feature
-
-- Add GitHub release description update via `--release` flag
-- Implement `ReleaseManager` for managing release descriptions
-- Create `release.go` for handling release updates
-- Update `release.yml` to run changelog generation
-- Enable AI summary updates for GitHub releases
