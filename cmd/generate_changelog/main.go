@@ -5,9 +5,9 @@ import (
 	"os"
 	"path/filepath"
 
+	internal "github.com/danielmiessler/fabric/cmd/generate_changelog/internal"
 	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal/changelog"
 	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal/config"
-	internal "github.com/danielmiessler/fabric/cmd/generate_changelog/internal"
 	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
 )
