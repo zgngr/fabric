@@ -1,5 +1,0 @@
-### PR [#1658](https://github.com/danielmiessler/Fabric/pull/1658) by [ksylvan](https://github.com/ksylvan): Update Release Process for Data Consistency
-
-- Add database sync before generating changelog in release workflow
-- Ensure changelog generation includes latest database updates
-- Update changelog cache database

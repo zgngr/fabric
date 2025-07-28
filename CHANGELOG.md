@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.4.272 (2025-07-28)
+
+### PR [#1658](https://github.com/danielmiessler/Fabric/pull/1658) by [ksylvan](https://github.com/ksylvan): Update Release Process for Data Consistency
+
+- Add database sync before generating changelog in release workflow
+- Ensure changelog generation includes latest database updates
+- Update changelog cache database
+
 ## v1.4.271 (2025-07-28)
 
 ### PR [#1657](https://github.com/danielmiessler/Fabric/pull/1657) by [ksylvan](https://github.com/ksylvan): Add GitHub Release Description Update Feature
