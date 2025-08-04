@@ -141,26 +141,47 @@ func (o *YouTube) tryMethodYtDlpInternal(videoId string, language string, proces
 	// Use yt-dlp to get transcript
 	videoURL := "https://www.youtube.com/watch?v=" + videoId
 	outputPath := filepath.Join(tempDir, "%(title)s.%(ext)s")
-	lang_match := language
-	if len(language) > 2 {
-		lang_match = language[:2]
-	}
-	cmd := exec.Command("yt-dlp",
+
+	baseArgs := []string{
 		"--write-auto-subs",
-		"--sub-lang", lang_match,
 		"--skip-download",
 		"--sub-format", "vtt",
 		"--quiet",
 		"--no-warnings",
 		"-o", outputPath,
-		videoURL)
+	}
+
+	args := append([]string{}, baseArgs...)
+	if language != "" {
+		langMatch := language
+		if len(langMatch) > 2 {
+			langMatch = langMatch[:2]
+		}
+		args = append(args, "--sub-lang", langMatch)
+	}
+	args = append(args, videoURL)
+
+	cmd := exec.Command("yt-dlp", args...)
 
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 
 	if err = cmd.Run(); err != nil {
-		err = fmt.Errorf("yt-dlp failed: %v, stderr: %s", err, stderr.String())
-		return
+		if language != "" {
+			// Fallback: try again without specifying language
+			stderr.Reset()
+			fallbackArgs := append([]string{}, baseArgs...)
+			fallbackArgs = append(fallbackArgs, videoURL)
+			cmd = exec.Command("yt-dlp", fallbackArgs...)
+			cmd.Stderr = &stderr
+			if err = cmd.Run(); err != nil {
+				err = fmt.Errorf("yt-dlp failed: %v, stderr: %s", err, stderr.String())
+				return
+			}
+		} else {
+			err = fmt.Errorf("yt-dlp failed: %v, stderr: %s", err, stderr.String())
+			return
+		}
 	}
 
 	// Find VTT files using cross-platform approach
