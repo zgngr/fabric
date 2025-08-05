@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.4.273 (2025-08-05)
+
+### Direct commits
+
+- Chore: remove redundant words
+Signed-off-by: queryfast <queryfast@outlook.com>
+- Fix typos in t_ patterns
+
 ## v1.4.272 (2025-07-28)
 
 ### PR [#1658](https://github.com/danielmiessler/Fabric/pull/1658) by [ksylvan](https://github.com/ksylvan): Update Release Process for Data Consistency
