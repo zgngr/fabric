@@ -20,6 +20,8 @@ import (
 )
 
 // Flags create flags struct. the users flags go into this, this will be passed to the chat struct in cli
+// Chat parameter defaults set in the struct tags must match domain.Default* constants
+
 type Flags struct {
 	Pattern                         string            `short:"p" long:"pattern" yaml:"pattern" description:"Choose a pattern from the available patterns" default:""`
 	PatternVariables                map[string]string `short:"v" long:"variable" description:"Values for pattern variables, e.g. -v=#role:expert -v=#points:30"`
