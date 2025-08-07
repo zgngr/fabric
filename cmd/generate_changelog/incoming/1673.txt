@@ -3,5 +3,5 @@
 - Add Claude Opus 4.1 model support
 - Upgrade anthropic-sdk-go from v1.4.0 to v1.7.0
 - Fix temperature/topP parameter conflict for models
+- Refactor chat parameter defaults handling with domain constants
 - Move changelog generation to separate workflow job
-- Refactor release workflow to use shared version job and simplify OS handling
