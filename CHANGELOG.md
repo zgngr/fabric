@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.275 (2025-08-07)
+
+### PR [#1676](https://github.com/danielmiessler/Fabric/pull/1676) by [ksylvan](https://github.com/ksylvan): Refactor authentication to support GITHUB_TOKEN and GH_TOKEN
+
+- Refactor: centralize GitHub token retrieval logic into utility function
+- Support both GITHUB_TOKEN and GH_TOKEN environment variables with fallback handling
+- Add new util/token.go file for centralized token handling across the application
+- Update walker.go and main.go to use the new centralized token utility function
+- Feat: add 'gpt-5' to raw-mode models in OpenAI client to bypass structured chat message formatting
+
 ## v1.4.274 (2025-08-07)
 
 ### PR [#1673](https://github.com/danielmiessler/Fabric/pull/1673) by [ksylvan](https://github.com/ksylvan): Add Support for Claude Opus 4.1 Model
