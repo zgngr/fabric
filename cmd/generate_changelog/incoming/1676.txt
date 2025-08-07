@@ -1,0 +1,7 @@
+### PR [#1676](https://github.com/danielmiessler/Fabric/pull/1676) by [ksylvan](https://github.com/ksylvan): Refactor authentication to support GITHUB_TOKEN and GH_TOKEN
+
+- Refactor: centralize GitHub token retrieval logic into utility function
+- Extract token retrieval into `util.GetTokenFromEnv` function
+- Support both `GITHUB_TOKEN` and `GH_TOKEN` environment variables
+- Replace direct `os.Getenv` calls with utility function
+- Add new `util/token.go` file for token handling
