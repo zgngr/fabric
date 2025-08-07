@@ -5,9 +5,10 @@ import (
 	"os"
 	"path/filepath"
 
-	internal "github.com/danielmiessler/fabric/cmd/generate_changelog/internal"
+	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal"
 	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal/changelog"
 	"github.com/danielmiessler/fabric/cmd/generate_changelog/internal/config"
+	"github.com/danielmiessler/fabric/cmd/generate_changelog/util"
 	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
 )
@@ -55,9 +56,7 @@ func run(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("--release cannot be used with other processing flags")
 	}
 
-	if cfg.GitHubToken == "" {
-		cfg.GitHubToken = os.Getenv("GITHUB_TOKEN")
-	}
+	cfg.GitHubToken = util.GetTokenFromEnv(cfg.GitHubToken)
 
 	generator, err := changelog.New(cfg)
 	if err != nil {
