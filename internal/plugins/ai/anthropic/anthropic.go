@@ -188,9 +188,13 @@ func (an *Client) buildMessageParams(msgs []anthropic.MessageParam, opts *domain
 	}
 
 	// Only set one of Temperature or TopP as some models don't allow both
-	if opts.Temperature != 0 {
+	// Check if values were explicitly set (different from defaults)
+	tempExplicitlySet := opts.Temperature != domain.DefaultTemperature
+	topPExplicitlySet := opts.TopP != domain.DefaultTopP
+
+	if tempExplicitlySet {
 		params.Temperature = anthropic.Opt(opts.Temperature)
-	} else if opts.TopP != 0 {
+	} else if topPExplicitlySet {
 		params.TopP = anthropic.Opt(opts.TopP)
 	}
 

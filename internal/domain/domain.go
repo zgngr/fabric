@@ -4,6 +4,14 @@ import "github.com/danielmiessler/fabric/internal/chat"
 
 const ChatMessageRoleMeta = "meta"
 
+// Default values for chat options (must match cli/flags.go defaults)
+const (
+	DefaultTemperature      = 0.7
+	DefaultTopP             = 0.9
+	DefaultPresencePenalty  = 0.0
+	DefaultFrequencyPenalty = 0.0
+)
+
 type ChatRequest struct {
 	ContextName      string
 	SessionName      string
