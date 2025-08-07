@@ -122,8 +122,6 @@ jobs:
           else
             echo "Release ${{ env.latest_tag }} already exists."
           fi
-          go run ./cmd/generate_changelog --sync-db
-          go run ./cmd/generate_changelog --release ${{ env.latest_tag }}
 
       - name: Upload release artifact
         if: matrix.os == 'windows-latest'
@@ -138,3 +136,23 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release upload ${{ env.latest_tag }} fabric-${OS}-${{ matrix.arch }}
+
+  update_release_notes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: ./go.mod
+
+      - name: Update release description
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          go run ./cmd/generate_changelog --sync-db
+          go run ./cmd/generate_changelog --release ${{ env.latest_tag }}
