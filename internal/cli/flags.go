@@ -20,6 +20,8 @@ import (
 )
 
 // Flags create flags struct. the users flags go into this, this will be passed to the chat struct in cli
+// Chat parameter defaults set in the struct tags must match domain.Default* constants
+
 type Flags struct {
 	Pattern                         string            `short:"p" long:"pattern" yaml:"pattern" description:"Choose a pattern from the available patterns" default:""`
 	PatternVariables                map[string]string `short:"v" long:"variable" description:"Values for pattern variables, e.g. -v=#role:expert -v=#points:30"`
@@ -89,6 +91,8 @@ type Flags struct {
 	DisableResponsesAPI             bool              `long:"disable-responses-api" yaml:"disableResponsesAPI" description:"Disable OpenAI Responses API (default: false)"`
 	Voice                           string            `long:"voice" yaml:"voice" description:"TTS voice name for supported models (e.g., Kore, Charon, Puck)" default:"Kore"`
 	ListGeminiVoices                bool              `long:"list-gemini-voices" description:"List all available Gemini TTS voices"`
+	Notification                    bool              `long:"notification" yaml:"notification" description:"Send desktop notification when command completes"`
+	NotificationCommand             string            `long:"notification-command" yaml:"notificationCommand" description:"Custom command to run for notifications (overrides built-in notifications)"`
 }
 
 var debug = false
@@ -425,25 +429,27 @@ func (o *Flags) BuildChatOptions() (ret *domain.ChatOptions, err error) {
 	}
 
 	ret = &domain.ChatOptions{
-		Model:              o.Model,
-		Temperature:        o.Temperature,
-		TopP:               o.TopP,
-		PresencePenalty:    o.PresencePenalty,
-		FrequencyPenalty:   o.FrequencyPenalty,
-		Raw:                o.Raw,
-		Seed:               o.Seed,
-		ModelContextLength: o.ModelContextLength,
-		Search:             o.Search,
-		SearchLocation:     o.SearchLocation,
-		ImageFile:          o.ImageFile,
-		ImageSize:          o.ImageSize,
-		ImageQuality:       o.ImageQuality,
-		ImageCompression:   o.ImageCompression,
-		ImageBackground:    o.ImageBackground,
-		SuppressThink:      o.SuppressThink,
-		ThinkStartTag:      startTag,
-		ThinkEndTag:        endTag,
-		Voice:              o.Voice,
+		Model:               o.Model,
+		Temperature:         o.Temperature,
+		TopP:                o.TopP,
+		PresencePenalty:     o.PresencePenalty,
+		FrequencyPenalty:    o.FrequencyPenalty,
+		Raw:                 o.Raw,
+		Seed:                o.Seed,
+		ModelContextLength:  o.ModelContextLength,
+		Search:              o.Search,
+		SearchLocation:      o.SearchLocation,
+		ImageFile:           o.ImageFile,
+		ImageSize:           o.ImageSize,
+		ImageQuality:        o.ImageQuality,
+		ImageCompression:    o.ImageCompression,
+		ImageBackground:     o.ImageBackground,
+		SuppressThink:       o.SuppressThink,
+		ThinkStartTag:       startTag,
+		ThinkEndTag:         endTag,
+		Voice:               o.Voice,
+		Notification:        o.Notification || o.NotificationCommand != "",
+		NotificationCommand: o.NotificationCommand,
 	}
 	return
 }

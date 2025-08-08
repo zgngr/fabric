@@ -46,6 +46,7 @@ func NewClient() (ret *Client) {
 		string(anthropic.ModelClaude_3_5_Sonnet_20240620), string(anthropic.ModelClaude3OpusLatest),
 		string(anthropic.ModelClaude_3_Opus_20240229), string(anthropic.ModelClaude_3_Haiku_20240307),
 		string(anthropic.ModelClaudeOpus4_20250514), string(anthropic.ModelClaudeSonnet4_20250514),
+		string(anthropic.ModelClaudeOpus4_1_20250805),
 	}
 
 	return
@@ -181,11 +182,19 @@ func (an *Client) buildMessageParams(msgs []anthropic.MessageParam, opts *domain
 	params anthropic.MessageNewParams) {
 
 	params = anthropic.MessageNewParams{
-		Model:       anthropic.Model(opts.Model),
-		MaxTokens:   int64(an.maxTokens),
-		TopP:        anthropic.Opt(opts.TopP),
-		Temperature: anthropic.Opt(opts.Temperature),
-		Messages:    msgs,
+		Model:     anthropic.Model(opts.Model),
+		MaxTokens: int64(an.maxTokens),
+		Messages:  msgs,
+	}
+
+	// Only set one of Temperature or TopP as some models don't allow both
+	// Always set temperature to ensure consistent behavior (Anthropic default is 1.0, Fabric default is 0.7)
+	if opts.TopP != domain.DefaultTopP {
+		// User explicitly set TopP, so use that instead of temperature
+		params.TopP = anthropic.Opt(opts.TopP)
+	} else {
+		// Use temperature (always set to ensure Fabric's default of 0.7, not Anthropic's 1.0)
+		params.Temperature = anthropic.Opt(opts.Temperature)
 	}
 
 	// Add Claude Code spoofing system message for OAuth authentication

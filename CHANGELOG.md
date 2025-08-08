@@ -1,5 +1,54 @@
 # Changelog
 
+## v1.4.277 (2025-08-08)
+
+### PR [#1679](https://github.com/danielmiessler/Fabric/pull/1679) by [ksylvan](https://github.com/ksylvan): Add cross-platform desktop notifications to Fabric CLI
+
+- Add cross-platform desktop notifications with secure custom commands
+- Integrate notification sending into chat processing workflow  
+- Add --notification and --notification-command CLI flags and help
+- Provide cross-platform providers: macOS, Linux, Windows with fallbacks
+- Escape shell metacharacters to prevent injection vulnerabilities
+
+## v1.4.276 (2025-08-08)
+
+### Direct commits
+
+- Ci: add write permissions to update_release_notes job
+
+- Add contents write permission to release notes job
+
+- Enable GitHub Actions to modify repository contents
+- Fix potential permission issues during release process
+
+## v1.4.275 (2025-08-07)
+
+### PR [#1676](https://github.com/danielmiessler/Fabric/pull/1676) by [ksylvan](https://github.com/ksylvan): Refactor authentication to support GITHUB_TOKEN and GH_TOKEN
+
+- Refactor: centralize GitHub token retrieval logic into utility function
+- Support both GITHUB_TOKEN and GH_TOKEN environment variables with fallback handling
+- Add new util/token.go file for centralized token handling across the application
+- Update walker.go and main.go to use the new centralized token utility function
+- Feat: add 'gpt-5' to raw-mode models in OpenAI client to bypass structured chat message formatting
+
+## v1.4.274 (2025-08-07)
+
+### PR [#1673](https://github.com/danielmiessler/Fabric/pull/1673) by [ksylvan](https://github.com/ksylvan): Add Support for Claude Opus 4.1 Model
+
+- Add Claude Opus 4.1 model support
+- Upgrade anthropic-sdk-go from v1.4.0 to v1.7.0
+- Fix temperature/topP parameter conflict for models
+- Refactor release workflow to use shared version job and simplify OS handling
+- Improve chat parameter defaults handling with domain constants
+
+## v1.4.273 (2025-08-05)
+
+### Direct commits
+
+- Chore: remove redundant words
+Signed-off-by: queryfast <queryfast@outlook.com>
+- Fix typos in t_ patterns
+
 ## v1.4.272 (2025-07-28)
 
 ### PR [#1658](https://github.com/danielmiessler/Fabric/pull/1658) by [ksylvan](https://github.com/ksylvan): Update Release Process for Data Consistency
