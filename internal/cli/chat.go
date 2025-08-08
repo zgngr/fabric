@@ -159,11 +159,11 @@ func sendNotification(options *domain.ChatOptions, patternName, result string) e
 		// SECURITY: Pass title and message as proper shell positional arguments $1 and $2
 		// This matches the documented interface where custom commands receive title and message as shell variables
 		cmd := exec.Command("sh", "-c", options.NotificationCommand+" \"$1\" \"$2\"", "--", title, message)
-		
+
 		// For debugging: capture and display output from custom commands
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
-		
+
 		return cmd.Run()
 	}
 
