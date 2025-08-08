@@ -76,6 +76,7 @@ complete -c fabric -l strategy -d "Choose a strategy from the available strategi
 complete -c fabric -l think-start-tag -d "Start tag for thinking sections (default: <think>)"
 complete -c fabric -l think-end-tag -d "End tag for thinking sections (default: </think>)"
 complete -c fabric -l voice -d "TTS voice name for supported models (e.g., Kore, Charon, Puck)" -a "(__fabric_get_gemini_voices)"
+complete -c fabric -l notification-command -d "Custom command to run for notifications (overrides built-in notifications)"
 
 # Boolean flags (no arguments)
 complete -c fabric -s S -l setup -d "Run setup for all reconfigurable parts of fabric"
@@ -108,4 +109,5 @@ complete -c fabric -l list-gemini-voices -d "List all available Gemini TTS voice
 complete -c fabric -l shell-complete-list -d "Output raw list without headers/formatting (for shell completion)"
 complete -c fabric -l suppress-think -d "Suppress text enclosed in thinking tags"
 complete -c fabric -l disable-responses-api -d "Disable OpenAI Responses API (default: false)"
+complete -c fabric -l notification -d "Send desktop notification when command completes"
 complete -c fabric -s h -l help -d "Show this help message"

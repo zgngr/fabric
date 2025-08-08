@@ -551,6 +551,9 @@ Application Options:
       --voice=                      TTS voice name for supported models (e.g., Kore, Charon, Puck)
                                     (default: Kore)
       --list-gemini-voices          List all available Gemini TTS voices
+      --notification                Send desktop notification when command completes
+      --notification-command=       Custom command to run for notifications (overrides built-in
+                                    notifications)
 
 Help Options:
   -h, --help                        Show this help message

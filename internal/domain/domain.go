@@ -25,28 +25,30 @@ type ChatRequest struct {
 }
 
 type ChatOptions struct {
-	Model              string
-	Temperature        float64
-	TopP               float64
-	PresencePenalty    float64
-	FrequencyPenalty   float64
-	Raw                bool
-	Seed               int
-	ModelContextLength int
-	MaxTokens          int
-	Search             bool
-	SearchLocation     string
-	ImageFile          string
-	ImageSize          string
-	ImageQuality       string
-	ImageCompression   int
-	ImageBackground    string
-	SuppressThink      bool
-	ThinkStartTag      string
-	ThinkEndTag        string
-	AudioOutput        bool
-	AudioFormat        string
-	Voice              string
+	Model               string
+	Temperature         float64
+	TopP                float64
+	PresencePenalty     float64
+	FrequencyPenalty    float64
+	Raw                 bool
+	Seed                int
+	ModelContextLength  int
+	MaxTokens           int
+	Search              bool
+	SearchLocation      string
+	ImageFile           string
+	ImageSize           string
+	ImageQuality        string
+	ImageCompression    int
+	ImageBackground     string
+	SuppressThink       bool
+	ThinkStartTag       string
+	ThinkEndTag         string
+	AudioOutput         bool
+	AudioFormat         string
+	Voice               string
+	Notification        bool
+	NotificationCommand string
 }
 
 // NormalizeMessages remove empty messages and ensure messages order user-assist-user
