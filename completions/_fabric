@@ -117,6 +117,8 @@ _fabric() {
     '(--think-start-tag)--think-start-tag[Start tag for thinking sections (default: <think>)]:start tag:' \
     '(--think-end-tag)--think-end-tag[End tag for thinking sections (default: </think>)]:end tag:' \
     '(--disable-responses-api)--disable-responses-api[Disable OpenAI Responses API (default: false)]' \
+    '(--notification)--notification[Send desktop notification when command completes]' \
+    '(--notification-command)--notification-command[Custom command to run for notifications]:notification command:' \
     '(-h --help)'{-h,--help}'[Show this help message]' \
     '*:arguments:'
 }

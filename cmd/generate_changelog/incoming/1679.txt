@@ -1,0 +1,7 @@
+### PR [#1679](https://github.com/danielmiessler/Fabric/pull/1679) by [ksylvan](https://github.com/ksylvan): Add cross-platform desktop notifications to Fabric CLI
+
+- Add desktop notification support with cross-platform providers for macOS, Linux, and Windows
+- Implement notification manager with fallback provider detection and configuration options
+- Integrate notification sending into chat processing workflow with CLI interface flags
+- Fix security vulnerabilities by hardening notification commands to prevent shell and script injection attacks
+- Improve Unicode handling and environment variable inheritance in notification providers

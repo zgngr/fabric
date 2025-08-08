@@ -3,12 +3,14 @@ package cli
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
 	"github.com/danielmiessler/fabric/internal/core"
 	"github.com/danielmiessler/fabric/internal/domain"
 	"github.com/danielmiessler/fabric/internal/plugins/db/fsdb"
+	"github.com/danielmiessler/fabric/internal/tools/notifications"
 )
 
 // handleChatProcessing handles the main chat processing logic
@@ -115,7 +117,63 @@ func handleChatProcessing(currentFlags *Flags, registry *core.PluginRegistry, me
 			}
 		}
 	}
+
+	// Send notification if requested
+	if chatOptions.Notification {
+		if err = sendNotification(chatOptions, chatReq.PatternName, result); err != nil {
+			// Log notification error but don't fail the main command
+			fmt.Fprintf(os.Stderr, "Failed to send notification: %v\n", err)
+		}
+	}
+
 	return
+}
+
+// sendNotification sends a desktop notification about command completion.
+//
+// When truncating the result for notification display, this function counts Unicode code points,
+// not grapheme clusters. As a result, complex emoji or accented characters with multiple combining
+// characters may be truncated improperly. This is a limitation of the current implementation.
+func sendNotification(options *domain.ChatOptions, patternName, result string) error {
+	title := "Fabric Command Complete"
+	if patternName != "" {
+		title = fmt.Sprintf("Fabric: %s Complete", patternName)
+	}
+
+	// Limit message length for notification display (counts Unicode code points)
+	message := "Command completed successfully"
+	if result != "" {
+		maxLength := 100
+		runes := []rune(result)
+		if len(runes) > maxLength {
+			message = fmt.Sprintf("Output: %s...", string(runes[:maxLength]))
+		} else {
+			message = fmt.Sprintf("Output: %s", result)
+		}
+		// Clean up newlines for notification display
+		message = strings.ReplaceAll(message, "\n", " ")
+	}
+
+	// Use custom notification command if provided
+	if options.NotificationCommand != "" {
+		// SECURITY: Pass title and message as proper shell positional arguments $1 and $2
+		// This matches the documented interface where custom commands receive title and message as shell variables
+		cmd := exec.Command("sh", "-c", options.NotificationCommand+" \"$1\" \"$2\"", "--", title, message)
+		
+		// For debugging: capture and display output from custom commands
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		
+		return cmd.Run()
+	}
+
+	// Use built-in notification system
+	notificationManager := notifications.NewNotificationManager()
+	if !notificationManager.IsAvailable() {
+		return fmt.Errorf("no notification system available")
+	}
+
+	return notificationManager.Send(title, message)
 }
 
 // isTTSModel checks if the model is a text-to-speech model

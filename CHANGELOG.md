@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.4.276 (2025-08-08)
+
+### Direct commits
+
+- Ci: add write permissions to update_release_notes job
+
+- Add contents write permission to release notes job
+
+- Enable GitHub Actions to modify repository contents
+- Fix potential permission issues during release process
+
 ## v1.4.275 (2025-08-07)
 
 ### PR [#1676](https://github.com/danielmiessler/Fabric/pull/1676) by [ksylvan](https://github.com/ksylvan): Refactor authentication to support GITHUB_TOKEN and GH_TOKEN
