@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.277 (2025-08-08)
+
+### PR [#1679](https://github.com/danielmiessler/Fabric/pull/1679) by [ksylvan](https://github.com/ksylvan): Add cross-platform desktop notifications to Fabric CLI
+
+- Add cross-platform desktop notifications with secure custom commands
+- Integrate notification sending into chat processing workflow  
+- Add --notification and --notification-command CLI flags and help
+- Provide cross-platform providers: macOS, Linux, Windows with fallbacks
+- Escape shell metacharacters to prevent injection vulnerabilities
+
 ## v1.4.276 (2025-08-08)
 
 ### Direct commits
