@@ -54,6 +54,7 @@ type Flags struct {
 	YouTubeTranscriptWithTimestamps bool              `long:"transcript-with-timestamps" description:"Grab transcript from YouTube video with timestamps and send to chat"`
 	YouTubeComments                 bool              `long:"comments" description:"Grab comments from YouTube video and send to chat"`
 	YouTubeMetadata                 bool              `long:"metadata" description:"Output video metadata"`
+	YtDlpArgs                       string            `long:"yt-dlp-args" yaml:"ytDlpArgs" description:"Additional arguments to pass to yt-dlp (e.g. '--cookies-from-browser brave')"`
 	Language                        string            `short:"g" long:"language" description:"Specify the Language Code for the chat, e.g. -g=en -g=zh" default:""`
 	ScrapeURL                       string            `short:"u" long:"scrape_url" description:"Scrape website URL to markdown using Jina AI"`
 	ScrapeQuestion                  string            `short:"q" long:"scrape_question" description:"Search question using Jina AI"`

@@ -38,6 +38,47 @@ func init() {
 	timestampRegex = regexp.MustCompile(`^\d+$|^\d{1,2}:\d{2}(:\d{2})?(\.\d{3})?$`)
 }
 
+// parseShellArgs parses a shell-style argument string into individual arguments
+// Handles quoted strings and escaping
+func parseShellArgs(argsStr string) []string {
+	if argsStr == "" {
+		return nil
+	}
+
+	var args []string
+	var current strings.Builder
+	var inQuotes bool
+	var quoteChar rune
+
+	for i, r := range argsStr {
+		switch {
+		case !inQuotes && (r == '"' || r == '\''):
+			inQuotes = true
+			quoteChar = r
+		case inQuotes && r == quoteChar:
+			// Check if it's escaped
+			if i > 0 && rune(argsStr[i-1]) == '\\' {
+				current.WriteRune(r)
+			} else {
+				inQuotes = false
+			}
+		case !inQuotes && (r == ' ' || r == '\t'):
+			if current.Len() > 0 {
+				args = append(args, current.String())
+				current.Reset()
+			}
+		default:
+			current.WriteRune(r)
+		}
+	}
+
+	if current.Len() > 0 {
+		args = append(args, current.String())
+	}
+
+	return args
+}
+
 func NewYouTube() (ret *YouTube) {
 
 	label := "YouTube"
@@ -113,17 +154,27 @@ func (o *YouTube) GrabTranscriptForUrl(url string, language string) (ret string,
 
 func (o *YouTube) GrabTranscript(videoId string, language string) (ret string, err error) {
 	// Use yt-dlp for reliable transcript extraction
-	return o.tryMethodYtDlp(videoId, language)
+	return o.GrabTranscriptWithArgs(videoId, language, "")
+}
+
+func (o *YouTube) GrabTranscriptWithArgs(videoId string, language string, additionalArgs string) (ret string, err error) {
+	// Use yt-dlp for reliable transcript extraction
+	return o.tryMethodYtDlp(videoId, language, additionalArgs)
 }
 
 func (o *YouTube) GrabTranscriptWithTimestamps(videoId string, language string) (ret string, err error) {
 	// Use yt-dlp for reliable transcript extraction with timestamps
-	return o.tryMethodYtDlpWithTimestamps(videoId, language)
+	return o.GrabTranscriptWithTimestampsWithArgs(videoId, language, "")
+}
+
+func (o *YouTube) GrabTranscriptWithTimestampsWithArgs(videoId string, language string, additionalArgs string) (ret string, err error) {
+	// Use yt-dlp for reliable transcript extraction with timestamps
+	return o.tryMethodYtDlpWithTimestamps(videoId, language, additionalArgs)
 }
 
 // tryMethodYtDlpInternal is a helper function to reduce duplication between
 // tryMethodYtDlp and tryMethodYtDlpWithTimestamps.
-func (o *YouTube) tryMethodYtDlpInternal(videoId string, language string, processVTTFileFunc func(filename string) (string, error)) (ret string, err error) {
+func (o *YouTube) tryMethodYtDlpInternal(videoId string, language string, additionalArgs string, processVTTFileFunc func(filename string) (string, error)) (ret string, err error) {
 	// Check if yt-dlp is available
 	if _, err = exec.LookPath("yt-dlp"); err != nil {
 		err = fmt.Errorf("yt-dlp not found in PATH. Please install yt-dlp to use YouTube transcript functionality")
@@ -152,38 +203,69 @@ func (o *YouTube) tryMethodYtDlpInternal(videoId string, language string, proces
 	}
 
 	args := append([]string{}, baseArgs...)
+
+	// Add additional arguments if provided
+	if additionalArgs != "" {
+		additionalArgsList := parseShellArgs(additionalArgs)
+		args = append(args, additionalArgsList...)
+	}
+
 	if language != "" {
 		langMatch := language
 		if len(langMatch) > 2 {
 			langMatch = langMatch[:2]
 		}
-		args = append(args, "--sub-lang", langMatch)
+		args = append(args, "--sub-langs", langMatch)
 	}
 	args = append(args, videoURL)
-
 	cmd := exec.Command("yt-dlp", args...)
 
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 
 	if err = cmd.Run(); err != nil {
+		stderrStr := stderr.String()
+
+		// Check for specific YouTube errors
+		if strings.Contains(stderrStr, "429") || strings.Contains(stderrStr, "Too Many Requests") {
+			err = fmt.Errorf("YouTube rate limit exceeded. Try again later or use different yt-dlp arguments like '--sleep-requests 1' to slow down requests. Error: %v", err)
+			return
+		}
+
+		if strings.Contains(stderrStr, "Sign in to confirm you're not a bot") || strings.Contains(stderrStr, "Use --cookies-from-browser") {
+			err = fmt.Errorf("YouTube requires authentication (bot detection). Use --yt-dlp-args '--cookies-from-browser BROWSER' where BROWSER is chrome, firefox, brave, etc. Error: %v", err)
+			return
+		}
+
 		if language != "" {
-			// Fallback: try again without specifying language
+			// Fallback: try without specifying language (let yt-dlp choose best available)
 			stderr.Reset()
 			fallbackArgs := append([]string{}, baseArgs...)
+
+			// Add additional arguments if provided
+			if additionalArgs != "" {
+				additionalArgsList := parseShellArgs(additionalArgs)
+				fallbackArgs = append(fallbackArgs, additionalArgsList...)
+			}
+
+			// Don't specify language, let yt-dlp choose
 			fallbackArgs = append(fallbackArgs, videoURL)
 			cmd = exec.Command("yt-dlp", fallbackArgs...)
 			cmd.Stderr = &stderr
 			if err = cmd.Run(); err != nil {
-				err = fmt.Errorf("yt-dlp failed: %v, stderr: %s", err, stderr.String())
+				stderrStr2 := stderr.String()
+				if strings.Contains(stderrStr2, "429") || strings.Contains(stderrStr2, "Too Many Requests") {
+					err = fmt.Errorf("YouTube rate limit exceeded. Try again later or use different yt-dlp arguments like '--sleep-requests 1'. Error: %v", err)
+				} else {
+					err = fmt.Errorf("yt-dlp failed with language '%s' and fallback. Original error: %s. Fallback error: %s", language, stderrStr, stderrStr2)
+				}
 				return
 			}
 		} else {
-			err = fmt.Errorf("yt-dlp failed: %v, stderr: %s", err, stderr.String())
+			err = fmt.Errorf("yt-dlp failed: %v, stderr: %s", err, stderrStr)
 			return
 		}
 	}
-
 	// Find VTT files using cross-platform approach
 	vttFiles, err := o.findVTTFiles(tempDir, language)
 	if err != nil {
@@ -193,12 +275,12 @@ func (o *YouTube) tryMethodYtDlpInternal(videoId string, language string, proces
 	return processVTTFileFunc(vttFiles[0])
 }
 
-func (o *YouTube) tryMethodYtDlp(videoId string, language string) (ret string, err error) {
-	return o.tryMethodYtDlpInternal(videoId, language, o.readAndCleanVTTFile)
+func (o *YouTube) tryMethodYtDlp(videoId string, language string, additionalArgs string) (ret string, err error) {
+	return o.tryMethodYtDlpInternal(videoId, language, additionalArgs, o.readAndCleanVTTFile)
 }
 
-func (o *YouTube) tryMethodYtDlpWithTimestamps(videoId string, language string) (ret string, err error) {
-	return o.tryMethodYtDlpInternal(videoId, language, o.readAndFormatVTTWithTimestamps)
+func (o *YouTube) tryMethodYtDlpWithTimestamps(videoId string, language string, additionalArgs string) (ret string, err error) {
+	return o.tryMethodYtDlpInternal(videoId, language, additionalArgs, o.readAndFormatVTTWithTimestamps)
 }
 
 func (o *YouTube) readAndCleanVTTFile(filename string) (ret string, err error) {

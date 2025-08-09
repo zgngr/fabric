@@ -554,6 +554,7 @@ Application Options:
       --notification                Send desktop notification when command completes
       --notification-command=       Custom command to run for notifications (overrides built-in
                                     notifications)
+      --yt-dlp-args=                Additional arguments to pass to yt-dlp (e.g. '--cookies-from-browser brave')
 
 Help Options:
   -h, --help                        Show this help message
