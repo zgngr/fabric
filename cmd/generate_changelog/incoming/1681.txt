@@ -4,4 +4,4 @@
 - Implement fallback logic for YouTube subtitle language detection with retry mechanism
 - Allow passing browser cookies for authentication and improve error handling for YouTube rate limits
 - Add user argument precedence over built-in flags with comprehensive documentation for override behavior
-- Separate release notes generation into dedicated CI workflow job with proper Go configuration
+- A new guide to using Fabric for YouTube transcripts, comments, metadata extraction
