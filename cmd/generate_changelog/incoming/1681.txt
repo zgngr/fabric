@@ -4,4 +4,3 @@
 - Implement smart subtitle language fallback system when requested locale is unavailable
 - Add fallback logic for YouTube subtitle language detection with auto-detection of downloaded languages
 - Replace custom argument parser with shellquote and precompile regexes for improved performance and safety
-- Separate release notes generation into dedicated CI workflow job with proper Go setup and configuration
