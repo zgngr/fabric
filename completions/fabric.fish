@@ -95,6 +95,7 @@ complete -c fabric -l transcript -d "Grab transcript from YouTube video and send
 complete -c fabric -l transcript-with-timestamps -d "Grab transcript from YouTube video with timestamps"
 complete -c fabric -l comments -d "Grab comments from YouTube video and send to chat"
 complete -c fabric -l metadata -d "Output video metadata"
+complete -c fabric -l yt-dlp-args -d "Additional arguments to pass to yt-dlp (e.g. '--cookies-from-browser brave')"
 complete -c fabric -l readability -d "Convert HTML input into a clean, readable view"
 complete -c fabric -l input-has-vars -d "Apply variables to user input"
 complete -c fabric -l dry-run -d "Show what would be sent to the model without actually sending it"
