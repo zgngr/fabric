@@ -1,6 +1,0 @@
-### PR [#1681](https://github.com/danielmiessler/Fabric/pull/1681) by [ksylvan](https://github.com/ksylvan): Enhance YouTube Support with Custom yt-dlp Arguments
-
-- Add `--yt-dlp-args` flag for custom YouTube downloader options with advanced control capabilities
-- Implement smart subtitle language fallback system when requested locale is unavailable
-- Add fallback logic for YouTube subtitle language detection with auto-detection of downloaded languages
-- Replace custom argument parser with shellquote and precompile regexes for improved performance and safety
