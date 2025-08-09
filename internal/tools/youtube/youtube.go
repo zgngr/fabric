@@ -204,12 +204,7 @@ func (o *YouTube) tryMethodYtDlpInternal(videoId string, language string, additi
 
 	args := append([]string{}, baseArgs...)
 
-	// Add additional arguments if provided
-	if additionalArgs != "" {
-		additionalArgsList := parseShellArgs(additionalArgs)
-		args = append(args, additionalArgsList...)
-	}
-
+	// Add built-in language selection first
 	if language != "" {
 		langMatch := language
 		if len(langMatch) > 2 {
@@ -217,7 +212,15 @@ func (o *YouTube) tryMethodYtDlpInternal(videoId string, language string, additi
 		}
 		args = append(args, "--sub-langs", langMatch)
 	}
+
+	// Add user-provided arguments last so they take precedence
+	if additionalArgs != "" {
+		additionalArgsList := parseShellArgs(additionalArgs)
+		args = append(args, additionalArgsList...)
+	}
+
 	args = append(args, videoURL)
+
 	cmd := exec.Command("yt-dlp", args...)
 
 	var stderr bytes.Buffer

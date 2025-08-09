@@ -58,14 +58,14 @@ fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --metadata
 
 ### Custom yt-dlp Arguments
 
-Pass additional arguments to yt-dlp for advanced functionality:
+Pass additional arguments to yt-dlp for advanced functionality. **User-provided arguments take precedence** over built-in fabric arguments, giving you full control:
 
 ```bash
 # Use browser cookies for age-restricted or private videos
 fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args "--cookies-from-browser brave"
 
-# Specify subtitle language
-fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args "--sub-langs es"
+# Override language selection (takes precedence over -g flag)
+fabric -g en -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args "--sub-langs es,fr"
 
 # Use specific format
 fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args "--format best"
@@ -78,7 +78,21 @@ fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args "--cookies-fr
 
 # Combine rate limiting with authentication
 fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args "--cookies-from-browser brave --sleep-requests 1"
+
+# Override subtitle format (takes precedence over built-in --sub-format vtt)
+fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args "--sub-format srt"
 ```
+
+#### Argument Precedence
+
+Fabric constructs the yt-dlp command in this order:
+
+1. **Built-in base arguments** (`--write-auto-subs`, `--skip-download`, etc.)
+2. **Language selection** (from `-g` flag): `--sub-langs LANGUAGE`
+3. **User arguments** (from `--yt-dlp-args`): **These override any conflicting built-in arguments**
+4. **Video URL**
+
+This means you can override any built-in behavior by specifying it in `--yt-dlp-args`.
 
 ### Playlist Processing
 
@@ -228,6 +242,8 @@ export FABRIC_YOUTUBE_API_KEY="your_api_key_here"
 5. **Language support**: Specify language codes for better transcript accuracy
 6. **Rate limiting**: If you encounter 429 errors, use `--sleep-requests 1` to slow down requests
 7. **Persistent settings**: Set common yt-dlp args in your config file to avoid repeating them
+8. **Argument precedence**: Use `--yt-dlp-args` to override any built-in behavior when needed
+9. **Testing**: Use `yt-dlp --list-subs URL` to see available subtitle languages before processing
 
 ## Examples
 
@@ -255,6 +271,15 @@ fabric -y "https://www.youtube.com/playlist?list=PLrAXtmRdnEQy6nuLvVUxpDnx4C0823
   --playlist \
   --pattern extract_wisdom \
   -o playlist_wisdom.md
+```
+
+### Override Built-in Language Selection
+
+```bash
+# Built-in language selection (-g es) is overridden by user args
+fabric -g es -y "https://www.youtube.com/watch?v=VIDEO_ID" \
+  --yt-dlp-args "--sub-langs fr,de,en" \
+  --pattern translate
 ```
 
 For more patterns and advanced usage, see the main [Fabric documentation](../README.md).
