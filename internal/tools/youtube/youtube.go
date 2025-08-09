@@ -25,58 +25,33 @@ import (
 	"time"
 
 	"github.com/danielmiessler/fabric/internal/plugins"
+	"github.com/kballard/go-shellquote"
 	"google.golang.org/api/option"
 	"google.golang.org/api/youtube/v3"
 )
 
 var timestampRegex *regexp.Regexp
+var languageFileRegex *regexp.Regexp
+var videoPatternRegex *regexp.Regexp
+var playlistPatternRegex *regexp.Regexp
+var vttTagRegex *regexp.Regexp
+var durationRegex *regexp.Regexp
 
 const TimeGapForRepeats = 10 // seconds
 
 func init() {
 	// Match timestamps like "00:00:01.234" or just numbers or sequence numbers
 	timestampRegex = regexp.MustCompile(`^\d+$|^\d{1,2}:\d{2}(:\d{2})?(\.\d{3})?$`)
-}
-
-// parseShellArgs parses a shell-style argument string into individual arguments
-// Handles quoted strings and escaping
-func parseShellArgs(argsStr string) []string {
-	if argsStr == "" {
-		return nil
-	}
-
-	var args []string
-	var current strings.Builder
-	var inQuotes bool
-	var quoteChar rune
-
-	for i, r := range argsStr {
-		switch {
-		case !inQuotes && (r == '"' || r == '\''):
-			inQuotes = true
-			quoteChar = r
-		case inQuotes && r == quoteChar:
-			// Check if it's escaped
-			if i > 0 && rune(argsStr[i-1]) == '\\' {
-				current.WriteRune(r)
-			} else {
-				inQuotes = false
-			}
-		case !inQuotes && (r == ' ' || r == '\t'):
-			if current.Len() > 0 {
-				args = append(args, current.String())
-				current.Reset()
-			}
-		default:
-			current.WriteRune(r)
-		}
-	}
-
-	if current.Len() > 0 {
-		args = append(args, current.String())
-	}
-
-	return args
+	// Match language-specific VTT files like .en.vtt, .es.vtt, .en-US.vtt, .pt-BR.vtt
+	languageFileRegex = regexp.MustCompile(`\.[a-z]{2}(-[A-Z]{2})?\.vtt$`)
+	// YouTube video ID pattern
+	videoPatternRegex = regexp.MustCompile(`(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:live\/|[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|(?:s(?:horts)\/)|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]*)`)
+	// YouTube playlist ID pattern
+	playlistPatternRegex = regexp.MustCompile(`[?&]list=([a-zA-Z0-9_-]+)`)
+	// VTT formatting tags like <c.colorE5E5E5>, </c>, etc.
+	vttTagRegex = regexp.MustCompile(`<[^>]*>`)
+	// YouTube duration format PT1H2M3S
+	durationRegex = regexp.MustCompile(`(?i)PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?`)
 }
 
 func NewYouTube() (ret *YouTube) {
@@ -117,18 +92,14 @@ func (o *YouTube) initService() (err error) {
 }
 
 func (o *YouTube) GetVideoOrPlaylistId(url string) (videoId string, playlistId string, err error) {
-	// Video ID pattern
-	videoPattern := `(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:live\/|[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|(?:s(?:horts)\/)|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]*)`
-	videoRe := regexp.MustCompile(videoPattern)
-	videoMatch := videoRe.FindStringSubmatch(url)
+	// Extract video ID using pre-compiled regex
+	videoMatch := videoPatternRegex.FindStringSubmatch(url)
 	if len(videoMatch) > 1 {
 		videoId = videoMatch[1]
 	}
 
-	// Playlist ID pattern
-	playlistPattern := `[?&]list=([a-zA-Z0-9_-]+)`
-	playlistRe := regexp.MustCompile(playlistPattern)
-	playlistMatch := playlistRe.FindStringSubmatch(url)
+	// Extract playlist ID using pre-compiled regex
+	playlistMatch := playlistPatternRegex.FindStringSubmatch(url)
 	if len(playlistMatch) > 1 {
 		playlistId = playlistMatch[1]
 	}
@@ -215,7 +186,10 @@ func (o *YouTube) tryMethodYtDlpInternal(videoId string, language string, additi
 
 	// Add user-provided arguments last so they take precedence
 	if additionalArgs != "" {
-		additionalArgsList := parseShellArgs(additionalArgs)
+		additionalArgsList, err := shellquote.Split(additionalArgs)
+		if err != nil {
+			return "", fmt.Errorf("invalid yt-dlp arguments: %v", err)
+		}
 		args = append(args, additionalArgsList...)
 	}
 
@@ -247,7 +221,10 @@ func (o *YouTube) tryMethodYtDlpInternal(videoId string, language string, additi
 
 			// Add additional arguments if provided
 			if additionalArgs != "" {
-				additionalArgsList := parseShellArgs(additionalArgs)
+				additionalArgsList, parseErr := shellquote.Split(additionalArgs)
+				if parseErr != nil {
+					return "", fmt.Errorf("invalid yt-dlp arguments: %v", parseErr)
+				}
 				fallbackArgs = append(fallbackArgs, additionalArgsList...)
 			}
 
@@ -411,8 +388,7 @@ func isTimeStamp(s string) bool {
 
 func removeVTTTags(s string) string {
 	// Remove VTT tags like <c.colorE5E5E5>, </c>, etc.
-	tagRegex := regexp.MustCompile(`<[^>]*>`)
-	return tagRegex.ReplaceAllString(s, "")
+	return vttTagRegex.ReplaceAllString(s, "")
 }
 
 // shouldIncludeRepeat determines if repeated content should be included based on time gap
@@ -536,7 +512,7 @@ func (o *YouTube) GrabDuration(videoId string) (ret int, err error) {
 
 	durationStr := videoResponse.Items[0].ContentDetails.Duration
 
-	matches := regexp.MustCompile(`(?i)PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?`).FindStringSubmatch(durationStr)
+	matches := durationRegex.FindStringSubmatch(durationStr)
 	if len(matches) == 0 {
 		return 0, fmt.Errorf("invalid duration string: %s", durationStr)
 	}
@@ -696,43 +672,6 @@ func (o *YouTube) normalizeFileName(name string) string {
 
 }
 
-// findVTTFiles searches for VTT files in a directory using cross-platform approach
-func (o *YouTube) findVTTFiles(dir, language string) ([]string, error) {
-	var vttFiles []string
-
-	// Walk through the directory to find VTT files
-	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
-		if !info.IsDir() && strings.HasSuffix(strings.ToLower(path), ".vtt") {
-			vttFiles = append(vttFiles, path)
-		}
-		return nil
-	})
-
-	if err != nil {
-		return nil, fmt.Errorf("failed to walk directory: %v", err)
-	}
-
-	if len(vttFiles) == 0 {
-		return nil, fmt.Errorf("no VTT files found in directory")
-	}
-
-	// Prefer files with the specified language
-	if language != "" {
-		for _, file := range vttFiles {
-			if strings.Contains(file, "."+language+".vtt") {
-				return []string{file}, nil
-			}
-		}
-	}
-
-	// Return the first VTT file found if no language-specific file exists
-	return []string{vttFiles[0]}, nil
-}
-
 // findVTTFilesWithFallback searches for VTT files, handling fallback scenarios
 // where the requested language might not be available
 func (o *YouTube) findVTTFilesWithFallback(dir, requestedLanguage string) ([]string, error) {
@@ -774,7 +713,7 @@ func (o *YouTube) findVTTFilesWithFallback(dir, requestedLanguage string) ([]str
 	// This handles the fallback case where yt-dlp downloaded a different language
 	for _, file := range vttFiles {
 		// Look for any language pattern (e.g., .en.vtt, .es.vtt, etc.)
-		if matched, _ := regexp.MatchString(`\.[a-z]{2}(-[A-Z]{2})?\.vtt$`, file); matched {
+		if languageFileRegex.MatchString(file) {
 			return []string{file}, nil
 		}
 	}
