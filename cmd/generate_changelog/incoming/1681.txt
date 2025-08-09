@@ -1,0 +1,7 @@
+### PR [#1681](https://github.com/danielmiessler/Fabric/pull/1681) by [ksylvan](https://github.com/ksylvan): Enhance YouTube Support with Custom yt-dlp Arguments
+
+- Add `--yt-dlp-args` flag for custom YouTube downloader options with advanced control capabilities
+- Implement fallback logic for YouTube subtitle language detection with retry mechanism
+- Allow passing browser cookies for authentication and improve error handling for YouTube rate limits
+- Add user argument precedence over built-in flags with comprehensive documentation for override behavior
+- Separate release notes generation into dedicated CI workflow job with proper Go configuration
