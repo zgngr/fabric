@@ -215,6 +215,19 @@ fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --pattern write_blog_post
   - **Try without language specification** - let yt-dlp choose any available language
   - **Try English instead** - `fabric -g en` (English subtitles may be less rate-limited)
 
+### Language Fallback Behavior
+
+When you specify a language (e.g., `-g es` for Spanish) but that language isn't available or fails to download:
+
+1. **Automatic fallback**: Fabric automatically retries without language specification
+2. **Smart file detection**: If the fallback downloads a different language (e.g., English), Fabric will automatically detect and use it
+3. **No manual intervention needed**: The process is transparent to the user
+
+```bash
+# Even if Spanish isn't available, this will work with whatever language yt-dlp finds
+fabric -g es -y "https://youtube.com/watch?v=VIDEO_ID" --pattern summarize
+```
+
 ## Configuration
 
 ### YAML Configuration

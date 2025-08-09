@@ -269,8 +269,10 @@ func (o *YouTube) tryMethodYtDlpInternal(videoId string, language string, additi
 			return
 		}
 	}
+
 	// Find VTT files using cross-platform approach
-	vttFiles, err := o.findVTTFiles(tempDir, language)
+	// Try to find files with the requested language first, but fall back to any VTT file
+	vttFiles, err := o.findVTTFilesWithFallback(tempDir, language)
 	if err != nil {
 		return "", err
 	}
@@ -719,13 +721,65 @@ func (o *YouTube) findVTTFiles(dir, language string) ([]string, error) {
 	}
 
 	// Prefer files with the specified language
-	for _, file := range vttFiles {
-		if strings.Contains(file, "."+language+".vtt") {
-			return []string{file}, nil
+	if language != "" {
+		for _, file := range vttFiles {
+			if strings.Contains(file, "."+language+".vtt") {
+				return []string{file}, nil
+			}
 		}
 	}
 
 	// Return the first VTT file found if no language-specific file exists
+	return []string{vttFiles[0]}, nil
+}
+
+// findVTTFilesWithFallback searches for VTT files, handling fallback scenarios
+// where the requested language might not be available
+func (o *YouTube) findVTTFilesWithFallback(dir, requestedLanguage string) ([]string, error) {
+	var vttFiles []string
+
+	// Walk through the directory to find VTT files
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if !info.IsDir() && strings.HasSuffix(strings.ToLower(path), ".vtt") {
+			vttFiles = append(vttFiles, path)
+		}
+		return nil
+	})
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to walk directory: %v", err)
+	}
+
+	if len(vttFiles) == 0 {
+		return nil, fmt.Errorf("no VTT files found in directory")
+	}
+
+	// If no specific language requested, return the first file
+	if requestedLanguage == "" {
+		return []string{vttFiles[0]}, nil
+	}
+
+	// First, try to find files with the requested language
+	for _, file := range vttFiles {
+		if strings.Contains(file, "."+requestedLanguage+".vtt") {
+			return []string{file}, nil
+		}
+	}
+
+	// If requested language not found, check if we have any language-specific files
+	// This handles the fallback case where yt-dlp downloaded a different language
+	for _, file := range vttFiles {
+		// Look for any language pattern (e.g., .en.vtt, .es.vtt, etc.)
+		if matched, _ := regexp.MatchString(`\.[a-z]{2}(-[A-Z]{2})?\.vtt$`, file); matched {
+			return []string{file}, nil
+		}
+	}
+
+	// If no language-specific files found, return the first VTT file
 	return []string{vttFiles[0]}, nil
 }
 
