@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.280 (2025-08-10)
+
+### PR [#1686](https://github.com/danielmiessler/Fabric/pull/1686) by [ksylvan](https://github.com/ksylvan): Prevent duplicate text output in OpenAI streaming responses
+
+- Fix: prevent duplicate text output in OpenAI streaming responses
+- Skip processing of ResponseOutputTextDone events
+- Prevent doubled text in stream output
+- Add clarifying comment about API behavior
+- Maintain delta chunk streaming functionality
+
 ## v1.4.279 (2025-08-10)
 
 ### PR [#1685](https://github.com/danielmiessler/Fabric/pull/1685) by [ksylvan](https://github.com/ksylvan): Fix Gemini Role Mapping for API Compatibility
