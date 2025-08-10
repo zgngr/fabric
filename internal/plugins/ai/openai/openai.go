@@ -115,7 +115,11 @@ func (o *Client) sendStreamResponses(
 		case string(constant.ResponseOutputTextDelta("").Default()):
 			channel <- event.AsResponseOutputTextDelta().Delta
 		case string(constant.ResponseOutputTextDone("").Default()):
-			channel <- event.AsResponseOutputTextDone().Text
+			// The Responses API sends the full text again in the
+			// final "done" event. Since we've already streamed all
+			// delta chunks above, sending it would duplicate the
+			// output. Ignore it here to prevent doubled results.
+			continue
 		}
 	}
 	if stream.Err() == nil {
