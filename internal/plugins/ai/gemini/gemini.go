@@ -336,6 +336,19 @@ func (o *Client) convertMessages(msgs []*chat.ChatCompletionMessage) []*genai.Co
 	for _, msg := range msgs {
 		content := &genai.Content{Parts: []*genai.Part{}}
 
+		switch msg.Role {
+		case chat.ChatMessageRoleAssistant:
+			content.Role = "model"
+		case chat.ChatMessageRoleUser:
+			content.Role = "user"
+		case chat.ChatMessageRoleSystem, chat.ChatMessageRoleDeveloper, chat.ChatMessageRoleFunction, chat.ChatMessageRoleTool:
+			// Gemini's API only accepts "user" and "model" roles.
+			// Map all other roles to "user" to preserve instruction context.
+			content.Role = "user"
+		default:
+			content.Role = "user"
+		}
+
 		if msg.Content != "" {
 			content.Parts = append(content.Parts, &genai.Part{Text: msg.Content})
 		}
