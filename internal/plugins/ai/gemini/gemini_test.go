@@ -4,6 +4,8 @@ import (
 	"testing"
 
 	"google.golang.org/genai"
+
+	"github.com/danielmiessler/fabric/internal/chat"
 )
 
 // Test buildModelNameFull method
@@ -48,6 +50,30 @@ func TestExtractTextFromResponse(t *testing.T) {
 
 	if result != expected {
 		t.Errorf("Expected %v, got %v", expected, result)
+	}
+}
+
+// Test convertMessages handles role mapping correctly
+func TestConvertMessagesRoles(t *testing.T) {
+	client := &Client{}
+	msgs := []*chat.ChatCompletionMessage{
+		{Role: chat.ChatMessageRoleUser, Content: "user"},
+		{Role: chat.ChatMessageRoleAssistant, Content: "assistant"},
+		{Role: chat.ChatMessageRoleSystem, Content: "system"},
+	}
+
+	contents := client.convertMessages(msgs)
+
+	expected := []string{"user", "model", "user"}
+
+	if len(contents) != len(expected) {
+		t.Fatalf("expected %d contents, got %d", len(expected), len(contents))
+	}
+
+	for i, c := range contents {
+		if c.Role != expected[i] {
+			t.Errorf("content %d expected role %s, got %s", i, expected[i], c.Role)
+		}
 	}
 }
 
