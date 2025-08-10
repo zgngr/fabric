@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.279 (2025-08-10)
+
+### PR [#1685](https://github.com/danielmiessler/Fabric/pull/1685) by [ksylvan](https://github.com/ksylvan): Fix Gemini Role Mapping for API Compatibility
+
+- Fix Gemini role mapping to ensure proper API compatibility by converting chat roles to Gemini's user/model format
+- Map assistant role to model role per Gemini API constraints
+- Map system, developer, function, and tool roles to user role for proper handling
+- Default unrecognized roles to user role to preserve instruction context
+- Add comprehensive unit tests to validate convertMessages role mapping logic
+
 ## v1.4.278 (2025-08-09)
 
 ### PR [#1681](https://github.com/danielmiessler/Fabric/pull/1681) by [ksylvan](https://github.com/ksylvan): Enhance YouTube Support with Custom yt-dlp Arguments

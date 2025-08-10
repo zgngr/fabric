@@ -1,7 +1,0 @@
-### PR [#1685](https://github.com/danielmiessler/Fabric/pull/1685) by [ksylvan](https://github.com/ksylvan): Fix Gemini Role Mapping for API Compatibility
-
-- Fix Gemini role mapping to ensure proper API compatibility by converting chat roles to Gemini's user/model format
-- Map assistant role to model role per Gemini API constraints
-- Map system, developer, function, and tool roles to user role for proper handling
-- Default unrecognized roles to user role to preserve instruction context
-- Add comprehensive unit tests to validate convertMessages role mapping logic
