@@ -99,7 +99,7 @@ complete -c fabric -l yt-dlp-args -d "Additional arguments to pass to yt-dlp (e.
 complete -c fabric -l readability -d "Convert HTML input into a clean, readable view"
 complete -c fabric -l input-has-vars -d "Apply variables to user input"
 complete -c fabric -l dry-run -d "Show what would be sent to the model without actually sending it"
-complete -c fabric -l search -d "Enable web search tool for supported models (Anthropic, OpenAI)"
+complete -c fabric -l search -d "Enable web search tool for supported models (Anthropic, OpenAI, Gemini)"
 complete -c fabric -l serve -d "Serve the Fabric Rest API"
 complete -c fabric -l serveOllama -d "Serve the Fabric Rest API with ollama endpoints"
 complete -c fabric -l version -d "Print current version"
