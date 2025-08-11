@@ -17,7 +17,7 @@ _fabric() {
 
   # Helper function for dynamic completions
   _fabric_get_list() {
-    fabric "$1" --shell-complete-list 2>/dev/null
+    "${COMP_WORDS[0]}" "$1" --shell-complete-list 2>/dev/null
   }
 
   # Handle completions based on the previous word
@@ -104,4 +104,4 @@ _fabric() {
 
 }
 
-complete -F _fabric fabric
+complete -F _fabric fabric fabric-ai

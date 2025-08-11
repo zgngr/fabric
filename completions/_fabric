@@ -1,47 +1,54 @@
-#compdef fabric
+#compdef fabric fabric-ai
 
 # Zsh completion for fabric CLI
 # Place this file in a directory in your $fpath (e.g. /usr/local/share/zsh/site-functions)
 
 _fabric_patterns() {
   local -a patterns
-  patterns=(${(f)"$(fabric --listpatterns --shell-complete-list 2>/dev/null)"})
+  local cmd=${words[1]}
+  patterns=(${(f)"$($cmd --listpatterns --shell-complete-list 2>/dev/null)"})
   compadd -X "Patterns:" ${patterns}
 }
 
 _fabric_models() {
   local -a models
-  models=(${(f)"$(fabric --listmodels --shell-complete-list 2>/dev/null)"})
+  local cmd=${words[1]}
+  models=(${(f)"$($cmd --listmodels --shell-complete-list 2>/dev/null)"})
   compadd -X "Models:" ${models}
 }
 
 _fabric_contexts() {
   local -a contexts
-  contexts=(${(f)"$(fabric --listcontexts --shell-complete-list 2>/dev/null)"})
+  local cmd=${words[1]}
+  contexts=(${(f)"$($cmd --listcontexts --shell-complete-list 2>/dev/null)"})
   compadd -X "Contexts:" ${contexts}
 }
 
 _fabric_sessions() {
   local -a sessions
-  sessions=(${(f)"$(fabric --listsessions --shell-complete-list 2>/dev/null)"})
+  local cmd=${words[1]}
+  sessions=(${(f)"$($cmd --listsessions --shell-complete-list 2>/dev/null)"})
   compadd -X "Sessions:" ${sessions}
 }
 
 _fabric_strategies() {
   local -a strategies
-  strategies=(${(f)"$(fabric --liststrategies --shell-complete-list 2>/dev/null)"})
+  local cmd=${words[1]}
+  strategies=(${(f)"$($cmd --liststrategies --shell-complete-list 2>/dev/null)"})
   compadd -X "Strategies:" ${strategies}
 }
 
 _fabric_extensions() {
   local -a extensions
-  extensions=(${(f)"$(fabric --listextensions --shell-complete-list 2>/dev/null)"})
+  local cmd=${words[1]}
+  extensions=(${(f)"$($cmd --listextensions --shell-complete-list 2>/dev/null)"})
   compadd -X "Extensions:" ${extensions}
 }
 
 _fabric_gemini_voices() {
   local -a voices
-  voices=(${(f)"$(fabric --list-gemini-voices --shell-complete-list 2>/dev/null)"})
+  local cmd=${words[1]}
+  voices=(${(f)"$($cmd --list-gemini-voices --shell-complete-list 2>/dev/null)"})
   compadd -X "Gemini TTS Voices:" ${voices}
 }
 
