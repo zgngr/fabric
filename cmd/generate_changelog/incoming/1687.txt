@@ -1,0 +1,7 @@
+### PR [#1687](https://github.com/danielmiessler/Fabric/pull/1687) by [ksylvan](https://github.com/ksylvan): Add Web Search Tool Support for Gemini Models
+
+- Enable Gemini models to use web search tool with --search flag
+- Add validation for search-location timezone and language code formats
+- Normalize language codes from underscores to hyphenated form
+- Append deduplicated web citations under standardized Sources section
+- Improve robustness for nil candidates and content parts

@@ -1,11 +1,13 @@
 package gemini
 
 import (
+	"strings"
 	"testing"
 
 	"google.golang.org/genai"
 
 	"github.com/danielmiessler/fabric/internal/chat"
+	"github.com/danielmiessler/fabric/internal/domain"
 )
 
 // Test buildModelNameFull method
@@ -50,6 +52,106 @@ func TestExtractTextFromResponse(t *testing.T) {
 
 	if result != expected {
 		t.Errorf("Expected %v, got %v", expected, result)
+	}
+}
+
+func TestExtractTextFromResponse_Nil(t *testing.T) {
+	client := &Client{}
+	if got := client.extractTextFromResponse(nil); got != "" {
+		t.Fatalf("expected empty string, got %q", got)
+	}
+}
+
+func TestExtractTextFromResponse_EmptyGroundingChunks(t *testing.T) {
+	client := &Client{}
+	response := &genai.GenerateContentResponse{
+		Candidates: []*genai.Candidate{
+			{
+				Content:           &genai.Content{Parts: []*genai.Part{{Text: "Hello"}}},
+				GroundingMetadata: &genai.GroundingMetadata{GroundingChunks: nil},
+			},
+		},
+	}
+	if got := client.extractTextFromResponse(response); got != "Hello" {
+		t.Fatalf("expected 'Hello', got %q", got)
+	}
+}
+
+func TestBuildGenerateContentConfig_WithSearch(t *testing.T) {
+	client := &Client{}
+	opts := &domain.ChatOptions{Search: true}
+
+	cfg, err := client.buildGenerateContentConfig(opts)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if cfg.Tools == nil || len(cfg.Tools) != 1 || cfg.Tools[0].GoogleSearch == nil {
+		t.Errorf("expected google search tool to be included")
+	}
+}
+
+func TestBuildGenerateContentConfig_WithSearchAndLocation(t *testing.T) {
+	client := &Client{}
+	opts := &domain.ChatOptions{Search: true, SearchLocation: "America/Los_Angeles"}
+
+	cfg, err := client.buildGenerateContentConfig(opts)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if cfg.ToolConfig == nil || cfg.ToolConfig.RetrievalConfig == nil {
+		t.Fatalf("expected retrieval config when search location provided")
+	}
+	if cfg.ToolConfig.RetrievalConfig.LanguageCode != opts.SearchLocation {
+		t.Errorf("expected language code %s, got %s", opts.SearchLocation, cfg.ToolConfig.RetrievalConfig.LanguageCode)
+	}
+}
+
+func TestBuildGenerateContentConfig_InvalidLocation(t *testing.T) {
+	client := &Client{}
+	opts := &domain.ChatOptions{Search: true, SearchLocation: "invalid"}
+
+	_, err := client.buildGenerateContentConfig(opts)
+	if err == nil {
+		t.Fatalf("expected error for invalid location")
+	}
+}
+
+func TestBuildGenerateContentConfig_LanguageCodeNormalization(t *testing.T) {
+	client := &Client{}
+	opts := &domain.ChatOptions{Search: true, SearchLocation: "en_US"}
+
+	cfg, err := client.buildGenerateContentConfig(opts)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if cfg.ToolConfig == nil || cfg.ToolConfig.RetrievalConfig.LanguageCode != "en-US" {
+		t.Fatalf("expected normalized language code 'en-US', got %+v", cfg.ToolConfig)
+	}
+}
+
+func TestCitationFormatting(t *testing.T) {
+	client := &Client{}
+	response := &genai.GenerateContentResponse{
+		Candidates: []*genai.Candidate{
+			{
+				Content: &genai.Content{Parts: []*genai.Part{{Text: "Based on recent research, AI is advancing rapidly."}}},
+				GroundingMetadata: &genai.GroundingMetadata{
+					GroundingChunks: []*genai.GroundingChunk{
+						{Web: &genai.GroundingChunkWeb{URI: "https://example.com/ai", Title: "AI Research"}},
+						{Web: &genai.GroundingChunkWeb{URI: "https://news.com/tech", Title: "Tech News"}},
+						{Web: &genai.GroundingChunkWeb{URI: "https://example.com/ai", Title: "AI Research"}}, // duplicate
+					},
+				},
+			},
+		},
+	}
+
+	result := client.extractTextFromResponse(response)
+	if !strings.Contains(result, "## Sources") {
+		t.Fatalf("expected sources section in result: %s", result)
+	}
+	if strings.Count(result, "- [") != 2 {
+		t.Errorf("expected 2 unique citations, got %d", strings.Count(result, "- ["))
 	}
 }
 
