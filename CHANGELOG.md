@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.281 (2025-08-11)
+
+### PR [#1687](https://github.com/danielmiessler/Fabric/pull/1687) by [ksylvan](https://github.com/ksylvan): Add Web Search Tool Support for Gemini Models
+
+- Enable Gemini models to use web search tool with --search flag
+- Add validation for search-location timezone and language code formats
+- Normalize language codes from underscores to hyphenated form
+- Append deduplicated web citations under standardized Sources section
+- Improve robustness for nil candidates and content parts
+
 ## v1.4.280 (2025-08-10)
 
 ### PR [#1686](https://github.com/danielmiessler/Fabric/pull/1686) by [ksylvan](https://github.com/ksylvan): Prevent duplicate text output in OpenAI streaming responses
