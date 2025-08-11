@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.282 (2025-08-11)
+
+### PR [#1689](https://github.com/danielmiessler/Fabric/pull/1689) by [ksylvan](https://github.com/ksylvan): Enhanced Shell Completions for Fabric CLI Binaries
+
+- Add 'fabric-ai' alias support across all shell completions
+- Use invoked command name for dynamic completion list queries
+- Refactor fish completions into reusable registrar for multiple commands
+- Update Bash completion to reference executable via COMP_WORDS[0]
+- Install completions automatically with new cross-shell setup script
+
 ## v1.4.281 (2025-08-11)
 
 ### PR [#1687](https://github.com/danielmiessler/Fabric/pull/1687) by [ksylvan](https://github.com/ksylvan): Add Web Search Tool Support for Gemini Models
