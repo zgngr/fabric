@@ -84,6 +84,7 @@ Keep in mind that many of these were recorded when Fabric was Python-based, so r
     - [Migration](#migration)
     - [Upgrading](#upgrading)
     - [Shell Completions](#shell-completions)
+      - [Quick install (no clone required)](#quick-install-no-clone-required)
       - [Zsh Completion](#zsh-completion)
       - [Bash Completion](#bash-completion)
       - [Fish Completion](#fish-completion)
@@ -427,6 +428,25 @@ go install github.com/danielmiessler/fabric/cmd/fabric@latest
 Fabric provides shell completion scripts for Zsh, Bash, and Fish
 shells, making it easier to use the CLI by providing tab completion
 for commands and options.
+
+#### Quick install (no clone required)
+
+You can install completions directly via a one-liner:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/danielmiessler/Fabric/refs/heads/main/completions/setup-completions.sh | sh
+```
+
+Optional variants:
+
+```bash
+# Dry-run (see actions without changing your system)
+curl -fsSL https://raw.githubusercontent.com/danielmiessler/Fabric/refs/heads/main/completions/setup-completions.sh | sh -s -- --dry-run
+
+# Override the download source (advanced)
+FABRIC_COMPLETIONS_BASE_URL="https://raw.githubusercontent.com/danielmiessler/Fabric/refs/heads/main/completions" \
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/danielmiessler/Fabric/refs/heads/main/completions/setup-completions.sh)"
+```
 
 #### Zsh Completion
 

@@ -4,10 +4,24 @@ Fabric comes with shell completion support for Zsh, Bash, and Fish shells. These
 
 ## Quick Setup (Automated)
 
-For a quick automated installation, use the setup script:
+You can install completions without cloning the repo:
 
 ```bash
-# Run the automated setup script
+# No-clone install (Zsh/Bash/Fish supported)
+curl -fsSL https://raw.githubusercontent.com/danielmiessler/Fabric/refs/heads/main/completions/setup-completions.sh | sh
+
+# Optional: dry-run first
+curl -fsSL https://raw.githubusercontent.com/danielmiessler/Fabric/refs/heads/main/completions/setup-completions.sh | sh -s -- --dry-run
+
+# Optional: override the download source
+FABRIC_COMPLETIONS_BASE_URL="https://raw.githubusercontent.com/danielmiessler/Fabric/refs/heads/main/completions" \
+   sh -c "$(curl -fsSL https://raw.githubusercontent.com/danielmiessler/Fabric/refs/heads/main/completions/setup-completions.sh)"
+```
+
+Or, if you have the repository locally:
+
+```bash
+# Run the automated setup script from a cloned repo
 ./completions/setup-completions.sh
 
 # Or see what it would do first
@@ -21,6 +35,8 @@ The script will:
 - Use your existing `$fpath` directories (for zsh) or standard completion directories
 - Install the completion file with the correct name
 - Provide instructions for enabling the completions
+
+If the completion files aren't present locally (e.g., when running via `curl`), the script will automatically download them from GitHub.
 
 For manual installation or troubleshooting, see the detailed instructions below.
 

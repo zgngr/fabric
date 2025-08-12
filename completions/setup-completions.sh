@@ -8,6 +8,10 @@ set -e
 
 # Global variables
 DRY_RUN=false
+# Base URL to fetch completion files when not available locally
+# Can be overridden via environment variable FABRIC_COMPLETIONS_BASE_URL
+FABRIC_COMPLETIONS_BASE_URL="${FABRIC_COMPLETIONS_BASE_URL:-https://raw.githubusercontent.com/danielmiessler/Fabric/refs/heads/main/completions}"
+TEMP_DIR=""
 
 # Colors for output
 RED='\033[0;31m'
@@ -48,6 +52,77 @@ execute_command() {
     else
         eval "$cmd" 2>/dev/null
     fi
+}
+
+# Simple downloader that prefers curl, falls back to wget
+download_file() {
+    url="$1"
+    dest="$2"
+
+    if [ "$DRY_RUN" = true ]; then
+        print_dry_run "Would download: $url -> $dest"
+        return 0
+    fi
+
+    if command -v curl >/dev/null 2>&1; then
+        curl -fsSL "$url" -o "$dest"
+        return $?
+    elif command -v wget >/dev/null 2>&1; then
+        wget -q "$url" -O "$dest"
+        return $?
+    else
+        print_error "Neither 'curl' nor 'wget' is available to download: $url"
+        return 1
+    fi
+}
+
+# Attempt to obtain completion files. If local copies are missing,
+# download them into a temporary directory and return that directory path.
+obtain_completion_files() {
+    obf_script_dir="$1"
+    obf_need_download=false
+
+    if [ ! -f "$obf_script_dir/_fabric" ] || [ ! -f "$obf_script_dir/fabric.bash" ] || [ ! -f "$obf_script_dir/fabric.fish" ]; then
+        obf_need_download=true
+    fi
+
+    if [ "$obf_need_download" = false ]; then
+        echo "$obf_script_dir"
+        return 0
+    fi
+
+    print_info "Local completion files not found; will download from GitHub."
+    print_info "Source: $FABRIC_COMPLETIONS_BASE_URL"
+
+    if [ "$DRY_RUN" = true ]; then
+        print_dry_run "Would create temporary directory for downloads"
+    echo "$obf_script_dir" # Keep using original for dry-run copies
+        return 0
+    fi
+
+    TEMP_DIR="$(mktemp -d 2>/dev/null || mktemp -d -t fabric-completions)"
+    if [ ! -d "$TEMP_DIR" ]; then
+        print_error "Failed to create temporary directory for downloads."
+        return 1
+    fi
+
+    # Clean up temp dir on exit
+    trap 'if [ -n "$TEMP_DIR" ] && [ -d "$TEMP_DIR" ]; then rm -rf "$TEMP_DIR"; fi' EXIT INT TERM
+
+    if ! download_file "$FABRIC_COMPLETIONS_BASE_URL/_fabric" "$TEMP_DIR/_fabric"; then
+        print_error "Failed to download _fabric"
+        return 1
+    fi
+    if ! download_file "$FABRIC_COMPLETIONS_BASE_URL/fabric.bash" "$TEMP_DIR/fabric.bash"; then
+        print_error "Failed to download fabric.bash"
+        return 1
+    fi
+    if ! download_file "$FABRIC_COMPLETIONS_BASE_URL/fabric.fish" "$TEMP_DIR/fabric.fish"; then
+        print_error "Failed to download fabric.fish"
+        return 1
+    fi
+
+    echo "$TEMP_DIR"
 }
 
 # Ensure directory exists, try sudo on permission failure
@@ -266,6 +341,7 @@ setup_fish_completions() {
 setup_other_shell_completions() {
     fabric_cmd="$1"
     shell_name="$2"
+    script_dir="$3"
 
     print_warning "Shell '$shell_name' is not directly supported."
     print_info "You can manually source the completion files:"
@@ -289,8 +365,14 @@ DESCRIPTION:
     This script automatically installs shell completions for the fabric CLI
     based on your current shell and the installed fabric command name.
 
-    The script looks for completion files in the same directory as the script,
-    so it can be run from anywhere.
+        The script will use completion files from the same directory as the script
+        when available. If they are not present (e.g., when running via curl), it
+        will download them from GitHub:
+
+            $FABRIC_COMPLETIONS_BASE_URL
+
+        You can override the download source by setting
+        FABRIC_COMPLETIONS_BASE_URL to your preferred location.
 
     Supports: zsh, bash, fish
 
@@ -301,9 +383,11 @@ DESCRIPTION:
     4. Try multiple standard completion directories
 
 EXAMPLES:
-    ./setup-completions.sh              # Install completions
-    ./setup-completions.sh --dry-run    # Show what would be done
-    ./setup-completions.sh --help       # Show this help
+        ./setup-completions.sh                  # Install completions
+        ./setup-completions.sh --dry-run        # Show what would be done
+        FABRIC_COMPLETIONS_BASE_URL="https://raw.githubusercontent.com/<owner>/<repo>/main/completions" \\
+            ./setup-completions.sh               # Override download source
+        ./setup-completions.sh --help           # Show this help
 
 EOF
 }
@@ -337,16 +421,11 @@ main() {
         print_info ""
     fi
 
-    # Get script directory
+    # Get script directory and obtain completion files (local or downloaded)
     script_dir="$(get_script_dir)"
-
-    # Check if completion files exist
-    if [ ! -f "$script_dir/_fabric" ] || [ ! -f "$script_dir/fabric.bash" ] || [ ! -f "$script_dir/fabric.fish" ]; then
-        print_error "Completion files not found. Make sure you're running this script from the fabric completions directory."
-        print_error "Expected files:"
-        print_error "  $script_dir/_fabric"
-        print_error "  $script_dir/fabric.bash"
-        print_error "  $script_dir/fabric.fish"
+    script_dir="$(obtain_completion_files "$script_dir" || echo "")"
+    if [ -z "$script_dir" ]; then
+        print_error "Unable to obtain completion files. Aborting."
         exit 1
     fi
 
@@ -370,7 +449,7 @@ main() {
             setup_fish_completions "$fabric_cmd" "$script_dir"
             ;;
         *)
-            setup_other_shell_completions "$fabric_cmd" "$shell_name"
+            setup_other_shell_completions "$fabric_cmd" "$shell_name" "$script_dir"
             ;;
     esac
 
