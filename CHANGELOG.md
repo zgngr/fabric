@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.284 (2025-08-12)
+
+### PR [#1695](https://github.com/danielmiessler/Fabric/pull/1695) by [ksylvan](https://github.com/ksylvan): Introduce One-Liner Curl Install for Completions
+
+- Add one-liner curl install method for shell completions without requiring repository cloning
+- Support downloading completions when files are missing locally with dry-run option for previewing changes
+- Enable custom download source via environment variable and create temporary directory for downloaded completion files
+- Add automatic cleanup of temporary files and validate downloaded files are non-empty and not HTML
+- Improve error handling and standardize logging by routing informational messages to stderr to avoid stdout pollution
+
 ## v1.4.283 (2025-08-12)
 
 ### PR [#1692](https://github.com/danielmiessler/Fabric/pull/1692) by [ksylvan](https://github.com/ksylvan): Add Vendor Selection Support for Models
