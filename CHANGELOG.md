@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.283 (2025-08-12)
+
+### PR [#1692](https://github.com/danielmiessler/Fabric/pull/1692) by [ksylvan](https://github.com/ksylvan): Add Vendor Selection Support for Models
+
+- Add -V/--vendor flag to specify model vendor
+- Implement vendor-aware model resolution and availability validation
+- Warn on ambiguous models; suggest --vendor to disambiguate
+- Update bash, zsh, fish completions with vendor suggestions
+- Extend --listmodels to print vendor|model when interactive
+
 ## v1.4.282 (2025-08-11)
 
 ### PR [#1689](https://github.com/danielmiessler/Fabric/pull/1689) by [ksylvan](https://github.com/ksylvan): Enhanced Shell Completions for Fabric CLI Binaries

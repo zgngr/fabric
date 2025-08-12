@@ -1,7 +1,0 @@
-### PR [#1692](https://github.com/danielmiessler/Fabric/pull/1692) by [ksylvan](https://github.com/ksylvan): Add Vendor Selection Support for Models
-
-- Add -V/--vendor flag to specify model vendor
-- Implement vendor-aware model resolution and availability validation
-- Warn on ambiguous models; suggest --vendor to disambiguate
-- Update bash, zsh, fish completions with vendor suggestions
-- Extend --listmodels to print vendor|model when interactive
