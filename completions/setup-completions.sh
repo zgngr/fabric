@@ -113,18 +113,19 @@ obtain_completion_files() {
         return 0
     fi
 
-    print_info "Local completion files not found; will download from GitHub." 1>&2
-    print_info "Source: $FABRIC_COMPLETIONS_BASE_URL" 1>&2
+    # Note: write only to stderr in this function except for the final echo which returns the path
+    printf "%s\n" "[INFO] Local completion files not found; will download from GitHub." 1>&2
+    printf "%s\n" "[INFO] Source: $FABRIC_COMPLETIONS_BASE_URL" 1>&2
 
     if [ "$DRY_RUN" = true ]; then
-        print_dry_run "Would create temporary directory for downloads" 1>&2
+    printf "%s\n" "[DRY-RUN] Would create temporary directory for downloads" 1>&2
     echo "$obf_script_dir" # Keep using original for dry-run copies
         return 0
     fi
 
     TEMP_DIR="$(mktemp -d 2>/dev/null || mktemp -d -t fabric-completions)"
     if [ ! -d "$TEMP_DIR" ]; then
-        print_error "Failed to create temporary directory for downloads."
+    print_error "Failed to create temporary directory for downloads."
         return 1
     fi
 
