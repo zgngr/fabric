@@ -55,6 +55,26 @@ execute_command() {
 }
 
 # Simple downloader that prefers curl, falls back to wget
+to_github_raw_url() {
+    in_url="$1"
+    case "$in_url" in
+        https://github.com/*/*/blob/*)
+            # Convert blob URL to raw
+            # https://github.com/{owner}/{repo}/blob/{ref}/path -> https://raw.githubusercontent.com/{owner}/{repo}/{ref}/path
+            echo "$in_url" | sed -E 's#https://github.com/([^/]+)/([^/]+)/blob/([^/]+)/#https://raw.githubusercontent.com/\1/\2/\3/#'
+            ;;
+        https://github.com/*/*/tree/*)
+            # Convert tree URL base + file path to raw
+            # https://github.com/{owner}/{repo}/tree/{ref}/path -> https://raw.githubusercontent.com/{owner}/{repo}/{ref}/path
+            echo "$in_url" | sed -E 's#https://github.com/([^/]+)/([^/]+)/tree/([^/]+)/#https://raw.githubusercontent.com/\1/\2/\3/#'
+            ;;
+        *)
+            echo "$in_url"
+            ;;
+    esac
+}
+
+# Simple downloader that prefers curl, falls back to wget
 download_file() {
     url="$1"
     dest="$2"
@@ -64,11 +84,13 @@ download_file() {
         return 0
     fi
 
+    eff_url="$(to_github_raw_url "$url")"
+
     if command -v curl >/dev/null 2>&1; then
-        curl -fsSL "$url" -o "$dest"
+        curl -fsSL "$eff_url" -o "$dest"
         return $?
     elif command -v wget >/dev/null 2>&1; then
-        wget -q "$url" -O "$dest"
+        wget -q "$eff_url" -O "$dest"
         return $?
     else
         print_error "Neither 'curl' nor 'wget' is available to download: $url"
@@ -91,11 +113,11 @@ obtain_completion_files() {
         return 0
     fi
 
-    print_info "Local completion files not found; will download from GitHub."
-    print_info "Source: $FABRIC_COMPLETIONS_BASE_URL"
+    print_info "Local completion files not found; will download from GitHub." 1>&2
+    print_info "Source: $FABRIC_COMPLETIONS_BASE_URL" 1>&2
 
     if [ "$DRY_RUN" = true ]; then
-        print_dry_run "Would create temporary directory for downloads"
+        print_dry_run "Would create temporary directory for downloads" 1>&2
     echo "$obf_script_dir" # Keep using original for dry-run copies
         return 0
     fi
@@ -106,19 +128,28 @@ obtain_completion_files() {
         return 1
     fi
 
-    # Clean up temp dir on exit
-    trap 'if [ -n "$TEMP_DIR" ] && [ -d "$TEMP_DIR" ]; then rm -rf "$TEMP_DIR"; fi' EXIT INT TERM
-
     if ! download_file "$FABRIC_COMPLETIONS_BASE_URL/_fabric" "$TEMP_DIR/_fabric"; then
         print_error "Failed to download _fabric"
+        return 1
+    fi
+    if [ ! -s "$TEMP_DIR/_fabric" ] || head -n1 "$TEMP_DIR/_fabric" | grep -qi "^<!DOCTYPE\|^<html"; then
+        print_error "Downloaded _fabric appears invalid (empty or HTML). Check FABRIC_COMPLETIONS_BASE_URL."
         return 1
     fi
     if ! download_file "$FABRIC_COMPLETIONS_BASE_URL/fabric.bash" "$TEMP_DIR/fabric.bash"; then
         print_error "Failed to download fabric.bash"
         return 1
     fi
+    if [ ! -s "$TEMP_DIR/fabric.bash" ] || head -n1 "$TEMP_DIR/fabric.bash" | grep -qi "^<!DOCTYPE\|^<html"; then
+        print_error "Downloaded fabric.bash appears invalid (empty or HTML). Check FABRIC_COMPLETIONS_BASE_URL."
+        return 1
+    fi
     if ! download_file "$FABRIC_COMPLETIONS_BASE_URL/fabric.fish" "$TEMP_DIR/fabric.fish"; then
         print_error "Failed to download fabric.fish"
+        return 1
+    fi
+    if [ ! -s "$TEMP_DIR/fabric.fish" ] || head -n1 "$TEMP_DIR/fabric.fish" | grep -qi "^<!DOCTYPE\|^<html"; then
+        print_error "Downloaded fabric.fish appears invalid (empty or HTML). Check FABRIC_COMPLETIONS_BASE_URL."
         return 1
     fi
 
@@ -427,6 +458,11 @@ main() {
     if [ -z "$script_dir" ]; then
         print_error "Unable to obtain completion files. Aborting."
         exit 1
+    fi
+
+    # If we downloaded into a temp dir, arrange cleanup at process exit
+    if [ -n "$TEMP_DIR" ] && [ -d "$TEMP_DIR" ]; then
+        trap 'if [ -n "$TEMP_DIR" ] && [ -d "$TEMP_DIR" ]; then rm -rf "$TEMP_DIR"; fi' EXIT INT TERM
     fi
 
     # Detect fabric command
