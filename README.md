@@ -498,6 +498,7 @@ Application Options:
   -U, --updatepatterns              Update patterns
   -c, --copy                        Copy to clipboard
   -m, --model=                      Choose model
+  -V, --vendor=                     Specify vendor for chosen model (e.g., -V "LM Studio" -m openai/gpt-oss-20b)
       --modelContextLength=         Model context length (only affects ollama)
   -o, --output=                     Output to file
       --output-session              Output the entire session (also a temporary one) to the output file

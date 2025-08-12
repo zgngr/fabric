@@ -36,7 +36,11 @@ func handleListingCommands(currentFlags *Flags, fabricDb *fsdb.Db, registry *cor
 		if models, err = registry.VendorManager.GetModels(); err != nil {
 			return true, err
 		}
-		models.Print(currentFlags.ShellCompleteOutput)
+		if currentFlags.ShellCompleteOutput {
+			models.Print(true)
+		} else {
+			models.PrintWithVendor(false)
+		}
 		return true, nil
 	}
 

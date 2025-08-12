@@ -19,6 +19,7 @@ require (
 	github.com/hasura/go-graphql-client v0.14.4
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/joho/godotenv v1.5.1
+	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51
 	github.com/mattn/go-sqlite3 v1.14.28
 	github.com/ollama/ollama v0.9.0
 	github.com/openai/openai-go v1.8.2
@@ -37,7 +38,6 @@ require (
 require (
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
-	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
 )
 
 require (

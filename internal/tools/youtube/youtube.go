@@ -210,7 +210,7 @@ func (o *YouTube) tryMethodYtDlpInternal(videoId string, language string, additi
 		}
 
 		if strings.Contains(stderrStr, "Sign in to confirm you're not a bot") || strings.Contains(stderrStr, "Use --cookies-from-browser") {
-			err = fmt.Errorf("YouTube requires authentication (bot detection). Use --yt-dlp-args '--cookies-from-browser BROWSER' where BROWSER is chrome, firefox, brave, etc. Error: %v", err)
+			err = fmt.Errorf("YouTube requires authentication (bot detection). Use --yt-dlp-args='--cookies-from-browser BROWSER' where BROWSER is chrome, firefox, brave, etc. Error: %v", err)
 			return
 		}
 

@@ -17,6 +17,13 @@ _fabric_models() {
   compadd -X "Models:" ${models}
 }
 
+_fabric_vendors() {
+  local -a vendors
+  local cmd=${words[1]}
+  vendors=(${(f)"$($cmd --listvendors --shell-complete-list 2>/dev/null)"})
+  compadd -X "Vendors:" ${vendors}
+}
+
 _fabric_contexts() {
   local -a contexts
   local cmd=${words[1]}
@@ -76,6 +83,7 @@ _fabric() {
     '(-U --updatepatterns)'{-U,--updatepatterns}'[Update patterns]' \
     '(-c --copy)'{-c,--copy}'[Copy to clipboard]' \
     '(-m --model)'{-m,--model}'[Choose model]:model:_fabric_models' \
+    '(-V --vendor)'{-V,--vendor}'[Specify vendor for chosen model (e.g., -V "LM Studio" -m openai/gpt-oss-20b)]:vendor:_fabric_vendors' \
     '(--modelContextLength)--modelContextLength[Model context length (only affects ollama)]:length:' \
     '(-o --output)'{-o,--output}'[Output to file]:file:_files' \
     '(--output-session)--output-session[Output the entire session to the output file]' \
