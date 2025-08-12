@@ -17,6 +17,11 @@ function __fabric_get_models
         $cmd --listmodels --shell-complete-list 2>/dev/null
 end
 
+function __fabric_get_vendors
+        set cmd (commandline -opc)[1]
+        $cmd --listvendors --shell-complete-list 2>/dev/null
+end
+
 function __fabric_get_contexts
         set cmd (commandline -opc)[1]
         $cmd --listcontexts --shell-complete-list 2>/dev/null
@@ -58,6 +63,7 @@ function __fabric_register_completions
         complete -c $cmd -s P -l presencepenalty -d "Set presence penalty (default: 0.0)"
         complete -c $cmd -s F -l frequencypenalty -d "Set frequency penalty (default: 0.0)"
         complete -c $cmd -s m -l model -d "Choose model" -a "(__fabric_get_models)"
+        complete -c $cmd -s V -l vendor -d "Specify vendor for chosen model (e.g., -V \"LM Studio\" -m openai/gpt-oss-20b)" -a "(__fabric_get_vendors)"
         complete -c $cmd -l modelContextLength -d "Model context length (only affects ollama)"
         complete -c $cmd -s o -l output -d "Output to file" -r
         complete -c $cmd -s n -l latest -d "Number of latest patterns to list (default: 0)"

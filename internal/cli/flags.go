@@ -43,6 +43,7 @@ type Flags struct {
 	Message                         string            `hidden:"true" description:"Messages to send to chat"`
 	Copy                            bool              `short:"c" long:"copy" description:"Copy to clipboard"`
 	Model                           string            `short:"m" long:"model" yaml:"model" description:"Choose model"`
+	Vendor                          string            `short:"V" long:"vendor" yaml:"vendor" description:"Specify vendor for the selected model (e.g., -V \"LM Studio\" -m openai/gpt-oss-20b)"`
 	ModelContextLength              int               `long:"modelContextLength" yaml:"modelContextLength" description:"Model context length (only affects ollama)"`
 	Output                          string            `short:"o" long:"output" description:"Output to file" default:""`
 	OutputSession                   bool              `long:"output-session" description:"Output the entire session (also a temporary one) to the output file"`

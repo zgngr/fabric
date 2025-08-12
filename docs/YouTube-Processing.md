@@ -62,25 +62,25 @@ Pass additional arguments to yt-dlp for advanced functionality. **User-provided 
 
 ```bash
 # Use browser cookies for age-restricted or private videos
-fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args "--cookies-from-browser brave"
+fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args="--cookies-from-browser brave"
 
 # Override language selection (takes precedence over -g flag)
-fabric -g en -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args "--sub-langs es,fr"
+fabric -g en -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args="--sub-langs es,fr"
 
 # Use specific format
-fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args "--format best"
+fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args="--format best"
 
 # Handle rate limiting (slow down requests)
-fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args "--sleep-requests 1"
+fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args="--sleep-requests 1"
 
 # Multiple arguments (use quotes)
-fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args "--cookies-from-browser firefox --write-info-json"
+fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args="--cookies-from-browser firefox --write-info-json"
 
 # Combine rate limiting with authentication
-fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args "--cookies-from-browser brave --sleep-requests 1"
+fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args="--cookies-from-browser brave --sleep-requests 1"
 
 # Override subtitle format (takes precedence over built-in --sub-format vtt)
-fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args "--sub-format srt"
+fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --yt-dlp-args="--sub-format srt"
 ```
 
 #### Argument Precedence
@@ -196,7 +196,7 @@ fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --pattern write_blog_post
 ### Common Issues
 
 1. **"yt-dlp not found"**: Install yt-dlp using pip or your package manager
-2. **Age-restricted videos**: Use `--yt-dlp-args "--cookies-from-browser BROWSER"`
+2. **Age-restricted videos**: Use `--yt-dlp-args="--cookies-from-browser BROWSER"`
 3. **No subtitles available**: Some videos don't have auto-generated subtitles
 4. **API rate limits**: YouTube API has daily quotas for comments/metadata
 5. **HTTP 429 errors**: YouTube is rate limiting subtitle requests
@@ -208,8 +208,8 @@ fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" --pattern write_blog_post
 - **"No transcript content found"**: Video may not have subtitles available
 - **"HTTP Error 429: Too Many Requests"**: YouTube rate limit exceeded. This is increasingly common. Solutions:
   - **Wait 10-30 minutes and try again** (most effective)
-  - Use longer sleep: `--yt-dlp-args "--sleep-requests 5"`
-  - Try with browser cookies: `--yt-dlp-args "--cookies-from-browser brave --sleep-requests 5"`
+  - Use longer sleep: `--yt-dlp-args="--sleep-requests 5"`
+  - Try with browser cookies: `--yt-dlp-args="--cookies-from-browser brave --sleep-requests 5"`
   - **Try a different video** - some videos are less restricted
   - **Use a VPN** - different IP address may help
   - **Try without language specification** - let yt-dlp choose any available language
@@ -270,7 +270,7 @@ fabric -y "https://www.youtube.com/watch?v=dQw4w9WgXcQ" --pattern summarize --st
 
 ```bash
 fabric -y "https://www.youtube.com/watch?v=VIDEO_ID" \
-  --yt-dlp-args "--cookies-from-browser chrome" \
+  --yt-dlp-args="--cookies-from-browser chrome" \
   --transcript-with-timestamps \
   --comments \
   --pattern comprehensive_analysis \
@@ -291,7 +291,7 @@ fabric -y "https://www.youtube.com/playlist?list=PLrAXtmRdnEQy6nuLvVUxpDnx4C0823
 ```bash
 # Built-in language selection (-g es) is overridden by user args
 fabric -g es -y "https://www.youtube.com/watch?v=VIDEO_ID" \
-  --yt-dlp-args "--sub-langs fr,de,en" \
+  --yt-dlp-args="--sub-langs fr,de,en" \
   --pattern translate
 ```
 
