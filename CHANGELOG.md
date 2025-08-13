@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.285 (2025-08-13)
+
+### PR [#1698](https://github.com/danielmiessler/Fabric/pull/1698) by [ksylvan](https://github.com/ksylvan): Enable One Million Token Context Beta Feature for Sonnet-4
+
+- Chore: upgrade anthropic-sdk-go to v1.9.1 and add beta feature support for context-1m
+- Add modelBetas map for beta feature configuration
+- Implement context-1m-2025-08-07 beta for Claude Sonnet 4
+- Add beta header support with fallback handling
+- Preserve existing beta headers in OAuth transport
+
 ## v1.4.284 (2025-08-12)
 
 ### PR [#1695](https://github.com/danielmiessler/Fabric/pull/1695) by [ksylvan](https://github.com/ksylvan): Introduce One-Liner Curl Install for Completions
