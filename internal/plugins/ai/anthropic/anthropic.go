@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/anthropics/anthropic-sdk-go"
@@ -47,6 +48,10 @@ func NewClient() (ret *Client) {
 		string(anthropic.ModelClaude_3_Opus_20240229), string(anthropic.ModelClaude_3_Haiku_20240307),
 		string(anthropic.ModelClaudeOpus4_20250514), string(anthropic.ModelClaudeSonnet4_20250514),
 		string(anthropic.ModelClaudeOpus4_1_20250805),
+	}
+
+	ret.modelBetas = map[string][]string{
+		string(anthropic.ModelClaudeSonnet4_20250514): {"context-1m-2025-08-07"},
 	}
 
 	return
@@ -93,6 +98,7 @@ type Client struct {
 	maxTokens                  int
 	defaultRequiredUserMessage string
 	models                     []string
+	modelBetas                 map[string][]string
 
 	client anthropic.Client
 }
@@ -160,7 +166,17 @@ func (an *Client) SendStream(
 
 	ctx := context.Background()
 
-	stream := an.client.Messages.NewStreaming(ctx, an.buildMessageParams(messages, opts))
+	params := an.buildMessageParams(messages, opts)
+	betas := an.modelBetas[opts.Model]
+	var reqOpts []option.RequestOption
+	if len(betas) > 0 {
+		reqOpts = append(reqOpts, option.WithHeader("anthropic-beta", strings.Join(betas, ",")))
+	}
+	stream := an.client.Messages.NewStreaming(ctx, params, reqOpts...)
+	if stream.Err() != nil && len(betas) > 0 {
+		fmt.Fprintf(os.Stderr, "Anthropic beta feature %s failed: %v\n", strings.Join(betas, ","), stream.Err())
+		stream = an.client.Messages.NewStreaming(ctx, params)
+	}
 
 	for stream.Next() {
 		event := stream.Current()
@@ -226,6 +242,7 @@ func (an *Client) buildMessageParams(msgs []anthropic.MessageParam, opts *domain
 			{OfWebSearchTool20250305: &webTool},
 		}
 	}
+
 	return
 }
 
@@ -239,8 +256,21 @@ func (an *Client) Send(ctx context.Context, msgs []*chat.ChatCompletionMessage, 
 	}
 
 	var message *anthropic.Message
-	if message, err = an.client.Messages.New(ctx, an.buildMessageParams(messages, opts)); err != nil {
-		return
+	params := an.buildMessageParams(messages, opts)
+	betas := an.modelBetas[opts.Model]
+	var reqOpts []option.RequestOption
+	if len(betas) > 0 {
+		reqOpts = append(reqOpts, option.WithHeader("anthropic-beta", strings.Join(betas, ",")))
+	}
+	if message, err = an.client.Messages.New(ctx, params, reqOpts...); err != nil {
+		if len(betas) > 0 {
+			fmt.Fprintf(os.Stderr, "Anthropic beta feature %s failed: %v\n", strings.Join(betas, ","), err)
+			if message, err = an.client.Messages.New(ctx, params); err != nil {
+				return
+			}
+		} else {
+			return
+		}
 	}
 
 	var textParts []string
