@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.286 (2025-08-14)
+
+### PR [#1700](https://github.com/danielmiessler/Fabric/pull/1700) by [ksylvan](https://github.com/ksylvan): Introduce Thinking Config Across Anthropic and OpenAI Providers
+
+- Add --thinking CLI flag for configurable reasoning levels across providers
+- Implement Anthropic ThinkingConfig with standardized budgets and tokens
+- Map OpenAI reasoning effort from thinking levels
+- Show thinking level in dry-run formatted options
+- Overhaul suggest_pattern docs with categories, workflows, usage examples
+
 ## v1.4.285 (2025-08-13)
 
 ### PR [#1698](https://github.com/danielmiessler/Fabric/pull/1698) by [ksylvan](https://github.com/ksylvan): Enable One Million Token Context Beta Feature for Sonnet-4
