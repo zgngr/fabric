@@ -95,7 +95,7 @@ type Flags struct {
 	ListGeminiVoices                bool                 `long:"list-gemini-voices" description:"List all available Gemini TTS voices"`
 	Notification                    bool                 `long:"notification" yaml:"notification" description:"Send desktop notification when command completes"`
 	NotificationCommand             string               `long:"notification-command" yaml:"notificationCommand" description:"Custom command to run for notifications (overrides built-in notifications)"`
-	Thinking                        domain.ThinkingLevel `long:"thinking" yaml:"thinking" description:"Set reasoning/thinking level (e.g., off, low, medium, high, or numeric tokens for Anthropic)"`
+	Thinking                        domain.ThinkingLevel `long:"thinking" yaml:"thinking" description:"Set reasoning/thinking level (e.g., off, low, medium, high, or numeric tokens for Anthropic or Google Gemini)"`
 }
 
 var debug = false
