@@ -167,7 +167,9 @@ func parseThinking(level domain.ThinkingLevel) (anthropic.ThinkingConfigParamUni
 		}
 	default:
 		if tokens, err := strconv.ParseInt(lower, 10, 64); err == nil {
-			return anthropic.ThinkingConfigParamOfEnabled(tokens), true
+			if tokens >= 1 && tokens <= 10000 {
+				return anthropic.ThinkingConfigParamOfEnabled(tokens), true
+			}
 		}
 	}
 	return anthropic.ThinkingConfigParamUnion{}, false
