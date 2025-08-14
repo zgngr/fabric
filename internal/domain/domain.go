@@ -32,6 +32,7 @@ type ChatOptions struct {
 	FrequencyPenalty    float64
 	Raw                 bool
 	Seed                int
+	Thinking            ThinkingLevel
 	ModelContextLength  int
 	MaxTokens           int
 	Search              bool
