@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/anthropics/anthropic-sdk-go"
@@ -154,6 +155,26 @@ func (an *Client) ListModels() (ret []string, err error) {
 	return an.models, nil
 }
 
+func parseThinking(level domain.ThinkingLevel) (anthropic.ThinkingConfigParamUnion, bool) {
+	lower := strings.ToLower(string(level))
+	switch domain.ThinkingLevel(lower) {
+	case domain.ThinkingOff:
+		disabled := anthropic.NewThinkingConfigDisabledParam()
+		return anthropic.ThinkingConfigParamUnion{OfDisabled: &disabled}, true
+	case domain.ThinkingLow, domain.ThinkingMedium, domain.ThinkingHigh:
+		if budget, ok := domain.ThinkingBudgets[domain.ThinkingLevel(lower)]; ok {
+			return anthropic.ThinkingConfigParamOfEnabled(budget), true
+		}
+	default:
+		if tokens, err := strconv.ParseInt(lower, 10, 64); err == nil {
+			if tokens >= 1 && tokens <= 10000 {
+				return anthropic.ThinkingConfigParamOfEnabled(tokens), true
+			}
+		}
+	}
+	return anthropic.ThinkingConfigParamUnion{}, false
+}
+
 func (an *Client) SendStream(
 	msgs []*chat.ChatCompletionMessage, opts *domain.ChatOptions, channel chan string,
 ) (err error) {
@@ -241,6 +262,10 @@ func (an *Client) buildMessageParams(msgs []anthropic.MessageParam, opts *domain
 		params.Tools = []anthropic.ToolUnionParam{
 			{OfWebSearchTool20250305: &webTool},
 		}
+	}
+
+	if t, ok := parseThinking(opts.Thinking); ok {
+		params.Thinking = t
 	}
 
 	return

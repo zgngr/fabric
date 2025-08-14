@@ -72,6 +72,7 @@ function __fabric_register_completions
         complete -c $cmd -s u -l scrape_url -d "Scrape website URL to markdown using Jina AI"
         complete -c $cmd -s q -l scrape_question -d "Search question using Jina AI"
         complete -c $cmd -s e -l seed -d "Seed to be used for LMM generation"
+        complete -c $cmd -l thinking -d "Set reasoning/thinking level" -a "off low medium high"
         complete -c $cmd -s w -l wipecontext -d "Wipe context" -a "(__fabric_get_contexts)"
         complete -c $cmd -s W -l wipesession -d "Wipe session" -a "(__fabric_get_sessions)"
         complete -c $cmd -l printcontext -d "Print context" -a "(__fabric_get_contexts)"

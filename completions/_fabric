@@ -100,6 +100,7 @@ _fabric() {
     '(-u --scrape_url)'{-u,--scrape_url}'[Scrape website URL to markdown using Jina AI]:url:' \
     '(-q --scrape_question)'{-q,--scrape_question}'[Search question using Jina AI]:question:' \
     '(-e --seed)'{-e,--seed}'[Seed to be used for LMM generation]:seed:' \
+    '(--thinking)--thinking[Set reasoning/thinking level]:level:(off low medium high)' \
     '(-w --wipecontext)'{-w,--wipecontext}'[Wipe context]:context:_fabric_contexts' \
     '(-W --wipesession)'{-W,--wipesession}'[Wipe session]:session:_fabric_sessions' \
     '(--printcontext)--printcontext[Print context]:context:_fabric_contexts' \

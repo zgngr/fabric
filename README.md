@@ -576,6 +576,8 @@ Application Options:
       --notification-command=       Custom command to run for notifications (overrides built-in
                                     notifications)
       --yt-dlp-args=                Additional arguments to pass to yt-dlp (e.g. '--cookies-from-browser brave')
+      --thinking=                   Set reasoning/thinking level (e.g., off, low, medium,
+                                    high, or numeric tokens for Anthropic)
 
 Help Options:
   -h, --help                        Show this help message

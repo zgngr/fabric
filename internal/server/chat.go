@@ -130,6 +130,7 @@ func (h *ChatHandler) HandleChat(c *gin.Context) {
 					TopP:             request.TopP,
 					FrequencyPenalty: request.FrequencyPenalty,
 					PresencePenalty:  request.PresencePenalty,
+					Thinking:         request.Thinking,
 				}
 
 				session, err := chatter.Send(chatReq, opts)

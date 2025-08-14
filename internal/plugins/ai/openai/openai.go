@@ -184,6 +184,19 @@ func (o *Client) NeedsRawMode(modelName string) bool {
 	return slices.Contains(openAIModelsNeedingRaw, modelName)
 }
 
+func parseReasoningEffort(level domain.ThinkingLevel) (shared.ReasoningEffort, bool) {
+	switch domain.ThinkingLevel(strings.ToLower(string(level))) {
+	case domain.ThinkingLow:
+		return shared.ReasoningEffortLow, true
+	case domain.ThinkingMedium:
+		return shared.ReasoningEffortMedium, true
+	case domain.ThinkingHigh:
+		return shared.ReasoningEffortHigh, true
+	default:
+		return "", false
+	}
+}
+
 func (o *Client) buildResponseParams(
 	inputMsgs []*chat.ChatCompletionMessage, opts *domain.ChatOptions,
 ) (ret responses.ResponseNewParams) {
@@ -227,6 +240,10 @@ func (o *Client) buildResponseParams(
 
 	if len(tools) > 0 {
 		ret.Tools = tools
+	}
+
+	if eff, ok := parseReasoningEffort(opts.Thinking); ok {
+		ret.Reasoning = shared.ReasoningParam{Effort: eff}
 	}
 
 	if !opts.Raw {
