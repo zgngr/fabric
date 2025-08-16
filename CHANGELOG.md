@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.287 (2025-08-14)
+
+### PR [#1706](https://github.com/danielmiessler/Fabric/pull/1706) by [ksylvan](https://github.com/ksylvan): Gemini Thinking Support and README (New Features) automation
+
+- Add comprehensive "Recent Major Features" section to README
+- Introduce new readme_updates Python script for automation
+- Enable Gemini thinking configuration with token budgets
+- Update CLI help text for Gemini thinking support
+- Add comprehensive test coverage for Gemini thinking
+
 ## v1.4.286 (2025-08-14)
 
 ### PR [#1700](https://github.com/danielmiessler/Fabric/pull/1700) by [ksylvan](https://github.com/ksylvan): Introduce Thinking Config Across Anthropic and OpenAI Providers
