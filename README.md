@@ -591,6 +591,7 @@ Application Options:
       --printsession=               Print session
       --readability                 Convert HTML input into a clean, readable view
       --input-has-vars              Apply variables to user input
+      --no-variable-replacement     Disable pattern variable replacement
       --dry-run                     Show what would be sent to the model without actually sending it
       --serve                       Serve the Fabric Rest API
       --serveOllama                 Serve the Fabric Rest API with ollama endpoints
