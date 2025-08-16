@@ -75,6 +75,7 @@
 		"jessevdk",
 		"Jina",
 		"joho",
+		"kballard",
 		"Keploy",
 		"Kore",
 		"ksylvan",
@@ -129,6 +130,7 @@
 		"seaborn",
 		"semgrep",
 		"sess",
+		"shellquote",
 		"storer",
 		"Streamlit",
 		"stretchr",
@@ -156,7 +158,8 @@
 		"writeups",
 		"xclip",
 		"yourpatternname",
-		"youtu"
+		"youtu",
+		"YTDLP"
 	],
 	"cSpell.ignorePaths": ["go.mod", ".gitignore", "CHANGELOG.md"],
 	"markdownlint.config": {
