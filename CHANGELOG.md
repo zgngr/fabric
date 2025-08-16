@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.288 (2025-08-16)
+
+### PR [#1709](https://github.com/danielmiessler/Fabric/pull/1709) by [ksylvan](https://github.com/ksylvan): Enhanced YouTube Subtitle Language Fallback Handling
+
+- Fix: improve YouTube subtitle language fallback handling in yt-dlp integration
+- Fix typo "Gemmini" to "Gemini" in README
+- Add "kballard" and "shellquote" to VSCode dictionary
+- Add "YTDLP" to VSCode spell checker
+- Enhance subtitle language options with fallback variants
+
 ## v1.4.287 (2025-08-14)
 
 ### PR [#1706](https://github.com/danielmiessler/Fabric/pull/1706) by [ksylvan](https://github.com/ksylvan): Gemini Thinking Support and README (New Features) automation
