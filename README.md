@@ -68,7 +68,7 @@ Below are the **new features and capabilities** we've added (newest first):
 - [v1.4.277](https://github.com/danielmiessler/fabric/releases/tag/v1.4.277) (Aug 8, 2025) — **Desktop Notifications**: Add cross-platform desktop notifications to Fabric CLI
 - [v1.4.274](https://github.com/danielmiessler/fabric/releases/tag/v1.4.274) (Aug 7, 2025) — **Claude 4.1 Added**: Add Support for Claude Opus 4.1 Model
 - [v1.4.271](https://github.com/danielmiessler/fabric/releases/tag/v1.4.271) (Jul 28, 2025) — **AI Summarized Release Notes**: Enable AI summary updates for GitHub releases
-- [v1.4.268](https://github.com/danielmiessler/fabric/releases/tag/v1.4.268) (Jul 26, 2025) — **Gemmini TTS Voice Selection**: add Gemini TTS voice selection and listing functionality
+- [v1.4.268](https://github.com/danielmiessler/fabric/releases/tag/v1.4.268) (Jul 26, 2025) — **Gemini TTS Voice Selection**: add Gemini TTS voice selection and listing functionality
 - [v1.4.267](https://github.com/danielmiessler/fabric/releases/tag/v1.4.267) (Jul 26, 2025) — **Text-to-Speech**: Update Gemini Plugin to New SDK with TTS Support
 - [v1.4.258](https://github.com/danielmiessler/fabric/releases/tag/v1.4.258) (Jul 17, 2025) — **Onboarding Improved**: Add startup check to initialize config and .env file automatically
 - [v1.4.257](https://github.com/danielmiessler/fabric/releases/tag/v1.4.257) (Jul 17, 2025) — **OpenAI Routing Control**: Introduce CLI Flag to Disable OpenAI Responses API

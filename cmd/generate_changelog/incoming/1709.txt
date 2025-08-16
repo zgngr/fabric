@@ -1,0 +1,7 @@
+### PR [#1709](https://github.com/danielmiessler/Fabric/pull/1709) by [ksylvan](https://github.com/ksylvan): Enhanced YouTube Subtitle Language Fallback Handling
+
+- Fix: improve YouTube subtitle language fallback handling in yt-dlp integration
+- Fix typo "Gemmini" to "Gemini" in README
+- Add "kballard" and "shellquote" to VSCode dictionary
+- Add "YTDLP" to VSCode spell checker
+- Enhance subtitle language options with fallback variants
