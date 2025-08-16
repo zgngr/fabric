@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.289 (2025-08-16)
+
+### PR [#1710](https://github.com/danielmiessler/Fabric/pull/1710) by [ksylvan](https://github.com/ksylvan): feat: add --no-variable-replacement flag to disable pattern variable …
+
+- Add --no-variable-replacement flag to disable pattern variable substitution
+- Introduce CLI flag to skip pattern variable replacement and wire it into domain request and session builder
+- Provide PatternsEntity.GetWithoutVariables for input-only pattern processing support
+- Refactor patterns code into reusable load and apply helpers
+- Update bash, zsh, fish completions with new flag and document in README and CLI help output
+
 ## v1.4.288 (2025-08-16)
 
 ### PR [#1709](https://github.com/danielmiessler/Fabric/pull/1709) by [ksylvan](https://github.com/ksylvan): Enhanced YouTube Subtitle Language Fallback Handling
