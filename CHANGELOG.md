@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.290 (2025-08-17)
+
+### PR [#1714](https://github.com/danielmiessler/Fabric/pull/1714) by [ksylvan](https://github.com/ksylvan): feat: add per-pattern model mapping support via environment variables
+
+- Add per-pattern model mapping support via environment variables
+- Implement environment variable lookup for pattern-specific models
+- Support vendor|model format in environment variable specification
+- Enable shell startup file configuration for patterns
+- Transform pattern names to uppercase environment variable format
+
 ## v1.4.289 (2025-08-16)
 
 ### PR [#1710](https://github.com/danielmiessler/Fabric/pull/1710) by [ksylvan](https://github.com/ksylvan): feat: add --no-variable-replacement flag to disable pattern variable …
