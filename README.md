@@ -127,6 +127,7 @@ Keep in mind that many of these were recorded when Fabric was Python-based, so r
     - [From Source](#from-source)
     - [Environment Variables](#environment-variables)
     - [Setup](#setup)
+    - [Per-Pattern Model Mapping](#per-pattern-model-mapping)
     - [Add aliases for all patterns](#add-aliases-for-all-patterns)
       - [Save your files in markdown using aliases](#save-your-files-in-markdown-using-aliases)
     - [Migration](#migration)
@@ -283,6 +284,13 @@ fabric --setup
 ```
 
 If everything works you are good to go.
+
+### Per-Pattern Model Mapping
+
+ You can configure specific models for individual patterns using environment variables
+ like `FABRIC_MODEL_PATTERN_NAME=vendor|model`
+
+ This makes it easy to maintain these per-pattern model mappings in your shell startup files.
 
 ### Add aliases for all patterns
 
