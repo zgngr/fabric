@@ -81,8 +81,10 @@ func TestGetChatter_WarnsOnAmbiguousModel(t *testing.T) {
 	if err != nil {
 		t.Fatalf("GetChatter() error = %v", err)
 	}
-	if chatter.vendor.GetName() != "VendorA" {
-		t.Fatalf("expected vendor VendorA, got %s", chatter.vendor.GetName())
+	// Verify that one of the valid vendors was selected (don't care which one due to map iteration randomness)
+	vendorName := chatter.vendor.GetName()
+	if vendorName != "VendorA" && vendorName != "VendorB" {
+		t.Fatalf("expected vendor VendorA or VendorB, got %s", vendorName)
 	}
 	if !strings.Contains(string(warning), "multiple vendors provide model shared-model") {
 		t.Fatalf("expected warning about multiple vendors, got %q", string(warning))

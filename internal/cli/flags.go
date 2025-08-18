@@ -92,8 +92,12 @@ type Flags struct {
 	ThinkStartTag                   string               `long:"think-start-tag" yaml:"thinkStartTag" description:"Start tag for thinking sections" default:"<think>"`
 	ThinkEndTag                     string               `long:"think-end-tag" yaml:"thinkEndTag" description:"End tag for thinking sections" default:"</think>"`
 	DisableResponsesAPI             bool                 `long:"disable-responses-api" yaml:"disableResponsesAPI" description:"Disable OpenAI Responses API (default: false)"`
+	TranscribeFile                  string               `long:"transcribe-file" yaml:"transcribeFile" description:"Audio or video file to transcribe"`
+	TranscribeModel                 string               `long:"transcribe-model" yaml:"transcribeModel" description:"Model to use for transcription (separate from chat model)"`
+	SplitMediaFile                  bool                 `long:"split-media-file" yaml:"splitMediaFile" description:"Split audio/video files larger than 25MB using ffmpeg"`
 	Voice                           string               `long:"voice" yaml:"voice" description:"TTS voice name for supported models (e.g., Kore, Charon, Puck)" default:"Kore"`
 	ListGeminiVoices                bool                 `long:"list-gemini-voices" description:"List all available Gemini TTS voices"`
+	ListTranscriptionModels         bool                 `long:"list-transcription-models" description:"List all available transcription models"`
 	Notification                    bool                 `long:"notification" yaml:"notification" description:"Send desktop notification when command completes"`
 	NotificationCommand             string               `long:"notification-command" yaml:"notificationCommand" description:"Custom command to run for notifications (overrides built-in notifications)"`
 	Thinking                        domain.ThinkingLevel `long:"thinking" yaml:"thinking" description:"Set reasoning/thinking level (e.g., off, low, medium, high, or numeric tokens for Anthropic or Google Gemini)"`

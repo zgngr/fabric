@@ -57,6 +57,7 @@ Below are the **new features and capabilities** we've added (newest first):
 
 ### Recent Major Features
 
+- [v1.4.290](https://github.com/danielmiessler/fabric/releases/tag/v1.4.290) (Aug 18, 2025) — **Speech To Text**: Add OpenAI speech-to-text support with `--transcribe-file`, `--transcribe-model`, and `--split-media-file` flags.
 - [v1.4.287](https://github.com/danielmiessler/fabric/releases/tag/v1.4.287) (Aug 16, 2025) — **AI Reasoning**: Add Thinking to Gemini models and introduce `readme_updates` python script
 - [v1.4.286](https://github.com/danielmiessler/fabric/releases/tag/v1.4.286) (Aug 14, 2025) — **AI Reasoning**: Introduce Thinking Config Across Anthropic and OpenAI Providers
 - [v1.4.285](https://github.com/danielmiessler/fabric/releases/tag/v1.4.285) (Aug 13, 2025) — **Extended Context**: Enable One Million Token Context Beta Feature for Sonnet-4
@@ -648,7 +649,7 @@ Fabric _Patterns_ are different than most prompts you'll see.
 Here's an example of a Fabric Pattern.
 
 ```bash
-https://github.com/danielmiessler/fabric/blob/main/patterns/extract_wisdom/system.md
+https://github.com/danielmiessler/Fabric/blob/main/data/patterns/extract_wisdom/system.md
 ```
 
 <img width="1461" alt="pattern-example" src="https://github.com/danielmiessler/fabric/assets/50654/b910c551-9263-405f-9735-71ca69bbab6d">
