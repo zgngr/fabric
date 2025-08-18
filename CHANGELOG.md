@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.291 (2025-08-18)
+
+### PR [#1715](https://github.com/danielmiessler/Fabric/pull/1715) by [ksylvan](https://github.com/ksylvan): feat: add speech-to-text via OpenAI with transcription flags and comp…
+
+- Add --transcribe-file flag to transcribe audio or video
+- Add --transcribe-model flag with model listing and completion
+- Add --split-media-file flag to chunk files over 25MB
+- Implement OpenAI transcription using Whisper and GPT-4o Transcribe
+- Integrate transcription pipeline into CLI before readability processing
+
 ## v1.4.290 (2025-08-17)
 
 ### PR [#1714](https://github.com/danielmiessler/Fabric/pull/1714) by [ksylvan](https://github.com/ksylvan): feat: add per-pattern model mapping support via environment variables
