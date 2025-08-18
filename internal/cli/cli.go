@@ -74,6 +74,15 @@ func Cli(version string) (err error) {
 		return
 	}
 
+	// Handle transcription if specified
+	if currentFlags.TranscribeFile != "" {
+		var transcriptionMessage string
+		if transcriptionMessage, err = handleTranscription(currentFlags, registry); err != nil {
+			return
+		}
+		currentFlags.Message = AppendMessage(currentFlags.Message, transcriptionMessage)
+	}
+
 	// Process HTML readability if needed
 	if currentFlags.HtmlReadability {
 		if msg, cleanErr := converter.HtmlReadability(currentFlags.Message); cleanErr != nil {
