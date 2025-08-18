@@ -57,7 +57,7 @@ Below are the **new features and capabilities** we've added (newest first):
 
 ### Recent Major Features
 
-- [v1.4.290](https://github.com/danielmiessler/fabric/releases/tag/v1.4.290) (Aug 18, 2025) — **Speech To Text**: Add OpenAI speech-to-text support with `--transcribe-file`, `--transcribe-model`, and `--split-media-file` flags.
+- [v1.4.291](https://github.com/danielmiessler/fabric/releases/tag/v1.4.291) (Aug 18, 2025) — **Speech To Text**: Add OpenAI speech-to-text support with `--transcribe-file`, `--transcribe-model`, and `--split-media-file` flags.
 - [v1.4.287](https://github.com/danielmiessler/fabric/releases/tag/v1.4.287) (Aug 16, 2025) — **AI Reasoning**: Add Thinking to Gemini models and introduce `readme_updates` python script
 - [v1.4.286](https://github.com/danielmiessler/fabric/releases/tag/v1.4.286) (Aug 14, 2025) — **AI Reasoning**: Introduce Thinking Config Across Anthropic and OpenAI Providers
 - [v1.4.285](https://github.com/danielmiessler/fabric/releases/tag/v1.4.285) (Aug 13, 2025) — **Extended Context**: Enable One Million Token Context Beta Feature for Sonnet-4
