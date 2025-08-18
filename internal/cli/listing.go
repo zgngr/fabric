@@ -41,7 +41,7 @@ func handleListingCommands(currentFlags *Flags, fabricDb *fsdb.Db, registry *cor
 		if currentFlags.ShellCompleteOutput {
 			models.Print(true)
 		} else {
-			models.PrintWithVendor(false)
+			models.PrintWithVendor(false, registry.Defaults.Vendor.Value, registry.Defaults.Model.Value)
 		}
 		return true, nil
 	}
