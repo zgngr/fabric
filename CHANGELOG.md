@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.4.292 (2025-08-18)
+
+### PR [#1717](https://github.com/danielmiessler/Fabric/pull/1717) by [ksylvan](https://github.com/ksylvan): Highlight default vendor/model in model listing
+
+- Update PrintWithVendor signature to accept default vendor and model
+- Mark default vendor/model with asterisk in non-shell output
+- Compare vendor and model case-insensitively when marking
+- Pass registry defaults to PrintWithVendor from CLI
+- Add test ensuring default selection appears with asterisk
+### Direct commits
+
+- Docs: update version number in README updates section from v1.4.290 to v1.4.291
+
 ## v1.4.291 (2025-08-18)
 
 ### PR [#1715](https://github.com/danielmiessler/Fabric/pull/1715) by [ksylvan](https://github.com/ksylvan): feat: add speech-to-text via OpenAI with transcription flags and comp…

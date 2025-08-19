@@ -1,7 +1,0 @@
-### PR [#1717](https://github.com/danielmiessler/Fabric/pull/1717) by [ksylvan](https://github.com/ksylvan): Highlight default vendor/model in model listing
-
-- Update PrintWithVendor signature to accept default vendor and model
-- Mark default vendor/model with asterisk in non-shell output
-- Compare vendor and model case-insensitively when marking
-- Pass registry defaults to PrintWithVendor from CLI
-- Add test ensuring default selection appears with asterisk
