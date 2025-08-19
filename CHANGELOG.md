@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.293 (2025-08-19)
+
+### PR [#1718](https://github.com/danielmiessler/Fabric/pull/1718) by [ksylvan](https://github.com/ksylvan): Implement Configurable Debug Logging Levels
+
+- Add --debug flag controlling runtime logging verbosity levels
+- Introduce internal/log package with Off, Basic, Detailed, Trace
+- Replace ad-hoc Debugf and globals with centralized debug logger
+- Wire debug level during early CLI argument parsing
+- Add bash, zsh, fish completions for --debug levels
+
 ## v1.4.292 (2025-08-18)
 
 ### PR [#1717](https://github.com/danielmiessler/Fabric/pull/1717) by [ksylvan](https://github.com/ksylvan): Highlight default vendor/model in model listing
