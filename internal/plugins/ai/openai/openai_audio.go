@@ -11,6 +11,8 @@ import (
 	"sort"
 	"strings"
 
+	debuglog "github.com/danielmiessler/fabric/internal/log"
+
 	openai "github.com/openai/openai-go"
 )
 
@@ -56,18 +58,14 @@ func (o *Client) TranscribeFile(ctx context.Context, filePath, model string, spl
 		return "", err
 	}
 
-	debug := os.Getenv("FABRIC_STT_DEBUG") != ""
-
 	var files []string
 	var cleanup func()
 	if info.Size() > MaxAudioFileSize {
 		if !split {
 			return "", fmt.Errorf("file %s exceeds 25MB limit; use --split-media-file to enable automatic splitting", filePath)
 		}
-		if debug {
-			fmt.Fprintf(os.Stderr, "File %s is larger than the size limit... breaking it up into chunks...\n", filePath)
-		}
-		if files, cleanup, err = splitAudioFile(filePath, ext, MaxAudioFileSize, debug); err != nil {
+		debuglog.Debug(debuglog.Basic, "File %s is larger than the size limit... breaking it up into chunks...\n", filePath)
+		if files, cleanup, err = splitAudioFile(filePath, ext, MaxAudioFileSize); err != nil {
 			return "", err
 		}
 		defer cleanup()
@@ -77,9 +75,7 @@ func (o *Client) TranscribeFile(ctx context.Context, filePath, model string, spl
 
 	var builder strings.Builder
 	for i, f := range files {
-		if debug {
-			fmt.Fprintf(os.Stderr, "Using model %s to transcribe part %d (file name: %s)...\n", model, i+1, f)
-		}
+		debuglog.Debug(debuglog.Basic, "Using model %s to transcribe part %d (file name: %s)...\n", model, i+1, f)
 		var chunk *os.File
 		if chunk, err = os.Open(f); err != nil {
 			return "", err
@@ -105,7 +101,7 @@ func (o *Client) TranscribeFile(ctx context.Context, filePath, model string, spl
 
 // splitAudioFile splits the source file into chunks smaller than maxSize using ffmpeg.
 // It returns the list of chunk file paths and a cleanup function.
-func splitAudioFile(src, ext string, maxSize int64, debug bool) (files []string, cleanup func(), err error) {
+func splitAudioFile(src, ext string, maxSize int64) (files []string, cleanup func(), err error) {
 	if _, err = exec.LookPath("ffmpeg"); err != nil {
 		return nil, nil, fmt.Errorf("ffmpeg not found: please install it")
 	}
@@ -119,9 +115,7 @@ func splitAudioFile(src, ext string, maxSize int64, debug bool) (files []string,
 	segmentTime := 600 // start with 10 minutes
 	for {
 		pattern := filepath.Join(dir, "chunk-%03d"+ext)
-		if debug {
-			fmt.Fprintf(os.Stderr, "Running ffmpeg to split audio into %d-second chunks...\n", segmentTime)
-		}
+		debuglog.Debug(debuglog.Basic, "Running ffmpeg to split audio into %d-second chunks...\n", segmentTime)
 		cmd := exec.Command("ffmpeg", "-y", "-i", src, "-f", "segment", "-segment_time", fmt.Sprintf("%d", segmentTime), "-c", "copy", pattern)
 		var stderr bytes.Buffer
 		cmd.Stderr = &stderr

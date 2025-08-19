@@ -13,6 +13,7 @@ import (
 
 	"github.com/danielmiessler/fabric/internal/chat"
 	"github.com/danielmiessler/fabric/internal/domain"
+	debuglog "github.com/danielmiessler/fabric/internal/log"
 	"github.com/danielmiessler/fabric/internal/util"
 	"github.com/jessevdk/go-flags"
 	"golang.org/x/text/language"
@@ -101,18 +102,12 @@ type Flags struct {
 	Notification                    bool                 `long:"notification" yaml:"notification" description:"Send desktop notification when command completes"`
 	NotificationCommand             string               `long:"notification-command" yaml:"notificationCommand" description:"Custom command to run for notifications (overrides built-in notifications)"`
 	Thinking                        domain.ThinkingLevel `long:"thinking" yaml:"thinking" description:"Set reasoning/thinking level (e.g., off, low, medium, high, or numeric tokens for Anthropic or Google Gemini)"`
-}
-
-var debug = false
-
-func Debugf(format string, a ...interface{}) {
-	if debug {
-		fmt.Printf("DEBUG: "+format, a...)
-	}
+	Debug                           int                  `long:"debug" description:"Set debug level (0=off, 1=basic, 2=detailed, 3=trace)" default:"0"`
 }
 
 // Init Initialize flags. returns a Flags struct and an error
 func Init() (ret *Flags, err error) {
+	debuglog.SetLevel(debuglog.LevelFromInt(parseDebugLevel(os.Args[1:])))
 	// Track which yaml-configured flags were set on CLI
 	usedFlags := make(map[string]bool)
 	yamlArgsScan := os.Args[1:]
@@ -128,11 +123,11 @@ func Init() (ret *Flags, err error) {
 			shortTag := field.Tag.Get("short")
 			if longTag != "" {
 				flagToYamlTag[longTag] = yamlTag
-				Debugf("Mapped long flag %s to yaml tag %s\n", longTag, yamlTag)
+				debuglog.Debug(debuglog.Detailed, "Mapped long flag %s to yaml tag %s\n", longTag, yamlTag)
 			}
 			if shortTag != "" {
 				flagToYamlTag[shortTag] = yamlTag
-				Debugf("Mapped short flag %s to yaml tag %s\n", shortTag, yamlTag)
+				debuglog.Debug(debuglog.Detailed, "Mapped short flag %s to yaml tag %s\n", shortTag, yamlTag)
 			}
 		}
 	}
@@ -144,7 +139,7 @@ func Init() (ret *Flags, err error) {
 		if flag != "" {
 			if yamlTag, exists := flagToYamlTag[flag]; exists {
 				usedFlags[yamlTag] = true
-				Debugf("CLI flag used: %s (yaml: %s)\n", flag, yamlTag)
+				debuglog.Debug(debuglog.Detailed, "CLI flag used: %s (yaml: %s)\n", flag, yamlTag)
 			}
 		}
 	}
@@ -156,6 +151,7 @@ func Init() (ret *Flags, err error) {
 	if args, err = parser.Parse(); err != nil {
 		return
 	}
+	debuglog.SetLevel(debuglog.LevelFromInt(ret.Debug))
 
 	// Check to see if a ~/.config/fabric/config.yaml config file exists (only when user didn't specify a config)
 	if ret.Config == "" {
@@ -163,7 +159,7 @@ func Init() (ret *Flags, err error) {
 		if defaultConfigPath, err := util.GetDefaultConfigPath(); err == nil && defaultConfigPath != "" {
 			ret.Config = defaultConfigPath
 		} else if err != nil {
-			Debugf("Could not determine default config path: %v\n", err)
+			debuglog.Debug(debuglog.Detailed, "Could not determine default config path: %v\n", err)
 		}
 	}
 
@@ -188,13 +184,13 @@ func Init() (ret *Flags, err error) {
 					if flagField.CanSet() {
 						if yamlField.Type() != flagField.Type() {
 							if err := assignWithConversion(flagField, yamlField); err != nil {
-								Debugf("Type conversion failed for %s: %v\n", yamlTag, err)
+								debuglog.Debug(debuglog.Detailed, "Type conversion failed for %s: %v\n", yamlTag, err)
 								continue
 							}
 						} else {
 							flagField.Set(yamlField)
 						}
-						Debugf("Applied YAML value for %s: %v\n", yamlTag, yamlField.Interface())
+						debuglog.Debug(debuglog.Detailed, "Applied YAML value for %s: %v\n", yamlTag, yamlField.Interface())
 					}
 				}
 			}
@@ -218,6 +214,22 @@ func Init() (ret *Flags, err error) {
 		ret.Message = AppendMessage(ret.Message, pipedMessage)
 	}
 	return
+}
+
+func parseDebugLevel(args []string) int {
+	for i := 0; i < len(args); i++ {
+		arg := args[i]
+		if arg == "--debug" && i+1 < len(args) {
+			if lvl, err := strconv.Atoi(args[i+1]); err == nil {
+				return lvl
+			}
+		} else if strings.HasPrefix(arg, "--debug=") {
+			if lvl, err := strconv.Atoi(strings.TrimPrefix(arg, "--debug=")); err == nil {
+				return lvl
+			}
+		}
+	}
+	return 0
 }
 
 func extractFlag(arg string) string {
@@ -289,7 +301,7 @@ func loadYAMLConfig(configPath string) (*Flags, error) {
 		return nil, fmt.Errorf("error parsing config file: %w", err)
 	}
 
-	Debugf("Config: %v\n", config)
+	debuglog.Debug(debuglog.Detailed, "Config: %v\n", config)
 
 	return config, nil
 }

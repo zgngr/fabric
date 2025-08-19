@@ -636,9 +636,19 @@ Application Options:
       --yt-dlp-args=                Additional arguments to pass to yt-dlp (e.g. '--cookies-from-browser brave')
       --thinking=                   Set reasoning/thinking level (e.g., off, low, medium, high, or
                                     numeric tokens for Anthropic or Google Gemini)
+      --debug=                     Set debug level (0: off, 1: basic, 2: detailed, 3: trace)
 Help Options:
   -h, --help                        Show this help message
 ```
+
+### Debug Levels
+
+Use the `--debug` flag to control runtime logging:
+
+- `0`: off (default)
+- `1`: basic debug info
+- `2`: detailed debugging
+- `3`: trace level
 
 ## Our approach to prompting
 
