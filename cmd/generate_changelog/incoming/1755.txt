@@ -1,0 +1,7 @@
+### PR [#1755](https://github.com/danielmiessler/Fabric/pull/1755) by [ksylvan](https://github.com/ksylvan): Add i18n Support for Multi-Language Fabric Experience
+
+- Add Spanish localization support with i18n
+- Create contexts and sessions tutorial documentation
+- Fix broken Warp sponsorship image URL
+- Remove solve_with_cot pattern from codebase
+- Update pattern descriptions and explanations
