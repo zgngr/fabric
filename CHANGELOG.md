@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.309 (2025-09-09)
+
+### PR [#1756](https://github.com/danielmiessler/Fabric/pull/1756) by [ksylvan](https://github.com/ksylvan): Add Internationalization Support with Custom Help System
+
+- Add comprehensive internationalization support with English and Spanish locales
+- Replace hardcoded strings with i18n.T translations and add en and es JSON locale files
+- Implement custom translated help system with language detection from CLI args
+- Add locale download capability and localize error messages throughout codebase
+- Support TTS and notification translations
+
 ## v1.4.308 (2025-09-05)
 
 ### PR [#1755](https://github.com/danielmiessler/Fabric/pull/1755) by [ksylvan](https://github.com/ksylvan): Add i18n Support for Multi-Language Fabric Experience
