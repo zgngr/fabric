@@ -66,12 +66,12 @@ func Init(locale string) (*i18n.Localizer, error) {
 	if _, err := os.Stat(path); os.IsNotExist(err) && !embedded {
 		if err := downloadLocale(path, locale); err != nil {
 			// if download fails, still continue with embedded translations
-			fmt.Fprintln(os.Stderr, "i18n download failed:", err)
+			fmt.Fprintf(os.Stderr, "%s\n", fmt.Sprintf(getErrorMessage("i18n_download_failed", "Failed to download translation for language '%s': %v"), locale, err))
 		}
 	}
 	if _, err := os.Stat(path); err == nil {
 		if _, err := bundle.LoadMessageFile(path); err != nil {
-			fmt.Fprintln(os.Stderr, "i18n load failed:", err)
+			fmt.Fprintf(os.Stderr, "%s\n", fmt.Sprintf(getErrorMessage("i18n_load_failed", "Failed to load translation file: %v"), err))
 		}
 	}
 
@@ -118,4 +118,43 @@ func downloadLocale(path, locale string) error {
 	defer f.Close()
 	_, err = io.Copy(f, resp.Body)
 	return err
+}
+
+// getErrorMessage tries to get a translated error message, falling back to system locale
+// and then to the provided fallback message. This is used during initialization when
+// the translator may not be fully ready.
+func getErrorMessage(messageID, fallback string) string {
+	// Try to get system locale for error messages
+	systemLocale := getPreferredLocale("")
+	if systemLocale == "" {
+		systemLocale = "en"
+	}
+
+	// First try the system locale
+	if msg := tryGetMessage(systemLocale, messageID); msg != "" {
+		return msg
+	}
+
+	// Fall back to English
+	if systemLocale != "en" {
+		if msg := tryGetMessage("en", messageID); msg != "" {
+			return msg
+		}
+	}
+
+	// Final fallback to hardcoded message
+	return fallback
+}
+
+// tryGetMessage attempts to get a message from embedded locale files
+func tryGetMessage(locale, messageID string) string {
+	if data, err := localeFS.ReadFile("locales/" + locale + ".json"); err == nil {
+		var messages map[string]string
+		if json.Unmarshal(data, &messages) == nil {
+			if msg, exists := messages[messageID]; exists {
+				return msg
+			}
+		}
+	}
+	return ""
 }
