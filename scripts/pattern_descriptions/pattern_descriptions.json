@@ -1870,6 +1870,14 @@
         "ANALYSIS",
         "SELF"
       ]
+    },
+    {
+      "patternName": "create_story_about_people_interaction",
+      "description": "Analyze two personas, compare their dynamics, and craft a realistic, character-driven story from those insights.",
+      "tags": [
+        "ANALYSIS",
+        "WRITING"
+      ]
     }
   ]
 }
