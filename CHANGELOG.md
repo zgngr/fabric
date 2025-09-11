@@ -9,6 +9,7 @@
 - Support `/flag` syntax for Windows command line
 - Handle Windows colon delimiter `/flag:value` format
 - Maintain backward compatibility with Unix-style flags
+
 ### PR [#1762](https://github.com/danielmiessler/Fabric/pull/1762) by [OmriH-Elister](https://github.com/OmriH-Elister): New pattern for writing interaction between two characters
 
 - Feat: add new pattern that creates story simulating interaction between two people
@@ -16,6 +17,7 @@
 - Add `create_story_about_people_interaction` pattern description
 - Include pattern in `ANALYSIS` and `WRITING` categories
 - Update `suggest_pattern` system and user documentation
+
 ### Direct commits
 
 - Chore: update alias creation to use consistent naming
@@ -74,6 +76,7 @@
 - Ensure proper markdown rendering on GitHub
 🤖 Generated with [Claude Code](<https://claude.ai/code)>
 Co-Authored-By: Claude <noreply@anthropic.com>
+
 - Update Warp sponsor section with new banner and branding
 
 - Replace old banner with new warp-banner-light.png image
