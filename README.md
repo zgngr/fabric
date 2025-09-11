@@ -352,10 +352,11 @@ before, if you'd prefer all the fabric aliases to start with the same prefix.
 # Loop through all files in the ~/.config/fabric/patterns directory
 for pattern_file in $HOME/.config/fabric/patterns/*; do
     # Get the base name of the file (i.e., remove the directory path)
-    pattern_name="${FABRIC_ALIAS_PREFIX:-}"$(basename "$pattern_file")
+    pattern_name="$(basename "$pattern_file")"
+    alias_name="${FABRIC_ALIAS_PREFIX:-}${pattern_name}"
 
     # Create an alias in the form: alias pattern_name="fabric --pattern pattern_name"
-    alias_command="alias $pattern_name='fabric --pattern $pattern_name'"
+    alias_command="alias $alias_name='fabric --pattern $pattern_name'"
 
     # Evaluate the alias command to add it to the current shell
     eval "$alias_command"
@@ -386,10 +387,11 @@ $patternsPath = Join-Path $HOME ".config/fabric/patterns"
 foreach ($patternDir in Get-ChildItem -Path $patternsPath -Directory) {
     # Prepend FABRIC_ALIAS_PREFIX if set; otherwise use empty string
     $prefix = $env:FABRIC_ALIAS_PREFIX ?? ''
-    $patternName = "$prefix$($patternDir.Name)"
+    $patternName = "$($patternDir.Name)"
+    $aliasName = "$prefix$patternName"
     # Dynamically define a function for each pattern
     $functionDefinition = @"
-function $patternName {
+function $aliasName {
     [CmdletBinding()]
     param(
         [Parameter(ValueFromPipeline = `$true)]
