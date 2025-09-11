@@ -1,4 +1,4 @@
-### PR [#1762](https://github.com/danielmiessler/Fabric/pull/1762) by [ksylvan](https://github.com/ksylvan): New pattern for writing interaction between two characters
+### PR [#1762](https://github.com/danielmiessler/Fabric/pull/1762) by [OmriH-Elister](https://github.com/OmriH-Elister): New pattern for writing interaction between two characters
 
 - Feat: add new pattern that creates story simulating interaction between two people
 - Chore: add `create_story_about_people_interaction` pattern for persona analysis
