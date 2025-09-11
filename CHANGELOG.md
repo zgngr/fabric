@@ -59,6 +59,7 @@
 - Fix broken Warp sponsorship image URL
 - Remove solve_with_cot pattern from codebase
 - Update pattern descriptions and explanations
+
 ### Direct commits
 
 - Update Warp sponsor section with proper formatting
@@ -246,6 +247,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 - Compare vendor and model case-insensitively when marking
 - Pass registry defaults to PrintWithVendor from CLI
 - Add test ensuring default selection appears with asterisk
+
 ### Direct commits
 
 - Docs: update version number in README updates section from v1.4.290 to v1.4.291
