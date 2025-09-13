@@ -1,7 +1,0 @@
-### PR [#1767](https://github.com/danielmiessler/Fabric/pull/1767) by [ksylvan](https://github.com/ksylvan): feat(i18n): add de, fr, ja, pt, zh, fa locales; expand tests
-
-- Add DE, FR, JA, PT, ZH, FA i18n locale files
-- Expand i18n tests with table-driven multilingual coverage
-- Verify 'html_readability_error' translations across all supported languages
-- Update README with release notes for added languages
-- Insert blank lines between aggregated PR changelog sections

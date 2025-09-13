@@ -1,5 +1,31 @@
 # Changelog
 
+## v1.4.311 (2025-09-13)
+
+### PR [#1767](https://github.com/danielmiessler/Fabric/pull/1767) by [ksylvan](https://github.com/ksylvan): feat(i18n): add de, fr, ja, pt, zh, fa locales; expand tests
+
+- Add DE, FR, JA, PT, ZH, FA i18n locale files
+- Expand i18n tests with table-driven multilingual coverage
+- Verify 'html_readability_error' translations across all supported languages
+- Update README with release notes for added languages
+- Insert blank lines between aggregated PR changelog sections
+
+### Direct commits
+
+- Chore: update changelog formatting and sync changelog database
+
+- Add line breaks to improve changelog readability
+
+- Sync changelog database with latest entries
+- Clean up whitespace in version sections
+
+- Maintain consistent formatting across entries
+- Chore: add spacing between changelog entries for improved readability
+
+- Add blank lines between PR sections
+
+- Update changelog database with  to correspond with CHANGELOG fix.
+
 ## v1.4.310 (2025-09-11)
 
 ### PR [#1759](https://github.com/danielmiessler/Fabric/pull/1759) by [ksylvan](https://github.com/ksylvan): Add Windows-style Flag Support for Language Detection
