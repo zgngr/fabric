@@ -72,6 +72,8 @@ Below are the **new features and capabilities** we've added (newest first):
 
 ### Recent Major Features
 
+- [v1.4.311](https://github.com/danielmiessler/fabric/releases/tag/v1.4.311) (Sep 13, 2025) — **More internationalization support**: Adds de (German), fa (Persian / Farsi), fr (French), it (Italian),
+  ja (Japanese), pt (Portuguese), zh (Chinese)
 - [v1.4.309](https://github.com/danielmiessler/fabric/releases/tag/v1.4.309) (Sep 9, 2025) — **Comprehensive internationalization support**: Includes English and Spanish locale files.
 - [v1.4.303](https://github.com/danielmiessler/fabric/releases/tag/v1.4.303) (Aug 29, 2025) — **New Binary Releases**: Linux ARM and Windows ARM targets. You can run Fabric on the Raspberry PI and on your Windows Surface!
 - [v1.4.294](https://github.com/danielmiessler/fabric/releases/tag/v1.4.294) (Aug 20, 2025) — **Venice AI Support**: Added the Venice AI provider. Venice is a Privacy-First, Open-Source AI provider. See their ["About Venice"](https://docs.venice.ai/overview/about-venice) page for details.
