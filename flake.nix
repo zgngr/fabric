@@ -28,7 +28,7 @@
     let
       forAllSystems = nixpkgs.lib.genAttrs (import systems);
 
-      getGoVersion = system: nixpkgs.legacyPackages.${system}.go_1_24;
+      getGoVersion = system: nixpkgs.legacyPackages.${system}.go_latest;
 
       treefmtEval = forAllSystems (
         system:

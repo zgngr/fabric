@@ -1,0 +1,7 @@
+### PR [#1769](https://github.com/danielmiessler/Fabric/pull/1769) by [ksylvan](https://github.com/ksylvan): Go 1.25.1 Upgrade & Critical SDK Updates
+
+- Upgrade Go from 1.24 to 1.25.1
+- Update Anthropic SDK for web fetch tools
+- Upgrade AWS Bedrock SDK 12 versions
+- Update Azure Core and Identity SDKs
+- Fix Nix config for Go version lag
