@@ -35,7 +35,14 @@
         let
           pkgs = nixpkgs.legacyPackages.${system};
         in
-        treefmt-nix.lib.evalModule pkgs ./nix/treefmt.nix
+        treefmt-nix.lib.evalModule pkgs (
+          { ... }:
+          {
+            imports = [ ./nix/treefmt.nix ];
+            # Set environment variable to prevent Go toolchain auto-download
+            settings.global.excludes = [ ];
+          }
+        )
       );
     in
     {
