@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.312 (2025-09-14)
+
+### PR [#1769](https://github.com/danielmiessler/Fabric/pull/1769) by [ksylvan](https://github.com/ksylvan): Go 1.25.1 Upgrade & Critical SDK Updates
+
+- Upgrade Go from 1.24 to 1.25.1
+- Update Anthropic SDK for web fetch tools
+- Upgrade AWS Bedrock SDK 12 versions
+- Update Azure Core and Identity SDKs
+- Fix Nix config for Go version lag
+
 ## v1.4.311 (2025-09-13)
 
 ### PR [#1767](https://github.com/danielmiessler/Fabric/pull/1767) by [ksylvan](https://github.com/ksylvan): feat(i18n): add de, fr, ja, pt, zh, fa locales; expand tests
