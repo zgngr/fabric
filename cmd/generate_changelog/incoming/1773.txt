@@ -1,0 +1,7 @@
+### PR [#1773](https://github.com/danielmiessler/Fabric/pull/1773) by [ksylvan](https://github.com/ksylvan): Add Garble Obfuscation for Windows Builds
+
+- Add garble obfuscation for Windows builds and fix changelog generation
+- Add garble tool installation to release workflow
+- Configure garble obfuscation for Windows builds only
+- Fix changelog walker to handle unreleased commits
+- Implement boundary detection for released vs unreleased commits

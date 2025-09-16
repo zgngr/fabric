@@ -103,7 +103,7 @@
 - Replace with correct div structure and styling
 - Use proper Warp image URL from brand assets
 
-- Add 'Special thanks to:' text and platform availability
+- Add "Special thanks to:" text and platform availability
 - Maintains proper spacing and alignment
 - Fix unclosed div tag in README causing display issues
 
