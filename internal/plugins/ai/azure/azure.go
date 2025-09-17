@@ -1,12 +1,13 @@
 package azure
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/danielmiessler/fabric/internal/plugins"
 	"github.com/danielmiessler/fabric/internal/plugins/ai/openai"
 	openaiapi "github.com/openai/openai-go"
-	"github.com/openai/openai-go/option"
+	"github.com/openai/openai-go/azure"
 )
 
 func NewClient() (ret *Client) {
@@ -28,18 +29,44 @@ type Client struct {
 	apiDeployments []string
 }
 
-func (oi *Client) configure() (err error) {
-	oi.apiDeployments = strings.Split(oi.ApiDeployments.Value, ",")
-	opts := []option.RequestOption{option.WithAPIKey(oi.ApiKey.Value)}
-	if oi.ApiBaseURL.Value != "" {
-		opts = append(opts, option.WithBaseURL(oi.ApiBaseURL.Value))
+const defaultAPIVersion = "2024-05-01-preview"
+
+func (oi *Client) configure() error {
+	oi.apiDeployments = parseDeployments(oi.ApiDeployments.Value)
+
+	apiKey := strings.TrimSpace(oi.ApiKey.Value)
+	if apiKey == "" {
+		return fmt.Errorf("Azure API key is required")
 	}
-	if oi.ApiVersion.Value != "" {
-		opts = append(opts, option.WithQuery("api-version", oi.ApiVersion.Value))
+
+	baseURL := strings.TrimSpace(oi.ApiBaseURL.Value)
+	if baseURL == "" {
+		return fmt.Errorf("Azure API base URL is required")
 	}
-	client := openaiapi.NewClient(opts...)
+
+	apiVersion := strings.TrimSpace(oi.ApiVersion.Value)
+	if apiVersion == "" {
+		apiVersion = defaultAPIVersion
+		oi.ApiVersion.Value = apiVersion
+	}
+
+	client := openaiapi.NewClient(
+		azure.WithAPIKey(apiKey),
+		azure.WithEndpoint(baseURL, apiVersion),
+	)
 	oi.ApiClient = &client
-	return
+	return nil
+}
+
+func parseDeployments(value string) []string {
+	parts := strings.Split(value, ",")
+	var deployments []string
+	for _, part := range parts {
+		if deployment := strings.TrimSpace(part); deployment != "" {
+			deployments = append(deployments, deployment)
+		}
+	}
+	return deployments
 }
 
 func (oi *Client) ListModels() (ret []string, err error) {
