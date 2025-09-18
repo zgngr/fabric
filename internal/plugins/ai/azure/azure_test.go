@@ -27,7 +27,7 @@ func TestClientConfigure(t *testing.T) {
 	client.ApiDeployments.Value = "deployment1,deployment2"
 	client.ApiKey.Value = "test-api-key"
 	client.ApiBaseURL.Value = "https://example.com"
-	client.ApiVersion.Value = "2021-01-01"
+	client.ApiVersion.Value = "2024-05-01-preview"
 
 	err := client.configure()
 	if err != nil {
@@ -48,8 +48,23 @@ func TestClientConfigure(t *testing.T) {
 		t.Errorf("Expected ApiClient to be initialized, got nil")
 	}
 
-	if client.ApiVersion.Value != "2021-01-01" {
-		t.Errorf("Expected API version to be '2021-01-01', got %s", client.ApiVersion.Value)
+	if client.ApiVersion.Value != "2024-05-01-preview" {
+		t.Errorf("Expected API version to be '2024-05-01-preview', got %s", client.ApiVersion.Value)
+	}
+}
+
+func TestClientConfigureDefaultAPIVersion(t *testing.T) {
+	client := NewClient()
+	client.ApiDeployments.Value = "deployment1"
+	client.ApiKey.Value = "test-api-key"
+	client.ApiBaseURL.Value = "https://example.com"
+
+	if err := client.configure(); err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+
+	if client.ApiVersion.Value != defaultAPIVersion {
+		t.Errorf("Expected API version to default to %s, got %s", defaultAPIVersion, client.ApiVersion.Value)
 	}
 }
 
