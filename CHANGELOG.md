@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.4.314 (2025-09-17)
+
+### PR [#1774](https://github.com/danielmiessler/Fabric/pull/1774) by [ksylvan](https://github.com/ksylvan): Migrate Azure client to openai-go/azure and default API version
+
+- Migrated Azure client to openai-go/azure and default API version
+- Switched Azure OpenAI config to openai-go azure helpers and now require API key and base URL during configuration
+- Set default API version to 2024-05-01-preview when unspecified
+- Updated dependencies to support azure client and authentication flow
+- Removed latest-tag boundary logic from changelog walker and simplified version assignment by matching commit messages directly
+
+### Direct commits
+
+- Fix: One-time fix for CHANGELOG and changelog cache db
+
 ## v1.4.313 (2025-09-16)
 
 ### PR [#1773](https://github.com/danielmiessler/Fabric/pull/1773) by [ksylvan](https://github.com/ksylvan): Add Garble Obfuscation for Windows Builds

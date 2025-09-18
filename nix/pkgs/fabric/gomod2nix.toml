@@ -16,6 +16,12 @@ schema = 3
   [mod."dario.cat/mergo"]
     version = "v1.0.2"
     hash = "sha256-p6jdiHlLEfZES8vJnDywG4aVzIe16p0CU6iglglIweA="
+  [mod."github.com/Azure/azure-sdk-for-go/sdk/azcore"]
+    version = "v1.19.1"
+    hash = "sha256-+cax/D2o8biQuuZkPTwTRECDPE3Ci25il9iVBcOiLC4="
+  [mod."github.com/Azure/azure-sdk-for-go/sdk/internal"]
+    version = "v1.11.2"
+    hash = "sha256-O4Vo6D/fus3Qhs/Te644+jh2LfiG5PpiMkW0YWIbLCs="
   [mod."github.com/Microsoft/go-winio"]
     version = "v0.6.2"
     hash = "sha256-tVNWDUMILZbJvarcl/E7tpSnkn7urqgSHa2Eaka5vSU="
