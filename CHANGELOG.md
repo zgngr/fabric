@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.4.315 (2025-09-20)
+
+### Direct commits
+
+- Chore: update CI workflow and simplify goreleaser build configuration
+
+- Add changelog database to git tracking
+
+- Remove unnecessary goreleaser comments
+- Add version metadata to default build
+
+- Rename windows build from garbled to standard
+- Remove garble obfuscation from windows build
+
+- Standardize ldflags across all build targets
+- Inject version info during compilation
+
 ## v1.4.314 (2025-09-17)
 
 ### PR [#1774](https://github.com/danielmiessler/Fabric/pull/1774) by [ksylvan](https://github.com/ksylvan): Migrate Azure client to openai-go/azure and default API version
