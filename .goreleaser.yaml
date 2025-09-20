@@ -5,10 +5,7 @@ version: 2
 project_name: fabric
 before:
   hooks:
-    # You may remove this if you don't use go modules.
     - go mod tidy
-    # you may remove this if you don't need go generate
-    # - go generate ./...
 
 builds:
   - id: default
@@ -19,19 +16,28 @@ builds:
       - linux
     main: ./cmd/fabric
     binary: fabric
-  - id: windows-garbled
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.ShortCommit}}
+      - -X main.date={{.Date}}
+      - -X main.builtBy=goreleaser
+      - -X main.tag={{.Tag}}
+
+  - id: windows-build
     env:
       - CGO_ENABLED=0
     goos:
       - windows
     main: ./cmd/fabric
     binary: fabric
-    tool: garble
-    # From https://github.com/eyevanovich/garble-goreleaser-example/blob/main/.goreleaser.yaml
-    # command is a single string.
-    command: "-tiny"
-    flags: [ "-seed=random", "build" ]
-    ldflags: [ "-s", "-w" ]
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.ShortCommit}}
+      - -X main.date={{.Date}}
+      - -X main.builtBy=goreleaser
+      - -X main.tag={{.Tag}}
 
 archives:
   - formats: [tar.gz]
