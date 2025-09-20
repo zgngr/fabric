@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.316 (2025-09-20)
+
+### PR [#1777](https://github.com/danielmiessler/Fabric/pull/1777) by [ksylvan](https://github.com/ksylvan): chore: remove garble installation from release workflow
+
+- Remove garble installation step from release workflow
+- Add comment for GoReleaser config file reference link
+- The original idea of adding garble was to make it pass
+  virus scanning during version upgrades for Winget, and
+  this was a failed experiment.
+
 ## v1.4.315 (2025-09-20)
 
 ### Direct commits
