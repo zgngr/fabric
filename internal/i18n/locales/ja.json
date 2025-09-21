@@ -76,7 +76,7 @@
   "grab_comments_from_youtube": "YouTube動画からコメントを取得してチャットに送信",
   "output_video_metadata": "動画メタデータを出力",
   "additional_yt_dlp_args": "yt-dlpに渡す追加の引数（例：'--cookies-from-browser brave'）",
-  "specify_language_code": "チャットの言語コードを指定、例：-g=en -g=zh",
+  "specify_language_code": "チャットの言語コードを指定、例: -g=en -g=zh -g=pt-BR -g=pt-PT",
   "scrape_website_url": "Jina AIを使用してウェブサイトURLをマークダウンにスクレイピング",
   "search_question_jina": "Jina AIを使用した検索質問",
   "seed_for_lmm_generation": "LMM生成で使用するシード",

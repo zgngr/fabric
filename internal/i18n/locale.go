@@ -52,6 +52,18 @@ func normalizeLocale(locale string) string {
 	// en_US -> en-US
 	locale = strings.ReplaceAll(locale, "_", "-")
 
+	// Ensure proper BCP 47 casing: language-REGION
+	parts := strings.Split(locale, "-")
+	if len(parts) >= 2 {
+		// Lowercase language, uppercase region
+		parts[0] = strings.ToLower(parts[0])
+		parts[1] = strings.ToUpper(parts[1])
+		locale = strings.Join(parts[:2], "-") // Only keep language-REGION
+	} else if len(parts) == 1 {
+		// Language only, lowercase it
+		locale = strings.ToLower(parts[0])
+	}
+
 	return locale
 }
 

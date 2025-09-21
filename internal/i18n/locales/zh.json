@@ -76,7 +76,7 @@
   "grab_comments_from_youtube": "从 YouTube 视频获取评论并发送到聊天",
   "output_video_metadata": "输出视频元数据",
   "additional_yt_dlp_args": "传递给 yt-dlp 的其他参数（例如 '--cookies-from-browser brave'）",
-  "specify_language_code": "指定聊天的语言代码，例如 -g=en -g=zh",
+  "specify_language_code": "指定聊天的语言代码，例如 -g=en -g=zh -g=pt-BR -g=pt-PT",
   "scrape_website_url": "使用 Jina AI 将网站 URL 抓取为 markdown",
   "search_question_jina": "使用 Jina AI 搜索问题",
   "seed_for_lmm_generation": "用于 LMM 生成的种子",

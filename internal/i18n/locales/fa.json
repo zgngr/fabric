@@ -76,7 +76,7 @@
   "grab_comments_from_youtube": "دریافت نظرات از ویدیو یوتیوب و ارسال به گفتگو",
   "output_video_metadata": "نمایش فراداده ویدیو",
   "additional_yt_dlp_args": "آرگومان‌های اضافی برای ارسال به yt-dlp (مثال: '--cookies-from-browser brave')",
-  "specify_language_code": "تعیین کد زبان برای گفتگو، مثال: -g=en -g=zh",
+  "specify_language_code": "کد زبان برای گفتگو را مشخص کنید، مثلاً -g=en -g=zh -g=pt-BR -g=pt-PT",
   "scrape_website_url": "استخراج URL وب‌سایت به markdown با استفاده از Jina AI",
   "search_question_jina": "سؤال جستجو با استفاده از Jina AI",
   "seed_for_lmm_generation": "Seed برای استفاده در تولید LMM",

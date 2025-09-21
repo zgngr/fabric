@@ -76,7 +76,7 @@
   "grab_comments_from_youtube": "Récupérer les commentaires de la vidéo YouTube et envoyer au chat",
   "output_video_metadata": "Afficher les métadonnées de la vidéo",
   "additional_yt_dlp_args": "Arguments supplémentaires à passer à yt-dlp (ex. '--cookies-from-browser brave')",
-  "specify_language_code": "Spécifier le code de langue pour le chat, ex. -g=en -g=zh",
+  "specify_language_code": "Spécifier le code de langue pour le chat, ex. -g=en -g=zh -g=pt-BR -g=pt-PT",
   "scrape_website_url": "Scraper l'URL du site web en markdown en utilisant Jina AI",
   "search_question_jina": "Question de recherche en utilisant Jina AI",
   "seed_for_lmm_generation": "Graine à utiliser pour la génération LMM",
