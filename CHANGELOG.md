@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.317 (2025-09-21)
+
+### PR [#1778](https://github.com/danielmiessler/Fabric/pull/1778) by [ksylvan](https://github.com/ksylvan): Add Portuguese Language Variants Support (pt-BR and pt-PT)
+
+- Add Brazilian Portuguese (pt-BR) translation file
+- Add European Portuguese (pt-PT) translation file
+- Implement BCP 47 locale normalization system
+- Create fallback chain for language variants
+- Add default variant mapping for Portuguese
+
 ## v1.4.316 (2025-09-20)
 
 ### PR [#1777](https://github.com/danielmiessler/Fabric/pull/1777) by [ksylvan](https://github.com/ksylvan): chore: remove garble installation from release workflow
