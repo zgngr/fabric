@@ -1,7 +1,0 @@
-### PR [#1779](https://github.com/danielmiessler/Fabric/pull/1779) by [ksylvan](https://github.com/ksylvan): Improve pt-BR Translation - Thanks to @JuracyAmerico
-
-- Fix: improve PT-BR translation naturalness and fluency
-- Replace "dos" with "entre" for better preposition usage
-- Add definite articles where natural in Portuguese
-- Clarify "configurações padrão" instead of just "padrões"
-- Keep technical terms visible like "padrões/patterns"

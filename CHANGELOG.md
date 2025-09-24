@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.318 (2025-09-24)
+
+### PR [#1779](https://github.com/danielmiessler/Fabric/pull/1779) by [ksylvan](https://github.com/ksylvan): Improve pt-BR Translation - Thanks to @JuracyAmerico
+
+- Fix: improve PT-BR translation naturalness and fluency
+- Replace "dos" with "entre" for better preposition usage
+- Add definite articles where natural in Portuguese
+- Clarify "configurações padrão" instead of just "padrões"
+- Keep technical terms visible like "padrões/patterns"
+
 ## v1.4.317 (2025-09-21)
 
 ### PR [#1778](https://github.com/danielmiessler/Fabric/pull/1778) by [ksylvan](https://github.com/ksylvan): Add Portuguese Language Variants Support (pt-BR and pt-PT)
