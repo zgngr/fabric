@@ -1,0 +1,5 @@
+### PR [#1783](https://github.com/danielmiessler/Fabric/pull/1783) by [ksylvan](https://github.com/ksylvan): Update anthropic-sdk-go and add claude-sonnet-4-5
+
+- Feat: update `anthropic-sdk-go` to v1.13.0 and add new model
+- Upgrade `anthropic-sdk-go` to version 1.13.0
+- Add `ModelClaudeSonnet4_5` to supported models list
