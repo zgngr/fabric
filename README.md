@@ -44,8 +44,6 @@
 [Helper Apps](#helper-apps) •
 [Meta](#meta)
 
-![Screenshot of fabric](./docs/images/fabric-summarize.png)
-
 </div>
 
 ## What and why
@@ -63,6 +61,9 @@ It's all really exciting and powerful, but _it's not easy to integrate this func
 Fabric organizes prompts by real-world task, allowing people to create, collect, and organize their most important AI solutions in a single place for use in their favorite tools. And if you're command-line focused, you can use Fabric itself as the interface!
 
 ## Updates
+
+<details>
+<summary>Click to view recent updates</summary>
 
 Dear Users,
 
@@ -113,6 +114,8 @@ Below are the **new features and capabilities** we've added (newest first):
 - [v1.4.203](https://github.com/danielmiessler/fabric/releases/tag/v1.4.203) (Jun 14, 2025) — **Add Amazon Bedrock**: Add support for Amazon Bedrock
 
 These features represent our commitment to making Fabric the most powerful and flexible AI augmentation framework available!
+
+</details>
 
 ## Intro videos
 
