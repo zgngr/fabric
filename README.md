@@ -128,59 +128,55 @@ Keep in mind that many of these were recorded when Fabric was Python-based, so r
 
 ## Navigation
 
-- [`fabric`](#fabric)
-  - [What and why](#what-and-why)
-  - [Updates](#updates)
-    - [Recent Major Features](#recent-major-features)
-  - [Intro videos](#intro-videos)
-  - [Navigation](#navigation)
-  - [Changelog](#changelog)
-  - [Philosophy](#philosophy)
-    - [Breaking problems into components](#breaking-problems-into-components)
-    - [Too many prompts](#too-many-prompts)
-  - [Installation](#installation)
-    - [One-Line Install (Recommended)](#one-line-install-recommended)
-    - [Manual Binary Downloads](#manual-binary-downloads)
-    - [Using package managers](#using-package-managers)
-      - [macOS (Homebrew)](#macos-homebrew)
-      - [Arch Linux (AUR)](#arch-linux-aur)
-      - [Windows](#windows)
-    - [From Source](#from-source)
-    - [Docker](#docker)
-    - [Environment Variables](#environment-variables)
-    - [Setup](#setup)
-    - [Per-Pattern Model Mapping](#per-pattern-model-mapping)
-    - [Add aliases for all patterns](#add-aliases-for-all-patterns)
-      - [Save your files in markdown using aliases](#save-your-files-in-markdown-using-aliases)
-    - [Migration](#migration)
-    - [Upgrading](#upgrading)
-    - [Shell Completions](#shell-completions)
-      - [Quick install (no clone required)](#quick-install-no-clone-required)
-      - [Zsh Completion](#zsh-completion)
-      - [Bash Completion](#bash-completion)
-      - [Fish Completion](#fish-completion)
-  - [Usage](#usage)
-    - [Debug Levels](#debug-levels)
-  - [Our approach to prompting](#our-approach-to-prompting)
-  - [Examples](#examples)
-  - [Just use the Patterns](#just-use-the-patterns)
-    - [Prompt Strategies](#prompt-strategies)
-  - [Custom Patterns](#custom-patterns)
-    - [Setting Up Custom Patterns](#setting-up-custom-patterns)
-    - [Using Custom Patterns](#using-custom-patterns)
-    - [How It Works](#how-it-works)
-  - [Helper Apps](#helper-apps)
-    - [`to_pdf`](#to_pdf)
-    - [`to_pdf` Installation](#to_pdf-installation)
-    - [`code_helper`](#code_helper)
-  - [pbpaste](#pbpaste)
-  - [Web Interface](#web-interface)
-    - [Installing](#installing)
-    - [Streamlit UI](#streamlit-ui)
-      - [Clipboard Support](#clipboard-support)
-  - [Meta](#meta)
-    - [Primary contributors](#primary-contributors)
-    - [Contributors](#contributors)
+- [What and why](#what-and-why)
+- [Updates](#updates)
+  - [Recent Major Features](#recent-major-features)
+- [Intro videos](#intro-videos)
+- [Navigation](#navigation)
+- [Changelog](#changelog)
+- [Philosophy](#philosophy)
+  - [Breaking problems into components](#breaking-problems-into-components)
+  - [Too many prompts](#too-many-prompts)
+- [Installation](#installation)
+  - [One-Line Install (Recommended)](#one-line-install-recommended)
+  - [Manual Binary Downloads](#manual-binary-downloads)
+  - [Using package managers](#using-package-managers)
+    - [macOS (Homebrew)](#macos-homebrew)
+    - [Arch Linux (AUR)](#arch-linux-aur)
+    - [Windows](#windows)
+  - [From Source](#from-source)
+  - [Docker](#docker)
+  - [Environment Variables](#environment-variables)
+  - [Setup](#setup)
+  - [Per-Pattern Model Mapping](#per-pattern-model-mapping)
+  - [Add aliases for all patterns](#add-aliases-for-all-patterns)
+    - [Save your files in markdown using aliases](#save-your-files-in-markdown-using-aliases)
+  - [Migration](#migration)
+  - [Upgrading](#upgrading)
+  - [Shell Completions](#shell-completions)
+    - [Quick install (no clone required)](#quick-install-no-clone-required)
+    - [Zsh Completion](#zsh-completion)
+    - [Bash Completion](#bash-completion)
+    - [Fish Completion](#fish-completion)
+- [Usage](#usage)
+  - [Debug Levels](#debug-levels)
+- [Our approach to prompting](#our-approach-to-prompting)
+- [Examples](#examples)
+- [Just use the Patterns](#just-use-the-patterns)
+  - [Prompt Strategies](#prompt-strategies)
+- [Custom Patterns](#custom-patterns)
+  - [Setting Up Custom Patterns](#setting-up-custom-patterns)
+  - [Using Custom Patterns](#using-custom-patterns)
+  - [How It Works](#how-it-works)
+- [Helper Apps](#helper-apps)
+  - [`to_pdf`](#to_pdf)
+  - [`to_pdf` Installation](#to_pdf-installation)
+  - [`code_helper`](#code_helper)
+- [pbpaste](#pbpaste)
+- [Web Interface (Fabric Web App)](#web-interface-fabric-web-app)
+- [Meta](#meta)
+  - [Primary contributors](#primary-contributors)
+  - [Contributors](#contributors)
 
 <br />
 
@@ -904,60 +900,9 @@ You can also create an alias by editing `~/.bashrc` or `~/.zshrc` and adding the
 alias pbpaste='xclip -selection clipboard -o'
 ```
 
-## Web Interface
+## Web Interface (Fabric Web App)
 
-Fabric now includes a built-in web interface that provides a GUI alternative to the command-line interface and an out-of-the-box website for those who want to get started with web development or blogging.
-You can use this app as a GUI interface for Fabric, a ready to go blog-site, or a website template for your own projects.
-
-The `web/src/lib/content` directory includes starter `.obsidian/` and `templates/` directories, allowing you to open up the `web/src/lib/content/` directory as an [Obsidian.md](https://obsidian.md) vault. You can place your posts in the posts directory when you're ready to publish.
-
-### Installing
-
-The GUI can be installed by navigating to the `web` directory and using `npm install`, `pnpm install`, or your favorite package manager. Then simply run the development server to start the app.
-
-_You will need to run fabric in a separate terminal with the `fabric --serve` command._
-
-**From the fabric project `web/` directory:**
-
-```shell
-npm run dev
-
-## or ##
-
-pnpm run dev
-
-## or your equivalent
-```
-
-### Streamlit UI
-
-To run the Streamlit user interface:
-
-```bash
-# Install required dependencies
-pip install -r requirements.txt
-
-# Or manually install dependencies
-pip install streamlit pandas matplotlib seaborn numpy python-dotenv pyperclip
-
-# Run the Streamlit app
-streamlit run streamlit.py
-```
-
-The Streamlit UI provides a user-friendly interface for:
-
-- Running and chaining patterns
-- Managing pattern outputs
-- Creating and editing patterns
-- Analyzing pattern results
-
-#### Clipboard Support
-
-The Streamlit UI supports clipboard operations across different platforms:
-
-- **macOS**: Uses `pbcopy` and `pbpaste` (built-in)
-- **Windows**: Uses `pyperclip` library (install with `pip install pyperclip`)
-- **Linux**: Uses `xclip` (install with `sudo apt-get install xclip` or equivalent for your Linux distribution)
+Fabric now includes a built-in web interface that provides a GUI alternative to the command-line interface. Refer to [Web App README](/web/README.md) for installation instructions and an overview of features.
 
 ## Meta
 
