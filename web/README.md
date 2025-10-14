@@ -51,7 +51,7 @@ Start Fabric's server in a separate terminal:
 fabric --serve
 ```
 
-(This exposes Fabric's API at <http://localhost:3456>)
+(This exposes Fabric's API at <http://localhost:8080>)
 
 ### Launch the Svelte App
 
