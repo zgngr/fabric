@@ -7,17 +7,18 @@ A user-friendly web interface for [Fabric](https://github.com/danielmiessler/Fab
 
 ## Table of Contents
 
-- [Table of Contents](#table-of-contents)
-- [Installation](#installation)
-- [Running the App](#running-the-app)
-  - [Prerequisites](#prerequisites)
-  - [Launch the Svelte App](#launch-the-svelte-app)
-- [Streamlit UI](#streamlit-ui)
-  - [Key Features](#key-features)
-  - [Setup and Run](#setup-and-run)
-- [Obsidian Integration](#obsidian-integration)
-  - [Quick Setup](#quick-setup)
-- [Contributing](#contributing)
+- [Fabric Web App](#fabric-web-app)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Running the App](#running-the-app)
+    - [Prerequisites](#prerequisites)
+    - [Launch the Svelte App](#launch-the-svelte-app)
+  - [Streamlit UI](#streamlit-ui)
+    - [Key Features](#key-features)
+    - [Setup and Run](#setup-and-run)
+  - [Obsidian Integration](#obsidian-integration)
+    - [Quick Setup](#quick-setup)
+  - [Contributing](#contributing)
 
 ## Installation
 
@@ -29,7 +30,7 @@ From the Fabric root directory:
 **Using npm:**
 
 ```bash
-./web/scripts/npm-install
+./web/scripts/npm-install.sh
 ```
 
 **Or using pnpm (recommended for speed):**
@@ -50,7 +51,7 @@ Start Fabric's server in a separate terminal:
 fabric --serve
 ```
 
-(This exposes Fabric's API at http://localhost:3456)
+(This exposes Fabric's API at <http://localhost:3456>)
 
 ### Launch the Svelte App
 
