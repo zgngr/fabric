@@ -175,6 +175,26 @@ what does this say about me?
 ./fabric -p ./plugins/template/Examples/test_pattern.md
 ```
 
+## Passing {{input}} to extensions inside patterns
+
+```
+Create a pattern called ai_summarize that uses extensions (see openai.yaml and copy for claude)
+
+Summarize the responses from both AI models:
+
+OpenAI Response:
+{{ext:openai:chat:{{input}}}}
+
+Claude Response:
+{{ext:claude:chat:{{input}}}}
+
+```
+
+```bash
+echo "What is Artificial Intelligence" | ../fabric-fix -p ai_summarize
+
+```
+
 ## Security Considerations
 
 1. **Hash Verification**
