@@ -1,0 +1,3 @@
+### PR [#1802](https://github.com/danielmiessler/Fabric/pull/1802) by [nickarino](https://github.com/nickarino): fix: improve template extension handling for {{input}} and add examples
+
+- Fix: improve template extension handling for {{input}} and add examples
