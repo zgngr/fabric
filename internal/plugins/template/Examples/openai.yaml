@@ -1,5 +1,5 @@
 name: openai
-executable: "/Users/ourdecisions/.config/fabric/extensions/bin/openai-chat.sh"
+executable: "/path/to/your/openai-chat.sh"
 type: executable
 timeout: "30s"
 description: "Call OpenAI Chat Completions API"
