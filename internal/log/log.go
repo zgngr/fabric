@@ -61,6 +61,11 @@ func Debug(l Level, format string, a ...interface{}) {
 	}
 }
 
+// Debug(Trace) convenience function
+func DTrace(a ...interface{}) {
+	Debug(Trace, "%s\n", a...)
+}
+
 // Log writes a message unconditionally to stderr.
 // This is for important messages that should always be shown regardless of debug level.
 func Log(format string, a ...interface{}) {
