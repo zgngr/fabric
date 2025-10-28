@@ -1,0 +1,3 @@
+### PR [#1810](https://github.com/danielmiessler/Fabric/pull/1810) by [tonymet](https://github.com/tonymet): improve subtitle lang, retry, debugging & error handling
+
+- Improve subtitle lang, retry, debugging & error handling
