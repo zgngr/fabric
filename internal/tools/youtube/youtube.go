@@ -151,18 +151,18 @@ func detectError(ytOutput io.Reader) error {
 	scanner := bufio.NewScanner(ytOutput)
 	for scanner.Scan() {
 		curLine := scanner.Text()
-		debuglog.DTrace(curLine)
-		if strings.Contains(curLine, "429") || strings.Contains(curLine, "Too Many Requests") {
-			return fmt.Errorf("YouTube rate limit exceeded. Try again later or use different yt-dlp arguments like '--sleep-requests 1' to slow down requests.")
+		debuglog.Debug(debuglog.Trace, "%s\n", curLine)
+		errorMessages := map[string]string{
+			"429":                                 "YouTube rate limit exceeded. Try again later or use different yt-dlp arguments like '--sleep-requests 1' to slow down requests.",
+			"Too Many Requests":                   "YouTube rate limit exceeded. Try again later or use different yt-dlp arguments like '--sleep-requests 1' to slow down requests.",
+			"Sign in to confirm you're not a bot": "YouTube requires authentication (bot detection). Use --yt-dlp-args='--cookies-from-browser BROWSER' where BROWSER is chrome, firefox, brave, etc.",
+			"Use --cookies-from-browser":          "YouTube requires authentication (bot detection). Use --yt-dlp-args='--cookies-from-browser BROWSER' where BROWSER is chrome, firefox, brave, etc.",
 		}
-		if strings.Contains(curLine, "Sign in to confirm you're not a bot") || strings.Contains(curLine, "Use --cookies-from-browser") {
-			return fmt.Errorf("YouTube requires authentication (bot detection). Use --yt-dlp-args='--cookies-from-browser BROWSER' where BROWSER is chrome, firefox, brave, etc.")
-		}
-		if strings.Contains(curLine, "There are no subtitles for the requested languages") {
-			return fmt.Errorf("There are no subtitles for the requested languages")
-		}
-		if strings.Contains(curLine, "Downloading subtitles:") {
-			return nil
+
+		for key, message := range errorMessages {
+			if strings.Contains(curLine, key) {
+				return fmt.Errorf("%s", message)
+			}
 		}
 	}
 	if err := scanner.Err(); err != nil {
