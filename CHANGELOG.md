@@ -1,5 +1,34 @@
 # Changelog
 
+## v1.4.320 (2025-10-28)
+
+### PR [#1780](https://github.com/danielmiessler/Fabric/pull/1780) by [marcas756](https://github.com/marcas756): feat: add extract_characters pattern
+
+- Define character extraction goals and steps with canonical naming and deduplication rules
+- Outline interaction mapping and narrative importance analysis
+- Provide comprehensive output schema with proper formatting guidelines
+- Include positive and negative examples for pattern clarity
+- Enforce restrictions on speculative motivations and non-actor inclusion
+
+### PR [#1794](https://github.com/danielmiessler/Fabric/pull/1794) by [starfish456](https://github.com/starfish456): Enhance web app docs
+
+- Remove duplicate content from the main readme and link to the web app readme
+- Update table of contents with proper nesting and fix minor formatting issues
+
+### PR [#1810](https://github.com/danielmiessler/Fabric/pull/1810) by [tonymet](https://github.com/tonymet): improve subtitle lang, retry, debugging & error handling
+
+- Improve subtitle lang, retry, debugging & error handling
+
+### Direct commits
+
+- Docs: clean up README - remove duplicate image and add collapsible updates section
+
+- Remove duplicate fabric-summarize.png screenshot
+- Wrap Updates section in HTML details/summary accordion to save space
+🤖 Generated with [Claude Code](<https://claude.com/claude-code)>
+Co-Authored-By: Claude <noreply@anthropic.com>
+- Updated CSE pattern.
+
 ## v1.4.319 (2025-09-30)
 
 ### PR [#1783](https://github.com/danielmiessler/Fabric/pull/1783) by [ksylvan](https://github.com/ksylvan): Update anthropic-sdk-go and add claude-sonnet-4-5
