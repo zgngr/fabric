@@ -11,8 +11,6 @@ import (
 	"github.com/danielmiessler/fabric/internal/util"
 )
 
-const inputSentinel = "__FABRIC_INPUT_SENTINEL_TOKEN__"
-
 type PatternsEntity struct {
 	*StorageEntity
 	SystemPatternFile      string
@@ -96,7 +94,7 @@ func (o *PatternsEntity) applyVariables(
 
 	// Temporarily replace {{input}} with a sentinel token to protect it
 	// from recursive variable resolution
-	withSentinel := strings.ReplaceAll(pattern.Pattern, "{{input}}", inputSentinel)
+	withSentinel := strings.ReplaceAll(pattern.Pattern, "{{input}}", template.InputSentinel)
 
 	// Process all other template variables in the pattern
 	// Pass the actual input so extension calls can use {{input}} within their value parameter
@@ -107,7 +105,7 @@ func (o *PatternsEntity) applyVariables(
 
 	// Finally, replace our sentinel with the actual user input
 	// The input has already been processed for variables if InputHasVars was true
-	pattern.Pattern = strings.ReplaceAll(processed, inputSentinel, input)
+	pattern.Pattern = strings.ReplaceAll(processed, template.InputSentinel, input)
 	return
 }
 

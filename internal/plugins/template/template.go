@@ -10,10 +10,6 @@ import (
 	debuglog "github.com/danielmiessler/fabric/internal/log"
 )
 
-// inputSentinel is used to temporarily replace {{input}} during template processing
-// to prevent recursive variable resolution
-const inputSentinel = "__FABRIC_INPUT_SENTINEL_TOKEN__"
-
 var (
 	textPlugin     = &TextPlugin{}
 	datetimePlugin = &DateTimePlugin{}
@@ -77,8 +73,8 @@ func ApplyTemplate(content string, variables map[string]string, input string) (s
 			// Extension call
 			if strings.HasPrefix(raw, "ext:") {
 				if name, operation, value, ok := matchTriple(extensionPattern, full); ok {
-					if strings.Contains(value, inputSentinel) {
-						value = strings.ReplaceAll(value, inputSentinel, input)
+					if strings.Contains(value, InputSentinel) {
+						value = strings.ReplaceAll(value, InputSentinel, input)
 						debugf("Replaced sentinel in extension value with input\n")
 					}
 					debugf("Extension call: name=%s operation=%s value=%s\n", name, operation, value)
@@ -132,7 +128,7 @@ func ApplyTemplate(content string, variables map[string]string, input string) (s
 
 			// Variables / input / sentinel
 			switch raw {
-			case "input", inputSentinel:
+			case "input", InputSentinel:
 				content = strings.ReplaceAll(content, full, input)
 				progress = true
 			default:
