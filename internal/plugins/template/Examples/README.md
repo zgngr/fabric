@@ -1,6 +1,20 @@
 
 # Fabric Extensions: Complete Guide
 
+## Important: Extensions Only Work in Patterns
+
+**Extensions are ONLY processed when used within pattern files, not via direct piping to fabric.**
+
+```bash
+# ❌ This DOES NOT WORK - extensions are not processed in stdin
+echo "{{ext:word-generator:generate:3}}" | fabric
+
+# ✅ This WORKS - extensions are processed within patterns  
+fabric -p my-pattern-with-extensions.md
+```
+
+When you pipe directly to fabric without a pattern, the input goes straight to the LLM without template processing. Extensions are only evaluated during pattern template processing via `ApplyTemplate()`.
+
 ## Understanding Extension Architecture
 
 ### Registry Structure
@@ -87,8 +101,8 @@ config:
 # Register
 fabric --addextension ~/.config/fabric/extensions/configs/word-generator.yaml
 
-# Run (generate 3 random words)
-echo "{{ext:word-generator:generate:3}}" | fabric
+# Extensions must be used within patterns (see "Extensions in patterns" section below)
+# Direct piping to fabric will NOT process extension syntax
 ```
 
 ## Example 2: Direct Executable (SQLite3)
@@ -127,9 +141,8 @@ config:
 # Register
 fabric --addextension ~/.config/fabric/extensions/configs/memory-query.yaml
 
-# Run queries
-echo  "{{ext:memory-query:all}}" | fabric
-echo  "{{ext:memory-query:byid:3}}" | fabric
+# Extensions must be used within patterns (see "Extensions in patterns" section below)
+# Direct piping to fabric will NOT process extension syntax
 ```
 
 
@@ -159,9 +172,10 @@ Removes an extension from the registry.
 
 ## Extensions in patterns
 
-```
-Create a pattern that use multiple extensions.
+**IMPORTANT**: Extensions are ONLY processed when used within pattern files, not via direct piping to fabric.
 
+Create a pattern file (e.g., `test_pattern.md`):
+```markdown
 These are my favorite
 {{ext:word-generator:generate:3}}
 
@@ -171,8 +185,9 @@ These are my least favorite
 what does this say about me?
 ```
 
+Run the pattern:
 ```bash
-./fabric -p ./plugins/template/Examples/test_pattern.md
+fabric -p ./internal/plugins/template/Examples/test_pattern.md
 ```
 
 ## Passing {{input}} to extensions inside patterns

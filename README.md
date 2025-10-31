@@ -705,6 +705,12 @@ Use the `--debug` flag to control runtime logging:
 - `2`: detailed debugging
 - `3`: trace level
 
+### Extensions
+
+Fabric supports extensions that can be called within patterns. See the [Extension Guide](internal/plugins/template/Examples/README.md) for complete documentation.
+
+**Important:** Extensions only work within pattern files, not via direct stdin. See the guide for details and examples.
+
 ## Our approach to prompting
 
 Fabric _Patterns_ are different than most prompts you'll see.
