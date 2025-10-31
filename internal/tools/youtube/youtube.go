@@ -10,11 +10,13 @@
 package youtube
 
 import (
+	"bufio"
 	"bytes"
 	"context"
 	"encoding/csv"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -26,6 +28,8 @@ import (
 
 	"github.com/danielmiessler/fabric/internal/plugins"
 	"github.com/kballard/go-shellquote"
+
+	debuglog "github.com/danielmiessler/fabric/internal/log"
 	"google.golang.org/api/option"
 	"google.golang.org/api/youtube/v3"
 )
@@ -143,6 +147,46 @@ func (o *YouTube) GrabTranscriptWithTimestampsWithArgs(videoId string, language 
 	return o.tryMethodYtDlpWithTimestamps(videoId, language, additionalArgs)
 }
 
+func detectError(ytOutput io.Reader) error {
+	scanner := bufio.NewScanner(ytOutput)
+	for scanner.Scan() {
+		curLine := scanner.Text()
+		debuglog.Debug(debuglog.Trace, "%s\n", curLine)
+		errorMessages := map[string]string{
+			"429":                                 "YouTube rate limit exceeded. Try again later or use different yt-dlp arguments like '--sleep-requests 1' to slow down requests.",
+			"Too Many Requests":                   "YouTube rate limit exceeded. Try again later or use different yt-dlp arguments like '--sleep-requests 1' to slow down requests.",
+			"Sign in to confirm you're not a bot": "YouTube requires authentication (bot detection). Use --yt-dlp-args='--cookies-from-browser BROWSER' where BROWSER is chrome, firefox, brave, etc.",
+			"Use --cookies-from-browser":          "YouTube requires authentication (bot detection). Use --yt-dlp-args='--cookies-from-browser BROWSER' where BROWSER is chrome, firefox, brave, etc.",
+		}
+
+		for key, message := range errorMessages {
+			if strings.Contains(curLine, key) {
+				return fmt.Errorf("%s", message)
+			}
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		return fmt.Errorf("Error reading yt-dlp stderr")
+	}
+	return nil
+}
+
+func noLangs(args []string) []string {
+	var (
+		i int
+		v string
+	)
+	for i, v = range args {
+		if strings.Contains(v, "--sub-langs") {
+			break
+		}
+	}
+	if i == 0 || i == len(args)-1 {
+		return args
+	}
+	return append(args[0:i], args[i+2:]...)
+}
+
 // tryMethodYtDlpInternal is a helper function to reduce duplication between
 // tryMethodYtDlp and tryMethodYtDlpWithTimestamps.
 func (o *YouTube) tryMethodYtDlpInternal(videoId string, language string, additionalArgs string, processVTTFileFunc func(filename string) (string, error)) (ret string, err error) {
@@ -168,8 +212,6 @@ func (o *YouTube) tryMethodYtDlpInternal(videoId string, language string, additi
 		"--write-auto-subs",
 		"--skip-download",
 		"--sub-format", "vtt",
-		"--quiet",
-		"--no-warnings",
 		"-o", outputPath,
 	}
 
@@ -177,11 +219,11 @@ func (o *YouTube) tryMethodYtDlpInternal(videoId string, language string, additi
 
 	// Add built-in language selection first
 	if language != "" {
-		langMatch := language
-		if len(langMatch) > 2 {
-			langMatch = langMatch[:2]
+		langMatch := language[:2]
+		langOpts := language + "," + langMatch + ".*"
+		if langMatch != language {
+			langOpts += "," + langMatch
 		}
-		langOpts := language + "," + langMatch + ".*," + langMatch
 		args = append(args, "--sub-langs", langOpts)
 	}
 
@@ -196,65 +238,26 @@ func (o *YouTube) tryMethodYtDlpInternal(videoId string, language string, additi
 
 	args = append(args, videoURL)
 
-	cmd := exec.Command("yt-dlp", args...)
-
-	var stderr bytes.Buffer
-	cmd.Stderr = &stderr
-
-	if err = cmd.Run(); err != nil {
-		stderrStr := stderr.String()
-
-		// Check for specific YouTube errors
-		if strings.Contains(stderrStr, "429") || strings.Contains(stderrStr, "Too Many Requests") {
-			err = fmt.Errorf("YouTube rate limit exceeded. Try again later or use different yt-dlp arguments like '--sleep-requests 1' to slow down requests. Error: %v", err)
-			return
+	for retry := 1; retry >= 0; retry-- {
+		var ytOutput []byte
+		cmd := exec.Command("yt-dlp", args...)
+		debuglog.Debug(debuglog.Trace, "yt-dlp %+v\n", cmd.Args)
+		ytOutput, err = cmd.CombinedOutput()
+		ytReader := bytes.NewReader(ytOutput)
+		if err = detectError(ytReader); err == nil {
+			break
 		}
-
-		if strings.Contains(stderrStr, "Sign in to confirm you're not a bot") || strings.Contains(stderrStr, "Use --cookies-from-browser") {
-			err = fmt.Errorf("YouTube requires authentication (bot detection). Use --yt-dlp-args='--cookies-from-browser BROWSER' where BROWSER is chrome, firefox, brave, etc. Error: %v", err)
-			return
-		}
-
-		if language != "" {
-			// Fallback: try without specifying language (let yt-dlp choose best available)
-			stderr.Reset()
-			fallbackArgs := append([]string{}, baseArgs...)
-
-			// Add additional arguments if provided
-			if additionalArgs != "" {
-				additionalArgsList, parseErr := shellquote.Split(additionalArgs)
-				if parseErr != nil {
-					return "", fmt.Errorf("invalid yt-dlp arguments: %v", parseErr)
-				}
-				fallbackArgs = append(fallbackArgs, additionalArgsList...)
-			}
-
-			// Don't specify language, let yt-dlp choose
-			fallbackArgs = append(fallbackArgs, videoURL)
-			cmd = exec.Command("yt-dlp", fallbackArgs...)
-			cmd.Stderr = &stderr
-			if err = cmd.Run(); err != nil {
-				stderrStr2 := stderr.String()
-				if strings.Contains(stderrStr2, "429") || strings.Contains(stderrStr2, "Too Many Requests") {
-					err = fmt.Errorf("YouTube rate limit exceeded. Try again later or use different yt-dlp arguments like '--sleep-requests 1'. Error: %v", err)
-				} else {
-					err = fmt.Errorf("yt-dlp failed with language '%s' and fallback. Original error: %s. Fallback error: %s", language, stderrStr, stderrStr2)
-				}
-				return
-			}
-		} else {
-			err = fmt.Errorf("yt-dlp failed: %v, stderr: %s", err, stderrStr)
-			return
-		}
+		args = noLangs(args)
 	}
-
+	if err != nil {
+		return
+	}
 	// Find VTT files using cross-platform approach
 	// Try to find files with the requested language first, but fall back to any VTT file
 	vttFiles, err := o.findVTTFilesWithFallback(tempDir, language)
 	if err != nil {
 		return "", err
 	}
-
 	return processVTTFileFunc(vttFiles[0])
 }
 
