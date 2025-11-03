@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.4.321 (2025-11-03)
+
+### PR [#1803](https://github.com/danielmiessler/Fabric/pull/1803) by [dependabot[bot][bot]](https://github.com/apps/dependabot): chore(deps-dev): bump vite from 5.4.20 to 5.4.21 in /web in the npm_and_yarn group across 1 directory
+
+- Updated Vite development dependency from version 5.4.20 to 5.4.21 in the web directory
+
+### PR [#1805](https://github.com/danielmiessler/Fabric/pull/1805) by [OmriH-Elister](https://github.com/OmriH-Elister): Added several new patterns
+
+- Added new WELLNESS category with four patterns including personalized yoga practice recommendations and wellness guidance
+- Added `model_as_sherlock_freud` pattern for psychological detective analysis combining Sherlock Holmes deduction with Freudian psychology
+- Added `predict_person_actions` pattern for behavioral response predictions based on personality analysis
+- Added `fix_typos` pattern for automated proofreading and typo corrections
+- Updated ANALYSIS and SELF categories to include new wellness-related patterns and classifications
+
+### PR [#1808](https://github.com/danielmiessler/Fabric/pull/1808) by [sluosapher](https://github.com/sluosapher): Updated create_newsletter_entry pattern to generate more factual titles
+
+- Updated the title generation style; added an output example.
+
 ## v1.4.320 (2025-10-28)
 
 ### PR [#1780](https://github.com/danielmiessler/Fabric/pull/1780) by [marcas756](https://github.com/marcas756): feat: add extract_characters pattern

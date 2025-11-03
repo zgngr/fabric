@@ -1,3 +1,0 @@
-### PR [#1803](https://github.com/danielmiessler/Fabric/pull/1803) by [dependabot[bot][bot]](https://github.com/apps/dependabot): chore(deps-dev): bump vite from 5.4.20 to 5.4.21 in /web in the npm_and_yarn group across 1 directory
-
-- Updated Vite development dependency from version 5.4.20 to 5.4.21 in the web directory

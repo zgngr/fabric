@@ -1,3 +1,0 @@
-### PR [#1808](https://github.com/danielmiessler/Fabric/pull/1808) by [sluosapher](https://github.com/sluosapher): Updated create_newsletter_entry pattern to generate more factual titles
-
-- Updated the title generation style; added an output example.
