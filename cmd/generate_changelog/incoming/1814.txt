@@ -1,0 +1,9 @@
+### PR [#1814](https://github.com/danielmiessler/Fabric/pull/1814) by [ksylvan](https://github.com/ksylvan): Add Concept Map in html
+
+- Add `create_conceptmap` for interactive HTML concept maps using Vis.js
+- Add `fix_typos` for proofreading and correcting text errors
+- Introduce `model_as_sherlock_freud` for psychological modeling and behavior analysis
+- Implement `predict_person_actions` for behavioral response predictions
+- Add `recommend_yoga_practice` for personalized yoga guidance
+- Credit goes to @FELIPEGUEDESBR for the pattern
+
