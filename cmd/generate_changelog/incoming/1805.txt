@@ -1,0 +1,4 @@
+### PR [#1805](https://github.com/danielmiessler/Fabric/pull/1805) by [OmriH-Elister](https://github.com/OmriH-Elister): Added several new patterns
+
+- Feat: add a few new patterns
+- Chore: incoming 1805 changelog entry
