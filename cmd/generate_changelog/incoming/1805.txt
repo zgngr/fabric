@@ -1,4 +1,7 @@
 ### PR [#1805](https://github.com/danielmiessler/Fabric/pull/1805) by [OmriH-Elister](https://github.com/OmriH-Elister): Added several new patterns
 
-- Feat: add a few new patterns
-- Chore: incoming 1805 changelog entry
+- Adde a few patterns (listed below):
+- **fix_typos** - Proofreads and corrects typos, spelling, grammar, and punctuation errors
+- **model_as_sherlock_freud** - Builds psychological models using detective reasoning and psychoanalytic insight
+- **predict_person_actions** - Predicts behavioral responses based on psychological profiles and challenges
+- **recommend_yoga_practice** - Provides personalized yoga sequences, meditation guidance, and holistic lifestyle advice
