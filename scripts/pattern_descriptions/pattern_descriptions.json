@@ -159,7 +159,8 @@
       "tags": [
         "ANALYSIS",
         "STRATEGY",
-        "SELF"
+        "SELF",
+        "WELLNESS"
       ]
     },
     {
@@ -744,7 +745,8 @@
       "tags": [
         "ANALYSIS",
         "RESEARCH",
-        "SELF"
+        "SELF",
+        "WELLNESS"
       ]
     },
     {
@@ -1060,7 +1062,8 @@
       "tags": [
         "EXTRACT",
         "SELF",
-        "WISDOM"
+        "WISDOM",
+        "WELLNESS"
       ]
     },
     {
@@ -1235,7 +1238,8 @@
       "tags": [
         "ANALYSIS",
         "LEARNING",
-        "SELF"
+        "SELF",
+        "WELLNESS"
       ]
     },
     {
@@ -1544,7 +1548,8 @@
       "description": "Generate personalized messages of encouragement.",
       "tags": [
         "WRITING",
-        "SELF"
+        "SELF",
+        "WELLNESS"
       ]
     },
     {
@@ -1868,7 +1873,8 @@
       "description": "Analyze a psychological profile, pinpoint issues and strengths, and deliver compassionate, structured strategies for spiritual, mental, and life improvement.",
       "tags": [
         "ANALYSIS",
-        "SELF"
+        "SELF",
+        "WELLNESS"
       ]
     },
     {
@@ -1885,6 +1891,39 @@
       "tags": [
         "ANALYSIS",
         "WRITING"
+      ]
+    },
+    {
+      "patternName": "fix_typos",
+      "description": "Proofreads and corrects typos, spelling, grammar, and punctuation errors.",
+      "tags": [
+        "WRITING"
+      ]
+    },
+    {
+      "patternName": "model_as_sherlock_freud",
+      "description": "Builds psychological models using detective reasoning and psychoanalytic insight.",
+      "tags": [
+        "ANALYSIS",
+        "SELF",
+        "WELLNESS"
+      ]
+    },
+    {
+      "patternName": "predict_person_actions",
+      "description": "Predicts behavioral responses based on psychological profiles and challenges",
+      "tags": [
+        "ANALYSIS",
+        "SELF",
+        "WELLNESS"
+      ]
+    },
+    {
+      "patternName": "recommend_yoga_practice",
+      "description": "Provides personalized yoga sequences, meditation guidance, and holistic lifestyle advice based on individual profiles.",
+      "tags": [
+        "WELLNESS",
+        "SELF"
       ]
     }
   ]
