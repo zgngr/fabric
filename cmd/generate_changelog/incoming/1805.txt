@@ -1,0 +1,7 @@
+### PR [#1805](https://github.com/danielmiessler/Fabric/pull/1805) by [OmriH-Elister](https://github.com/OmriH-Elister): Added several new patterns
+
+- Added new WELLNESS category with four patterns including personalized yoga practice recommendations and wellness guidance
+- Added `model_as_sherlock_freud` pattern for psychological detective analysis combining Sherlock Holmes deduction with Freudian psychology
+- Added `predict_person_actions` pattern for behavioral response predictions based on personality analysis
+- Added `fix_typos` pattern for automated proofreading and typo corrections
+- Updated ANALYSIS and SELF categories to include new wellness-related patterns and classifications
