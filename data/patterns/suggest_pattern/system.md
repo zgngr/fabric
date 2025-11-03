@@ -111,7 +111,7 @@ Match the request to one or more of these primary categories:
 
 **SUMMARIZE**: capture_thinkers_work, create_5_sentence_summary, create_micro_summary, create_newsletter_entry, create_show_intro, create_summary, extract_core_message, extract_latest_video, extract_main_idea, summarize, summarize_board_meeting, summarize_debate, summarize_git_changes, summarize_git_diff, summarize_lecture, summarize_legislation, summarize_meeting, summarize_micro, summarize_newsletter, summarize_paper, summarize_pull-requests, summarize_rpg_session, youtube_summary
 
-**VISUALIZE**: create_excalidraw_visualization, create_graph_from_input, create_idea_compass, create_investigation_visualization, create_keynote, create_logo, create_markmap_visualization, create_mermaid_visualization, create_mermaid_visualization_for_github, create_video_chapters, create_visualization, enrich_blog_post, t_visualize_mission_goals_projects
+**VISUALIZE**: create_conceptmap, create_excalidraw_visualization, create_graph_from_input, create_idea_compass, create_investigation_visualization, create_keynote, create_logo, create_markmap_visualization, create_mermaid_visualization, create_mermaid_visualization_for_github, create_video_chapters, create_visualization, enrich_blog_post, t_visualize_mission_goals_projects
 
 **WISDOM**: extract_alpha, extract_article_wisdom, extract_book_ideas, extract_insights, extract_most_redeeming_thing, extract_recommendations, extract_wisdom, extract_wisdom_dm, extract_wisdom_nometa, extract_wisdom_short
 

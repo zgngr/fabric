@@ -892,6 +892,10 @@ Convert content into flashcard format for learning.
 
 ## VISUALIZATION PATTERNS
 
+### create_conceptmap
+
+Transform unstructured text or markdown content into interactive HTML concept maps using Vis.js by extracting key concepts and their logical relationships.
+
 ### create_excalidraw_visualization
 
 Create visualizations using Excalidraw.
