@@ -44,17 +44,18 @@ func NewClient() (ret *Client) {
 	ret.models = []string{
 		string(anthropic.ModelClaude3_7SonnetLatest), string(anthropic.ModelClaude3_7Sonnet20250219),
 		string(anthropic.ModelClaude3_5HaikuLatest), string(anthropic.ModelClaude3_5Haiku20241022),
-		string(anthropic.ModelClaude3_5SonnetLatest), string(anthropic.ModelClaude3_5Sonnet20241022),
-		string(anthropic.ModelClaude_3_5_Sonnet_20240620), string(anthropic.ModelClaude3OpusLatest),
-		string(anthropic.ModelClaude_3_Opus_20240229), string(anthropic.ModelClaude_3_Haiku_20240307),
+		string(anthropic.ModelClaude3OpusLatest), string(anthropic.ModelClaude_3_Opus_20240229),
+		string(anthropic.ModelClaude_3_Haiku_20240307),
 		string(anthropic.ModelClaudeOpus4_20250514), string(anthropic.ModelClaudeSonnet4_20250514),
 		string(anthropic.ModelClaudeOpus4_1_20250805),
 		string(anthropic.ModelClaudeSonnet4_5),
+		string(anthropic.ModelClaudeSonnet4_5_20250929),
 	}
 
 	ret.modelBetas = map[string][]string{
-		string(anthropic.ModelClaudeSonnet4_20250514): {"context-1m-2025-08-07"},
-		string(anthropic.ModelClaudeSonnet4_5):        {"context-1m-2025-08-07"},
+		string(anthropic.ModelClaudeSonnet4_20250514):   {"context-1m-2025-08-07"},
+		string(anthropic.ModelClaudeSonnet4_5):          {"context-1m-2025-08-07"},
+		string(anthropic.ModelClaudeSonnet4_5_20250929): {"context-1m-2025-08-07"},
 	}
 
 	return

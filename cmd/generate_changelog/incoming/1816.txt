@@ -1,0 +1,7 @@
+### PR [#1816](https://github.com/danielmiessler/Fabric/pull/1816) by [ksylvan](https://github.com/ksylvan): Update `anthropic-sdk-go` to v1.16.0 and update models
+
+- Upgraded `anthropic-sdk-go` from v1.13.0 to v1.16.0
+- Removed outdated model `ModelClaude3_5SonnetLatest`
+- Added new model `ModelClaudeSonnet4_5_20250929`
+- Updated anthropic beta map to include the new model
+- Updated dependencies in `go.sum` file
