@@ -1,5 +1,25 @@
 # Changelog
 
+## v1.4.322 (2025-11-05)
+
+### PR [#1814](https://github.com/danielmiessler/Fabric/pull/1814) by [ksylvan](https://github.com/ksylvan): Add Concept Map in html
+
+- Add `create_conceptmap` for interactive HTML concept maps using Vis.js
+- Add `fix_typos` for proofreading and correcting text errors
+- Introduce `model_as_sherlock_freud` for psychological modeling and behavior analysis
+- Implement `predict_person_actions` for behavioral response predictions
+- Add `recommend_yoga_practice` for personalized yoga guidance
+- Credit goes to @FELIPEGUEDESBR for the pattern
+
+
+### PR [#1816](https://github.com/danielmiessler/Fabric/pull/1816) by [ksylvan](https://github.com/ksylvan): Update `anthropic-sdk-go` to v1.16.0 and update models
+
+- Upgraded `anthropic-sdk-go` from v1.13.0 to v1.16.0
+- Removed outdated model `ModelClaude3_5SonnetLatest`
+- Added new model `ModelClaudeSonnet4_5_20250929`
+- Updated anthropic beta map to include the new model
+- Updated dependencies in `go.sum` file
+
 ## v1.4.321 (2025-11-03)
 
 ### PR [#1803](https://github.com/danielmiessler/Fabric/pull/1803) by [dependabot[bot][bot]](https://github.com/apps/dependabot): chore(deps-dev): bump vite from 5.4.20 to 5.4.21 in /web in the npm_and_yarn group across 1 directory
