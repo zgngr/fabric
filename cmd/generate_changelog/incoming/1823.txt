@@ -1,0 +1,7 @@
+### PR [#1823](https://github.com/danielmiessler/Fabric/pull/1823) by [ksylvan](https://github.com/ksylvan): Add missing patterns and renumber pattern explanations list
+
+- Add `apply_ul_tags` pattern for content categorization
+- Add `extract_mcp_servers` pattern for MCP server identification
+- Add `generate_code_rules` pattern for AI coding guardrails
+- Add `t_check_dunning_kruger` pattern for competence assessment
+- Renumber all patterns from 37-226 to 37-230
