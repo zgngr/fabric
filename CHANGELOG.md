@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.4.323 (2025-11-12)
+
+### PR [#1802](https://github.com/danielmiessler/Fabric/pull/1802) by [nickarino](https://github.com/nickarino): fix: improve template extension handling for {{input}} and add examples
+
+- Fix: improve template extension handling for {{input}} and add examples
+
+### PR [#1823](https://github.com/danielmiessler/Fabric/pull/1823) by [ksylvan](https://github.com/ksylvan): Add missing patterns and renumber pattern explanations list
+
+- Add `apply_ul_tags` pattern for content categorization
+- Add `extract_mcp_servers` pattern for MCP server identification
+- Add `generate_code_rules` pattern for AI coding guardrails
+- Add `t_check_dunning_kruger` pattern for competence assessment
+- Renumber all patterns from 37-226 to 37-230
+
+### Direct commits
+
+- Chore: incoming 1823 changelog entry
+
 ## v1.4.322 (2025-11-05)
 
 ### PR [#1814](https://github.com/danielmiessler/Fabric/pull/1814) by [ksylvan](https://github.com/ksylvan): Add Concept Map in html
