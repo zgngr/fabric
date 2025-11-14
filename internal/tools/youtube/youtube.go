@@ -69,7 +69,7 @@ func NewYouTube() (ret *YouTube) {
 		EnvNamePrefix:    plugins.BuildEnvVariablePrefix(label),
 	}
 
-	ret.ApiKey = ret.AddSetupQuestion("API key", true)
+	ret.ApiKey = ret.AddSetupQuestion("API key", false)
 
 	return
 }
