@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.4.324 (2025-11-14)
+
+### PR [#1827](https://github.com/danielmiessler/Fabric/pull/1827) by [ksylvan](https://github.com/ksylvan): Make YouTube API key optional in setup
+
+- Make YouTube API key optional in setup process
+- Change API key setup question to optional configuration
+- Add test for optional API key behavior
+- Ensure plugin configuration works without API key
+
 ## v1.4.323 (2025-11-12)
 
 ### PR [#1802](https://github.com/danielmiessler/Fabric/pull/1802) by [nickarino](https://github.com/nickarino): fix: improve template extension handling for {{input}} and add examples
