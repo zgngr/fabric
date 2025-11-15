@@ -456,7 +456,7 @@ func (o *Client) convertMessages(msgs []*chat.ChatCompletionMessage) []*genai.Co
 			content.Role = "user"
 		}
 
-		if msg.Content != "" {
+		if strings.TrimSpace(msg.Content) != "" {
 			content.Parts = append(content.Parts, &genai.Part{Text: msg.Content})
 		}
 

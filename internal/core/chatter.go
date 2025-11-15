@@ -175,7 +175,7 @@ func (o *Chatter) BuildSession(request *domain.ChatRequest, raw bool) (session *
 	if request.Message == nil {
 		request.Message = &chat.ChatCompletionMessage{
 			Role:    chat.ChatMessageRoleUser,
-			Content: " ",
+			Content: "",
 		}
 	}
 
