@@ -356,7 +356,7 @@ func (an *Client) toMessages(msgs []*chat.ChatCompletionMessage) (ret []anthropi
 	lastRoleWasUser := false
 
 	for _, msg := range msgs {
-		if msg.Content == "" {
+		if strings.TrimSpace(msg.Content) == "" {
 			continue // Skip empty messages
 		}
 
