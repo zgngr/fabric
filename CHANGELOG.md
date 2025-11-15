@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.4.325 (2025-11-15)
+
+### PR [#1828](https://github.com/danielmiessler/Fabric/pull/1828) by [ksylvan](https://github.com/ksylvan): Fix empty string detection in chatter and AI clients
+
+- Chore: improve message handling by trimming whitespace in content checks
+- Remove default space in `BuildSession` message content
+- Trim whitespace in `anthropic` message content check
+- Trim whitespace in `gemini` message content check
+
 ## v1.4.324 (2025-11-14)
 
 ### PR [#1827](https://github.com/danielmiessler/Fabric/pull/1827) by [ksylvan](https://github.com/ksylvan): Make YouTube API key optional in setup
