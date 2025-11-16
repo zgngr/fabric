@@ -1,7 +1,0 @@
-### PR [#1830](https://github.com/danielmiessler/Fabric/pull/1830) by [ksylvan](https://github.com/ksylvan): Ensure final newline in model generated outputs
-
-- Feat: ensure newline in `CreateOutputFile` and improve tests
-- Add newline to `CreateOutputFile` if missing
-- Use `t.Cleanup` for file removal in tests
-- Add test for message with trailing newline
-- Introduce `printedStream` flag in `Chatter.Send`

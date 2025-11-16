@@ -1,5 +1,29 @@
 # Changelog
 
+## v1.4.326 (2025-11-16)
+
+### PR [#1830](https://github.com/danielmiessler/Fabric/pull/1830) by [ksylvan](https://github.com/ksylvan): Ensure final newline in model generated outputs
+
+- Feat: ensure newline in `CreateOutputFile` and improve tests
+- Add newline to `CreateOutputFile` if missing
+- Use `t.Cleanup` for file removal in tests
+- Add test for message with trailing newline
+- Introduce `printedStream` flag in `Chatter.Send`
+
+### Direct commits
+
+- Chore: update README with recent features and extensions
+
+- Add v1.4.322 release with concept maps
+
+- Introduce WELLNESS category with psychological analysis
+- Upgrade to Claude Sonnet 4.5
+
+- Add Portuguese language variants with BCP 47 support
+- Migrate to `openai-go/azure` SDK for Azure
+
+- Add Extensions section to README navigation
+
 ## v1.4.325 (2025-11-15)
 
 ### PR [#1828](https://github.com/danielmiessler/Fabric/pull/1828) by [ksylvan](https://github.com/ksylvan): Fix empty string detection in chatter and AI clients
