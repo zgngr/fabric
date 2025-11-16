@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.4.327 (2025-11-16)
+
+### PR [#1831](https://github.com/danielmiessler/Fabric/pull/1831) by [ksylvan](https://github.com/ksylvan): Remove `get_youtube_rss` pattern
+
+- Chore: remove `get_youtube_rss` pattern from multiple files
+- Remove `get_youtube_rss` from `pattern_explanations.md`
+- Delete `get_youtube_rss` entry in `pattern_descriptions.json`
+- Delete `get_youtube_rss` entry in `pattern_extracts.json`
+- Remove `get_youtube_rss` from `suggest_pattern/system.md`
+
+### PR [#1832](https://github.com/danielmiessler/Fabric/pull/1832) by [ksylvan](https://github.com/ksylvan): Improve channel management in Gemini provider
+
+- Fix: improve channel management in Gemini streaming method
+- Add deferred channel close at function start
+- Return error immediately instead of breaking loop
+- Remove redundant channel close statements from loop
+- Ensure channel closes on all exit paths consistently
+
 ## v1.4.326 (2025-11-16)
 
 ### PR [#1830](https://github.com/danielmiessler/Fabric/pull/1830) by [ksylvan](https://github.com/ksylvan): Ensure final newline in model generated outputs

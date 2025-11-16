@@ -1,7 +1,0 @@
-### PR [#1831](https://github.com/danielmiessler/Fabric/pull/1831) by [ksylvan](https://github.com/ksylvan): Remove `get_youtube_rss` pattern
-
-- Chore: remove `get_youtube_rss` pattern from multiple files
-- Remove `get_youtube_rss` from `pattern_explanations.md`
-- Delete `get_youtube_rss` entry in `pattern_descriptions.json`
-- Delete `get_youtube_rss` entry in `pattern_extracts.json`
-- Remove `get_youtube_rss` from `suggest_pattern/system.md`

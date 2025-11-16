@@ -1,7 +1,0 @@
-### PR [#1832](https://github.com/danielmiessler/Fabric/pull/1832) by [ksylvan](https://github.com/ksylvan): Improve channel management in Gemini provider
-
-- Fix: improve channel management in Gemini streaming method
-- Add deferred channel close at function start
-- Return error immediately instead of breaking loop
-- Remove redundant channel close statements from loop
-- Ensure channel closes on all exit paths consistently
