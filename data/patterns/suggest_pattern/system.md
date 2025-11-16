@@ -81,13 +81,13 @@ Match the request to one or more of these primary categories:
 
 **CLASSIFICATION**: apply_ul_tags
 
-**CONVERSION**: clean_text, convert_to_markdown, create_graph_from_input, export_data_as_csv, extract_videoid, get_youtube_rss, humanize, md_callout, sanitize_broken_html_to_markdown, to_flashcards, transcribe_minutes, translate, tweet, write_latex
+**CONVERSION**: clean_text, convert_to_markdown, create_graph_from_input, export_data_as_csv, extract_videoid, humanize, md_callout, sanitize_broken_html_to_markdown, to_flashcards, transcribe_minutes, translate, tweet, write_latex
 
 **CR THINKING**: capture_thinkers_work, create_idea_compass, create_markmap_visualization, dialog_with_socrates, extract_alpha, extract_controversial_ideas, extract_extraordinary_claims, extract_predictions, extract_primary_problem, extract_wisdom_nometa, find_hidden_message, find_logical_fallacies, summarize_debate, t_analyze_challenge_handling, t_check_dunning_kruger, t_find_blindspots, t_find_negative_thinking, t_find_neglected_goals, t_red_team_thinking
 
 **CREATIVITY**: create_mnemonic_phrases, write_essay
 
-**DEVELOPMENT**: agility_story, analyze_logs, analyze_prose_json, answer_interview_question, ask_secure_by_design_questions, ask_uncle_duke, coding_master, create_coding_feature, create_coding_project, create_command, create_design_document, create_git_diff_commit, create_loe_document, create_mermaid_visualization, create_mermaid_visualization_for_github, create_pattern, create_prd, create_sigma_rules, create_user_story, explain_code, explain_docs, explain_project, export_data_as_csv, extract_algorithm_update_recommendations, extract_mcp_servers, extract_poc, extract_product_features, generate_code_rules, get_youtube_rss, identify_job_stories, improve_prompt, official_pattern_template, recommend_pipeline_upgrades, refine_design_document, review_code, review_design, sanitize_broken_html_to_markdown, suggest_pattern, summarize_git_changes, summarize_git_diff, summarize_pull-requests, write_nuclei_template_rule, write_pull-request, write_semgrep_rule
+**DEVELOPMENT**: agility_story, analyze_logs, analyze_prose_json, answer_interview_question, ask_secure_by_design_questions, ask_uncle_duke, coding_master, create_coding_feature, create_coding_project, create_command, create_design_document, create_git_diff_commit, create_loe_document, create_mermaid_visualization, create_mermaid_visualization_for_github, create_pattern, create_prd, create_sigma_rules, create_user_story, explain_code, explain_docs, explain_project, export_data_as_csv, extract_algorithm_update_recommendations, extract_mcp_servers, extract_poc, extract_product_features, generate_code_rules, identify_job_stories, improve_prompt, official_pattern_template, recommend_pipeline_upgrades, refine_design_document, review_code, review_design, sanitize_broken_html_to_markdown, suggest_pattern, summarize_git_changes, summarize_git_diff, summarize_pull-requests, write_nuclei_template_rule, write_pull-request, write_semgrep_rule
 
 **DEVOPS**: analyze_terraform_plan
 

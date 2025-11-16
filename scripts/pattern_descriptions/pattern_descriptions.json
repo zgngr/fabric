@@ -1102,14 +1102,6 @@
       ]
     },
     {
-      "patternName": "get_youtube_rss",
-      "description": "Generate RSS feed URLs for YouTube channels.",
-      "tags": [
-        "CONVERSION",
-        "DEVELOPMENT"
-      ]
-    },
-    {
       "patternName": "humanize",
       "description": "Transform technical content into approachable language.",
       "tags": [

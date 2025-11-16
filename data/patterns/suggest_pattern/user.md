@@ -942,10 +942,6 @@ Convert content to markdown, preserving original content and structure.
 
 Extract data and convert to CSV, preserving data integrity.
 
-### get_youtube_rss
-
-Generate RSS feed URLs for YouTube channels.
-
 ### sanitize_broken_html_to_markdown
 
 Clean/convert malformed HTML to markdown.
