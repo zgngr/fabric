@@ -69,6 +69,7 @@ func (o *Chatter) Send(request *domain.ChatRequest, opts *domain.ChatOptions) (s
 		responseChan := make(chan string)
 		errChan := make(chan error, 1)
 		done := make(chan struct{})
+		printedStream := false
 
 		go func() {
 			defer close(done)
@@ -81,7 +82,12 @@ func (o *Chatter) Send(request *domain.ChatRequest, opts *domain.ChatOptions) (s
 			message += response
 			if !opts.SuppressThink {
 				fmt.Print(response)
+				printedStream = true
 			}
+		}
+
+		if printedStream && !opts.SuppressThink && !strings.HasSuffix(message, "\n") {
+			fmt.Println()
 		}
 
 		// Wait for goroutine to finish
