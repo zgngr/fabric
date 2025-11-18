@@ -53,7 +53,7 @@
   "set_top_p": "设置 top P",
   "stream_help": "流式传输",
   "set_presence_penalty": "设置存在惩罚",
-  "use_model_defaults_raw_help": "使用模型默认设置，不发送聊天选项（如温度等），对于模式使用用户角色而非系统角色。",
+  "use_model_defaults_raw_help": "在不发送聊天选项（temperature、top_p 等）的情况下使用模型默认值。仅影响兼容 OpenAI 的提供商。Anthropic 模型始终使用智能参数选择以满足特定模型的要求。",
   "set_frequency_penalty": "设置频率惩罚",
   "list_all_patterns": "列出所有模式",
   "list_all_available_models": "列出所有可用模型",

@@ -53,7 +53,7 @@
   "set_top_p": "Top Pを設定",
   "stream_help": "ストリーミング",
   "set_presence_penalty": "プレゼンスペナルティを設定",
-  "use_model_defaults_raw_help": "チャットオプション（温度など）を送信せずにモデルのデフォルトを使用し、パターンにシステムロールではなくユーザーロールを使用します。",
+  "use_model_defaults_raw_help": "チャットオプション（temperature、top_p など）を送信せずにモデルのデフォルトを使用します。OpenAI 互換プロバイダーにのみ適用されます。Anthropic モデルは常に、モデル固有の要件に準拠するためにスマートなパラメーター選択を使用します。",
   "set_frequency_penalty": "頻度ペナルティを設定",
   "list_all_patterns": "すべてのパターンを一覧表示",
   "list_all_available_models": "すべての利用可能なモデルを一覧表示",
