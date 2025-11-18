@@ -53,7 +53,7 @@
   "set_top_p": "Set top P",
   "stream_help": "Stream",
   "set_presence_penalty": "Set presence penalty",
-  "use_model_defaults_raw_help": "Use the defaults of the model without sending chat options (like temperature etc.) and use the user role instead of the system role for patterns.",
+  "use_model_defaults_raw_help": "Use the defaults of the model without sending chat options (temperature, top_p, etc.). Only affects OpenAI-compatible providers. Anthropic models always use smart parameter selection to comply with model-specific requirements.",
   "set_frequency_penalty": "Set frequency penalty",
   "list_all_patterns": "List all patterns",
   "list_all_available_models": "List all available models",

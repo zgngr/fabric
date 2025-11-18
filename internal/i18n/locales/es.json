@@ -53,7 +53,7 @@
   "set_top_p": "Establecer top P",
   "stream_help": "Transmitir",
   "set_presence_penalty": "Establecer penalización de presencia",
-  "use_model_defaults_raw_help": "Usar los valores predeterminados del modelo sin enviar opciones de chat (como temperatura, etc.) y usar el rol de usuario en lugar del rol del sistema para patrones.",
+  "use_model_defaults_raw_help": "Utiliza los valores predeterminados del modelo sin enviar opciones de chat (temperature, top_p, etc.). Solo afecta a los proveedores compatibles con OpenAI. Los modelos de Anthropic siempre usan una selección inteligente de parámetros para cumplir los requisitos específicos del modelo.",
   "set_frequency_penalty": "Establecer penalización de frecuencia",
   "list_all_patterns": "Listar todos los patrones",
   "list_all_available_models": "Listar todos los modelos disponibles",
