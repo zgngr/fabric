@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.328 (2025-11-18)
+
+### PR [#1836](https://github.com/danielmiessler/Fabric/pull/1836) by [ksylvan](https://github.com/ksylvan): docs: clarify `--raw` flag behavior for OpenAI and Anthropic providers
+
+- Update `--raw` flag description across all documentation files
+- Clarify flag only affects OpenAI-compatible providers behavior
+- Document Anthropic models use smart parameter selection
+- Remove outdated reference to system/user role changes
+- Update help text in CLI flags definition
+
 ## v1.4.327 (2025-11-16)
 
 ### PR [#1831](https://github.com/danielmiessler/Fabric/pull/1831) by [ksylvan](https://github.com/ksylvan): Remove `get_youtube_rss` pattern
