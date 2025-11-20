@@ -1,0 +1,7 @@
+### PR [#1838](https://github.com/danielmiessler/fabric/pull/1838) by [ksylvan](https://github.com/ksylvan): refactor: implement i18n support for YouTube tool error messages
+
+- Replace hardcoded error strings with i18n translation calls
+- Add localization keys for YouTube errors to all locale files
+- Introduce `extractAndValidateVideoId` helper to reduce code duplication
+- Update timestamp parsing logic to handle localized error formats
+- Standardize error handling in `yt-dlp` execution with i18n
