@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.329 (2025-11-20)
+
+### PR [#1838](https://github.com/danielmiessler/fabric/pull/1838) by [ksylvan](https://github.com/ksylvan): refactor: implement i18n support for YouTube tool error messages
+
+- Replace hardcoded error strings with i18n translation calls
+- Add localization keys for YouTube errors to all locale files
+- Introduce `extractAndValidateVideoId` helper to reduce code duplication
+- Update timestamp parsing logic to handle localized error formats
+- Standardize error handling in `yt-dlp` execution with i18n
+
 ## v1.4.328 (2025-11-18)
 
 ### PR [#1836](https://github.com/danielmiessler/Fabric/pull/1836) by [ksylvan](https://github.com/ksylvan): docs: clarify `--raw` flag behavior for OpenAI and Anthropic providers
