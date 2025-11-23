@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.331 (2025-11-22)
+
+### PR [#1839](https://github.com/danielmiessler/Fabric/pull/1839) by [ksylvan](https://github.com/ksylvan): Add GitHub Models Provider and Refactor Fetching Fallback Logic
+
+- Add GitHub Models provider and refactor model fetching with direct API fallback
+- Add GitHub Models to supported OpenAI-compatible providers list
+- Implement direct HTTP fallback for non-standard model responses
+- Centralize model fetching logic in openai package
+- Upgrade openai-go SDK dependency from v1.8.2 to v1.12.0
+
 ## v1.4.330 (2025-11-23)
 
 ### PR [#1840](https://github.com/danielmiessler/Fabric/pull/1840) by [ZackaryWelch](https://github.com/ZackaryWelch): Replace deprecated bash function in completion script
