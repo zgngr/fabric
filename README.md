@@ -73,6 +73,7 @@ Below are the **new features and capabilities** we've added (newest first):
 
 ### Recent Major Features
 
+- [v1.4.331](https://github.com/danielmiessler/fabric/releases/tag/v1.4.331) (Nov 23, 2025) — **Support for GitHub Models**: Adds support for using GitHub Models.
 - [v1.4.322](https://github.com/danielmiessler/fabric/releases/tag/v1.4.322) (Nov 5, 2025) — **Interactive HTML Concept Maps and Claude Sonnet 4.5**: Adds `create_conceptmap` pattern for visual knowledge representation using Vis.js, introduces WELLNESS category with psychological analysis patterns, and upgrades to Claude Sonnet 4.5
 - [v1.4.317](https://github.com/danielmiessler/fabric/releases/tag/v1.4.317) (Sep 21, 2025) — **Portuguese Language Variants**: Adds BCP 47 locale normalization with support for Brazilian Portuguese (pt-BR) and European Portuguese (pt-PT) with intelligent fallback chains
 - [v1.4.314](https://github.com/danielmiessler/fabric/releases/tag/v1.4.314) (Sep 17, 2025) — **Azure OpenAI Migration**: Migrates to official `openai-go/azure` SDK with improved authentication and default API version support
