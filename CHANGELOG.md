@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.330 (2025-11-23)
+
+### PR [#1840](https://github.com/danielmiessler/Fabric/pull/1840) by [ZackaryWelch](https://github.com/ZackaryWelch): Replace deprecated bash function in completion script
+
+- Replace deprecated bash function in completion script to use `_comp_get_words` instead of `__get_comp_words_by_ref`, fixing compatibility issues with latest bash versions and preventing script breakage on updated distributions like Fedora 42+
+
 ## v1.4.329 (2025-11-20)
 
 ### PR [#1838](https://github.com/danielmiessler/fabric/pull/1838) by [ksylvan](https://github.com/ksylvan): refactor: implement i18n support for YouTube tool error messages
