@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.332 (2025-11-24)
+
+### PR [#1843](https://github.com/danielmiessler/Fabric/pull/1843) by [ksylvan](https://github.com/ksylvan): Implement case-insensitive vendor and model name matching
+
+- Fix: implement case-insensitive vendor and model name matching across the application
+- Add case-insensitive vendor lookup in VendorsManager
+- Implement model name normalization in GetChatter method
+- Add FilterByVendor method with case-insensitive matching
+- Add FindModelNameCaseInsensitive helper for model queries
+
 ## v1.4.331 (2025-11-22)
 
 ### PR [#1839](https://github.com/danielmiessler/Fabric/pull/1839) by [ksylvan](https://github.com/ksylvan): Add GitHub Models Provider and Refactor Fetching Fallback Logic

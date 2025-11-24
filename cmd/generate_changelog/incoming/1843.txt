@@ -1,7 +1,0 @@
-### PR [#1843](https://github.com/danielmiessler/Fabric/pull/1843) by [ksylvan](https://github.com/ksylvan): Implement case-insensitive vendor and model name matching
-
-- Fix: implement case-insensitive vendor and model name matching across the application
-- Add case-insensitive vendor lookup in VendorsManager
-- Implement model name normalization in GetChatter method
-- Add FilterByVendor method with case-insensitive matching
-- Add FindModelNameCaseInsensitive helper for model queries
