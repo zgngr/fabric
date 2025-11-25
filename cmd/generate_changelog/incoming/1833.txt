@@ -1,3 +1,0 @@
-### PR [#1833](https://github.com/danielmiessler/Fabric/pull/1833) by [junaid18183](https://github.com/junaid18183): Added concall_summary
-
-- Added concall_summery pattern to extract strategic insights from earnings transcripts for investors.

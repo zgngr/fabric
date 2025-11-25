@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.4.333 (2025-11-25)
+
+### PR [#1833](https://github.com/danielmiessler/Fabric/pull/1833) by [junaid18183](https://github.com/junaid18183): Added concall_summary
+
+- Added concall_summery pattern to extract strategic insights from earnings transcripts for investors.
+
+### PR [#1844](https://github.com/danielmiessler/Fabric/pull/1844) by [ksylvan](https://github.com/ksylvan): Correct directory name from `concall_summery` to `concall_summary`
+
+- Fix: correct directory name from `concall_summery` to `concall_summary`
+- Rename pattern directory to fix spelling error
+- Update suggest_pattern system with concall_summary references
+- Add concall_summary to BUSINESS and SUMMARIZE category listings
+- Add user documentation for earnings call analysis
+
 ## v1.4.332 (2025-11-24)
 
 ### PR [#1843](https://github.com/danielmiessler/Fabric/pull/1843) by [ksylvan](https://github.com/ksylvan): Implement case-insensitive vendor and model name matching
