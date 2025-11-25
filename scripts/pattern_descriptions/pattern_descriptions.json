@@ -1924,6 +1924,14 @@
       "tags": [
         "VISUALIZE"
       ]
+    },
+    {
+      "patternName": "concall_summary",
+      "description": "Extract strategic insights from earnings transcripts for investors.",
+      "tags": [
+        "SUMMARIZE",
+        "BUSINESS"
+      ]
     }
   ]
 }
