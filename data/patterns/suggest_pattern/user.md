@@ -196,6 +196,10 @@ Review contract to identify stipulations, issues, and changes for negotiation.
 
 Create comparisons table, highlighting key differences and similarities.
 
+### concall_summary
+
+Analyze earnings call transcripts to extract management insights, financial metrics, and investment implications.
+
 ### create_ai_jobs_analysis
 
 Identify automation risks and career resilience strategies.
