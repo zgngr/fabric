@@ -1,0 +1,7 @@
+### PR [#1844](https://github.com/danielmiessler/Fabric/pull/1844) by [ksylvan](https://github.com/ksylvan): Correct directory name from `concall_summery` to `concall_summary`
+
+- Fix: correct directory name from `concall_summery` to `concall_summary`
+- Rename pattern directory to fix spelling error
+- Update suggest_pattern system with concall_summary references
+- Add concall_summary to BUSINESS and SUMMARIZE category listings
+- Add user documentation for earnings call analysis
