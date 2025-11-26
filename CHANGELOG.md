@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.334 (2025-11-26)
+
+### PR [#1845](https://github.com/danielmiessler/Fabric/pull/1845) by [ksylvan](https://github.com/ksylvan): Add Claude Opus 4.5 Support
+
+- Add Claude Opus 4.5 model variants to Anthropic client
+- Upgrade anthropic-sdk-go from v1.16.0 to v1.19.0
+- Update golang.org/x/crypto from v0.41.0 to v0.45.0
+- Upgrade golang.org/x/net from v0.43.0 to v0.47.0
+- Bump golang.org/x/text from v0.28.0 to v0.31.0
+
 ## v1.4.333 (2025-11-25)
 
 ### PR [#1833](https://github.com/danielmiessler/Fabric/pull/1833) by [junaid18183](https://github.com/junaid18183): Added concall_summary
