@@ -73,7 +73,7 @@ Below are the **new features and capabilities** we've added (newest first):
 
 ### Recent Major Features
 
-- [v1.4.334](https://github.com/danielmiessler/fabric/releases/tag/v1.4.334) (Nov 26, 2025) — **Claude Opus 4.5s**: Updates the Anthropic SDK to the latest and adds the new [Claude Opus 4.5](https://www.anthropic.com/news/claude-opus-4-5) to the available models.
+- [v1.4.334](https://github.com/danielmiessler/fabric/releases/tag/v1.4.334) (Nov 26, 2025) — **Claude Opus 4.5**: Updates the Anthropic SDK to the latest and adds the new [Claude Opus 4.5](https://www.anthropic.com/news/claude-opus-4-5) to the available models.
 - [v1.4.331](https://github.com/danielmiessler/fabric/releases/tag/v1.4.331) (Nov 23, 2025) — **Support for GitHub Models**: Adds support for using GitHub Models.
 - [v1.4.322](https://github.com/danielmiessler/fabric/releases/tag/v1.4.322) (Nov 5, 2025) — **Interactive HTML Concept Maps and Claude Sonnet 4.5**: Adds `create_conceptmap` pattern for visual knowledge representation using Vis.js, introduces WELLNESS category with psychological analysis patterns, and upgrades to Claude Sonnet 4.5
 - [v1.4.317](https://github.com/danielmiessler/fabric/releases/tag/v1.4.317) (Sep 21, 2025) — **Portuguese Language Variants**: Adds BCP 47 locale normalization with support for Brazilian Portuguese (pt-BR) and European Portuguese (pt-PT) with intelligent fallback chains
