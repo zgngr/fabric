@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.4.335 (2025-11-28)
+
+### PR [#1847](https://github.com/danielmiessler/Fabric/pull/1847) by [ksylvan](https://github.com/ksylvan): Improve model name matching for NeedsRaw in Ollama plugin
+
+- Improved model name matching in Ollama plugin by replacing prefix-based matching with substring matching
+- Enhanced NeedsRaw functionality to support more flexible model name detection
+- Renamed `ollamaPrefixes` variable to `ollamaSearchStrings` for better code clarity
+- Replaced `HasPrefix` function with `Contains` for more comprehensive model matching
+- Added "conceptmap" to VSCode dictionary settings
+
+### Direct commits
+
+- Merge branch 'danielmiessler:main' into main
+- Docs: Fix typo in README
+
 ## v1.4.334 (2025-11-26)
 
 ### PR [#1845](https://github.com/danielmiessler/Fabric/pull/1845) by [ksylvan](https://github.com/ksylvan): Add Claude Opus 4.5 Support
