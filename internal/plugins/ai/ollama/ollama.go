@@ -163,13 +163,13 @@ func (o *Client) createChatRequest(msgs []*chat.ChatCompletionMessage, opts *dom
 }
 
 func (o *Client) NeedsRawMode(modelName string) bool {
-	ollamaPrefixes := []string{
+	ollamaSearchStrings := []string{
 		"llama3",
 		"llama2",
 		"mistral",
 	}
-	for _, prefix := range ollamaPrefixes {
-		if strings.HasPrefix(modelName, prefix) {
+	for _, searchString := range ollamaSearchStrings {
+		if strings.Contains(modelName, searchString) {
 			return true
 		}
 	}
