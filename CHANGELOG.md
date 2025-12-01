@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.336 (2025-12-01)
+
+### PR [#1848](https://github.com/danielmiessler/Fabric/pull/1848) by [zeddy303](https://github.com/zeddy303): Fix localStorage SSR error in favorites-store
+
+- Fix localStorage SSR error in favorites-store by using SvelteKit's browser constant instead of typeof localStorage check to properly handle server-side rendering and prevent 'localStorage.getItem is not a function' error when running dev server
+
 ## v1.4.335 (2025-11-28)
 
 ### PR [#1847](https://github.com/danielmiessler/Fabric/pull/1847) by [ksylvan](https://github.com/ksylvan): Improve model name matching for NeedsRaw in Ollama plugin
