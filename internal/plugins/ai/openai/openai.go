@@ -172,10 +172,11 @@ func (o *Client) supportsResponsesAPI() bool {
 
 func (o *Client) NeedsRawMode(modelName string) bool {
 	openaiModelsPrefixes := []string{
+		"glm",
+		"gpt-5",
 		"o1",
 		"o3",
 		"o4",
-		"gpt-5",
 	}
 	openAIModelsNeedingRaw := []string{
 		"gpt-4o-mini-search-preview",
