@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.338 (2025-12-04)
+
+### PR [#1852](https://github.com/danielmiessler/Fabric/pull/1852) by [ksylvan](https://github.com/ksylvan): Add Abacus vendor for ChatLLM models with static model list
+
+- Add static model support and register Abacus provider
+- Detect modelsURL starting with 'static:' and route appropriately
+- Implement getStaticModels returning curated Abacus model list
+- Register Abacus provider with ModelsURL 'static:abacus'
+- Extend provider tests to include Abacus existence
+
 ## v1.4.337 (2025-12-04)
 
 ### PR [#1851](https://github.com/danielmiessler/Fabric/pull/1851) by [ksylvan](https://github.com/ksylvan): Add Z AI provider and glm model support
