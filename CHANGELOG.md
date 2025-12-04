@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.337 (2025-12-04)
+
+### PR [#1851](https://github.com/danielmiessler/Fabric/pull/1851) by [ksylvan](https://github.com/ksylvan): Add Z AI provider and glm model support
+
+- Add Z AI provider configuration to ProviderMap
+- Include BaseURL for Z AI API endpoint
+- Add test case for Z AI provider existence
+- Add glm to OpenAI model prefixes list
+- Support new Z AI provider in OpenAI compatible plugins
+
 ## v1.4.336 (2025-12-01)
 
 ### PR [#1848](https://github.com/danielmiessler/Fabric/pull/1848) by [zeddy303](https://github.com/zeddy303): Fix localStorage SSR error in favorites-store
