@@ -1,0 +1,7 @@
+### PR [#1852](https://github.com/danielmiessler/Fabric/pull/1852) by [ksylvan](https://github.com/ksylvan): Add Abacus vendor for ChatLLM models with static model list
+
+- Add static model support and register Abacus provider
+- Detect modelsURL starting with 'static:' and route appropriately
+- Implement getStaticModels returning curated Abacus model list
+- Register Abacus provider with ModelsURL 'static:abacus'
+- Extend provider tests to include Abacus existence
