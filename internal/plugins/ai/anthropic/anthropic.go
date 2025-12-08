@@ -52,6 +52,8 @@ func NewClient() (ret *Client) {
 		string(anthropic.ModelClaudeSonnet4_5_20250929),
 		string(anthropic.ModelClaudeOpus4_5_20251101),
 		string(anthropic.ModelClaudeOpus4_5),
+		string(anthropic.ModelClaudeHaiku4_5),
+		string(anthropic.ModelClaudeHaiku4_5_20251001),
 	}
 
 	ret.modelBetas = map[string][]string{
