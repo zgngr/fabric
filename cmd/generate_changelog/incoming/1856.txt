@@ -1,5 +1,0 @@
-### PR [#1856](https://github.com/danielmiessler/Fabric/pull/1856) by [ksylvan](https://github.com/ksylvan): Add support for new ClaudeHaiku 4.5 models
-
-- Add support for new ClaudeHaiku models in client
-- Add `ModelClaudeHaiku4_5` to supported models
-- Add `ModelClaudeHaiku4_5_20251001` to supported models

@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.4.340 (2025-12-08)
+
+### PR [#1856](https://github.com/danielmiessler/Fabric/pull/1856) by [ksylvan](https://github.com/ksylvan): Add support for new ClaudeHaiku 4.5 models
+
+- Add support for new ClaudeHaiku models in client
+- Add `ModelClaudeHaiku4_5` to supported models
+- Add `ModelClaudeHaiku4_5_20251001` to supported models
+
 ## v1.4.339 (2025-12-08)
 
 ### PR [#1855](https://github.com/danielmiessler/Fabric/pull/1855) by [ksylvan](https://github.com/ksylvan): feat: add image attachment support for Ollama vision models
