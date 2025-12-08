@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.339 (2025-12-08)
+
+### PR [#1855](https://github.com/danielmiessler/Fabric/pull/1855) by [ksylvan](https://github.com/ksylvan): feat: add image attachment support for Ollama vision models
+
+- Add multi-modal image support to Ollama client
+- Implement convertMessage to handle multi-content chat messages
+- Add loadImageBytes to fetch images from URLs
+- Support base64 data URLs for inline images
+- Handle HTTP image URLs with context propagation
+
 ## v1.4.338 (2025-12-04)
 
 ### PR [#1852](https://github.com/danielmiessler/Fabric/pull/1852) by [ksylvan](https://github.com/ksylvan): Add Abacus vendor for ChatLLM models with static model list
