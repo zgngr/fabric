@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.341 (2025-12-10)
+
+### PR [#1860](https://github.com/danielmiessler/Fabric/pull/1860) by [ksylvan](https://github.com/ksylvan): fix: allow resetting required settings without validation errors
+
+- Fix: allow resetting required settings without validation errors
+- Update `Ask` to detect reset command and bypass validation
+- Refactor `OnAnswer` to support new `isReset` parameter logic
+- Invoke `ConfigureCustom` in `Setup` to avoid redundant re-validation
+- Add unit tests ensuring required fields can be reset
+
 ## v1.4.340 (2025-12-08)
 
 ### PR [#1856](https://github.com/danielmiessler/Fabric/pull/1856) by [ksylvan](https://github.com/ksylvan): Add support for new ClaudeHaiku 4.5 models
