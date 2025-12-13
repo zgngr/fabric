@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
@@ -216,7 +217,7 @@ func (an *Client) SendStream(
 	}
 
 	if stream.Err() != nil {
-		fmt.Printf("Messages stream error: %v\n", stream.Err())
+		fmt.Fprintf(os.Stderr, "Messages stream error: %v\n", stream.Err())
 	}
 	close(channel)
 	return
