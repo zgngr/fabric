@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.342 (2025-12-13)
+
+### PR [#1866](https://github.com/danielmiessler/Fabric/pull/1866) by [ksylvan](https://github.com/ksylvan): fix: write CLI and streaming errors to stderr
+
+- Fix: write CLI and streaming errors to stderr
+- Route CLI execution errors to standard error output
+- Print Anthropic stream errors to stderr consistently
+- Add os import to support stderr error writes
+- Preserve help-output suppression and exit behavior
+
 ## v1.4.341 (2025-12-10)
 
 ### PR [#1860](https://github.com/danielmiessler/Fabric/pull/1860) by [ksylvan](https://github.com/ksylvan): fix: allow resetting required settings without validation errors
