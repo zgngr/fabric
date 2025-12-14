@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.343 (2025-12-14)
+
+### PR [#1829](https://github.com/danielmiessler/Fabric/pull/1829) by [dependabo](https://github.com/apps/dependabot): chore(deps): bump js-yaml from 4.1.0 to 4.1.1 in /web in the npm_and_yarn group across 1 directory
+
+- Updated js-yaml dependency from version 4.1.0 to 4.1.1 in the /web directory
+
 ## v1.4.342 (2025-12-13)
 
 ### PR [#1866](https://github.com/danielmiessler/Fabric/pull/1866) by [ksylvan](https://github.com/ksylvan): fix: write CLI and streaming errors to stderr
