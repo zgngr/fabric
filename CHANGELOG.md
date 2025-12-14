@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.4.344 (2025-12-14)
+
+### PR [#1867](https://github.com/danielmiessler/Fabric/pull/1867) by [jaredmontoya](https://github.com/jaredmontoya): chore: update flake
+
+- Chore: update flake
+- Merge branch 'main' into update-flake
+
 ## v1.4.343 (2025-12-14)
 
 ### PR [#1829](https://github.com/danielmiessler/Fabric/pull/1829) by [dependabo](https://github.com/apps/dependabot): chore(deps): bump js-yaml from 4.1.0 to 4.1.1 in /web in the npm_and_yarn group across 1 directory
