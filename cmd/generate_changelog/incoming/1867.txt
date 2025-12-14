@@ -1,0 +1,4 @@
+### PR [#1867](https://github.com/danielmiessler/Fabric/pull/1867) by [jaredmontoya](https://github.com/jaredmontoya): chore: update flake
+
+- Chore: update flake
+- Merge branch 'main' into update-flake
