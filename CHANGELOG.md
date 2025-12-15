@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.345 (2025-12-15)
+
+### PR [#1870](https://github.com/danielmiessler/Fabric/pull/1870) by [ksylvan](https://github.com/ksylvan): Web UI: upgrade pdfjs and add SSR-safe dynamic PDF worker init
+
+- Upgrade `pdfjs-dist` to v5 with new engine requirement
+- Dynamically import PDF.js to avoid SSR import-time crashes
+- Configure PDF worker via CDN using runtime PDF.js version
+- Update PDF conversion pipeline to use lazy initialization
+- Guard chat message localStorage persistence behind browser checks
+
 ## v1.4.344 (2025-12-14)
 
 ### PR [#1867](https://github.com/danielmiessler/Fabric/pull/1867) by [jaredmontoya](https://github.com/jaredmontoya): chore: update flake
