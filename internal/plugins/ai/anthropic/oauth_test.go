@@ -416,7 +416,7 @@ func TestGetValidTokenWithValidToken(t *testing.T) {
 
 // Benchmark tests
 func BenchmarkGeneratePKCE(b *testing.B) {
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		_, _, err := generatePKCE()
 		if err != nil {
 			b.Fatal(err)
@@ -427,8 +427,7 @@ func BenchmarkGeneratePKCE(b *testing.B) {
 func BenchmarkTokenIsExpired(b *testing.B) {
 	token := createTestToken("access", "refresh", 3600)
 
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		token.IsExpired(5)
 	}
 }
