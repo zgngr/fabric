@@ -1,0 +1,8 @@
+### PR [#1874](https://github.com/danielmiessler/Fabric/pull/1874) by [ksylvan](https://github.com/ksylvan): refactor: replace interface{} with any across codebase
+
+- Part 1 of dealing with #1873 as pointed out by @philoserf
+- Replace `interface{}` with `any` in slice type declarations throughout the codebase
+- Update map types from `map[string]interface{}` to `map[string]any` for modern Go standards
+- Change variadic function parameters to use `...any` instead of `...interface{}`
+- Modernize JSON unmarshaling variables to use `any` for consistency
+- Update struct fields and method signatures to prefer the `any` alias over legacy interface syntax

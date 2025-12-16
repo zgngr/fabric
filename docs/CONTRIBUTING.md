@@ -51,6 +51,29 @@ docs: update installation instructions
 
 ## Pull Request Process
 
+### Pull Request Guidelines
+
+**Keep pull requests focused and minimal.**
+
+PRs that touch a large number of files (50+) without clear functional justification will likely be rejected without detailed review.
+
+#### Why we enforce this
+
+- **Reviewability**: Large PRs are effectively un-reviewable. Studies show reviewer effectiveness drops significantly after ~200-400 lines of code. A 93-file "cleanup" PR cannot receive meaningful review.
+- **Git history**: Sweeping changes pollute `git blame`, making it harder to trace when and why functional changes were made.
+- **Merge conflicts**: Large PRs increase the likelihood of conflicts with other contributors' work.
+- **Risk**: More changed lines means more opportunities for subtle bugs, even in "safe" refactors.
+
+#### What to do instead
+
+If you have a large change in mind, break it into logical, independently-mergeable slices. For example:
+
+- ✅ "Replace `interface{}` with `any` across codebase" (single mechanical change, easy to verify)
+- ✅ "Migrate to `strings.CutPrefix` in `internal/cli`" (scoped to one package)
+- ❌ "Modernize codebase with multiple idiom updates" (too broad, impossible to review)
+
+For sweeping refactors or style changes, **open an issue first** to discuss the approach with maintainers before investing time in the work.
+
 ### Changelog Generation (REQUIRED)
 
 After opening your PR, generate a changelog entry:
