@@ -189,7 +189,8 @@ esac`
 	// Helper function to create and register extension
 	createExtension := func(name, opName, cmdTemplate string, config map[string]any) error {
 		configPath := filepath.Join(tmpDir, name+".yaml")
-		configContent := `name: ` + name + `
+		var configContent strings.Builder
+		configContent.WriteString(`name: ` + name + `
 executable: ` + testScript + `
 type: executable
 timeout: 30s
@@ -199,14 +200,14 @@ operations:
 config:
   output:
     method: file
-    file_config:`
+    file_config:`)
 
 		// Add config options
 		for k, v := range config {
-			configContent += "\n      " + k + ": " + strings.TrimSpace(v.(string))
+			configContent.WriteString("\n      " + k + ": " + strings.TrimSpace(v.(string)))
 		}
 
-		if err := os.WriteFile(configPath, []byte(configContent), 0644); err != nil {
+		if err := os.WriteFile(configPath, []byte(configContent.String()), 0644); err != nil {
 			return err
 		}
 
