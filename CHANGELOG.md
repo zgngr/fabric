@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.4.346 (2025-12-16)
+
+### PR [#1874](https://github.com/danielmiessler/Fabric/pull/1874) by [ksylvan](https://github.com/ksylvan): refactor: replace interface{} with any across codebase
+
+- Part 1 of dealing with #1873 as pointed out by @philoserf
+- Replace `interface{}` with `any` in slice type declarations throughout the codebase
+- Update map types from `map[string]interface{}` to `map[string]any` for modern Go standards
+- Change variadic function parameters to use `...any` instead of `...interface{}`
+- Modernize JSON unmarshaling variables to use `any` for consistency
+- Update struct fields and method signatures to prefer the `any` alias over legacy interface syntax
+
 ## v1.4.345 (2025-12-15)
 
 ### PR [#1870](https://github.com/danielmiessler/Fabric/pull/1870) by [ksylvan](https://github.com/ksylvan): Web UI: upgrade pdfjs and add SSR-safe dynamic PDF worker init
