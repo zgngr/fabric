@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.349 (2025-12-16)
+
+### PR [#1877](https://github.com/danielmiessler/Fabric/pull/1877) by [ksylvan](https://github.com/ksylvan): modernize: update GitHub Actions and modernize Go code
+
+- Modernize GitHub Actions and Go code with latest stdlib features
+- Upgrade GitHub Actions to latest versions (v6, v21) and add modernization check step
+- Replace strings manipulation with `strings.CutPrefix` and `strings.CutSuffix`
+- Replace manual loops with `slices.Contains` for validation and use `strings.SplitSeq` for iterator-based splitting
+- Replace `fmt.Sprintf` with `fmt.Appendf` for efficiency and simplify padding calculation with `max` builtin
+
 ## v1.4.348 (2025-12-16)
 
 ### PR [#1876](https://github.com/danielmiessler/Fabric/pull/1876) by [ksylvan](https://github.com/ksylvan): modernize Go code with TypeFor and range loops
