@@ -183,10 +183,10 @@ func detectLanguageFromArgs() string {
 			if i+1 < len(args) {
 				return args[i+1]
 			}
-		} else if strings.HasPrefix(arg, "--language=") {
-			return strings.TrimPrefix(arg, "--language=")
-		} else if strings.HasPrefix(arg, "-g=") {
-			return strings.TrimPrefix(arg, "-g=")
+		} else if after, ok := strings.CutPrefix(arg, "--language="); ok {
+			return after
+		} else if after, ok := strings.CutPrefix(arg, "-g="); ok {
+			return after
 		} else if runtime.GOOS == "windows" && strings.HasPrefix(arg, "/g:") {
 			return strings.TrimPrefix(arg, "/g:")
 		} else if runtime.GOOS == "windows" && strings.HasPrefix(arg, "/g=") {
@@ -272,10 +272,7 @@ func (h *TranslatedHelpWriter) writeAllFlags() {
 
 		// Pad to align descriptions
 		flagStr := flagLine.String()
-		padding := 34 - len(flagStr)
-		if padding < 2 {
-			padding = 2
-		}
+		padding := max(34-len(flagStr), 2)
 
 		fmt.Fprintf(h.writer, "%s%s%s", flagStr, strings.Repeat(" ", padding), description)
 

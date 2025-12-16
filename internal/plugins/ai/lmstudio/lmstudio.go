@@ -140,8 +140,8 @@ func (c *Client) SendStream(msgs []*chat.ChatCompletionMessage, opts *domain.Cha
 			continue
 		}
 
-		if bytes.HasPrefix(line, []byte("data: ")) {
-			line = bytes.TrimPrefix(line, []byte("data: "))
+		if after, ok := bytes.CutPrefix(line, []byte("data: ")); ok {
+			line = after
 		}
 
 		if string(line) == "[DONE]" {
