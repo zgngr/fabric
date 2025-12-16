@@ -115,7 +115,7 @@ func Init() (ret *Flags, err error) {
 
 	// Create mapping from flag names (both short and long) to yaml tag names
 	flagToYamlTag := make(map[string]string)
-	t := reflect.TypeOf(Flags{})
+	t := reflect.TypeFor[Flags]()
 	for i := 0; i < t.NumField(); i++ {
 		field := t.Field(i)
 		yamlTag := field.Tag.Get("yaml")
@@ -224,7 +224,7 @@ func Init() (ret *Flags, err error) {
 }
 
 func parseDebugLevel(args []string) int {
-	for i := 0; i < len(args); i++ {
+	for i := range args {
 		arg := args[i]
 		if arg == "--debug" && i+1 < len(args) {
 			if lvl, err := strconv.Atoi(args[i+1]); err == nil {
