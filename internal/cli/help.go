@@ -137,8 +137,7 @@ func (h *TranslatedHelpWriter) getTranslatedDescription(flagName string) string 
 
 // getOriginalDescription retrieves the original description from struct tags
 func (h *TranslatedHelpWriter) getOriginalDescription(flagName string) string {
-	flags := &Flags{}
-	flagsType := reflect.TypeOf(flags).Elem()
+	flagsType := reflect.TypeFor[Flags]()
 
 	for i := 0; i < flagsType.NumField(); i++ {
 		field := flagsType.Field(i)
@@ -218,8 +217,7 @@ func detectLanguageFromEnv() string {
 // writeAllFlags writes all flags with translated descriptions
 func (h *TranslatedHelpWriter) writeAllFlags() {
 	// Use direct reflection on the Flags struct to get all flag definitions
-	flags := &Flags{}
-	flagsType := reflect.TypeOf(flags).Elem()
+	flagsType := reflect.TypeFor[Flags]()
 
 	for i := 0; i < flagsType.NumField(); i++ {
 		field := flagsType.Field(i)
