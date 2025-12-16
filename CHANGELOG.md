@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.348 (2025-12-16)
+
+### PR [#1876](https://github.com/danielmiessler/Fabric/pull/1876) by [ksylvan](https://github.com/ksylvan): modernize Go code with TypeFor and range loops
+
+- Replace reflect.TypeOf with TypeFor generic syntax for improved type handling
+- Convert traditional for loops to range-based iterations for better code readability
+- Simplify reflection usage in CLI flag handling to reduce complexity
+- Update test loops to use range over integers for cleaner test code
+- Refactor string processing loops in template plugin to use modern Go patterns
+
 ## v1.4.347 (2025-12-16)
 
 ### PR [#1875](https://github.com/danielmiessler/Fabric/pull/1875) by [ksylvan](https://github.com/ksylvan): modernize: update benchmarks to use b.Loop and refactor map copying
