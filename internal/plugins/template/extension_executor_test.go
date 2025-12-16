@@ -187,7 +187,7 @@ esac`
 	executor := NewExtensionExecutor(registry)
 
 	// Helper function to create and register extension
-	createExtension := func(name, opName, cmdTemplate string, config map[string]interface{}) error {
+	createExtension := func(name, opName, cmdTemplate string, config map[string]any) error {
 		configPath := filepath.Join(tmpDir, name+".yaml")
 		configContent := `name: ` + name + `
 executable: ` + testScript + `
@@ -216,7 +216,7 @@ config:
 	// Test basic fixed file output
 	t.Run("BasicFixedFile", func(t *testing.T) {
 		outputFile := filepath.Join(tmpDir, "output.txt")
-		config := map[string]interface{}{
+		config := map[string]any{
 			"output_file": `"output.txt"`,
 			"work_dir":    `"` + tmpDir + `"`,
 			"cleanup":     "true",
@@ -241,7 +241,7 @@ config:
 
 	// Test no work_dir specified
 	t.Run("NoWorkDir", func(t *testing.T) {
-		config := map[string]interface{}{
+		config := map[string]any{
 			"output_file": `"direct-output.txt"`,
 			"cleanup":     "true",
 		}
@@ -263,7 +263,7 @@ config:
 		outputFile := filepath.Join(tmpDir, "cleanup-test.txt")
 
 		// Test with cleanup enabled
-		config := map[string]interface{}{
+		config := map[string]any{
 			"output_file": `"cleanup-test.txt"`,
 			"work_dir":    `"` + tmpDir + `"`,
 			"cleanup":     "true",
@@ -307,7 +307,7 @@ config:
 	// Test error cases
 	t.Run("ErrorCases", func(t *testing.T) {
 		outputFile := filepath.Join(tmpDir, "error-test.txt")
-		config := map[string]interface{}{
+		config := map[string]any{
 			"output_file": `"error-test.txt"`,
 			"work_dir":    `"` + tmpDir + `"`,
 			"cleanup":     "true",
@@ -341,7 +341,7 @@ config:
 
 	// Test with missing output_file
 	t.Run("MissingOutputFile", func(t *testing.T) {
-		config := map[string]interface{}{
+		config := map[string]any{
 			"work_dir": `"` + tmpDir + `"`,
 			"cleanup":  "true",
 		}
