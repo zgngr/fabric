@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.4.347 (2025-12-16)
+
+### PR [#1875](https://github.com/danielmiessler/Fabric/pull/1875) by [ksylvan](https://github.com/ksylvan): modernize: update benchmarks to use b.Loop and refactor map copying
+
+- Updated benchmark loops to use cleaner `b.Loop()` syntax
+- Removed unnecessary `b.ResetTimer()` call in token benchmark
+- Used `maps.Copy` for merging variables in patterns handler
+
 ## v1.4.346 (2025-12-16)
 
 ### PR [#1874](https://github.com/danielmiessler/Fabric/pull/1874) by [ksylvan](https://github.com/ksylvan): refactor: replace interface{} with any across codebase
